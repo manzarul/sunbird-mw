@@ -1,0 +1,7 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+GET      /v1/learner/getenrolledcoures	@controllers.LearnerController.getEnrolledCourses()
+POST     /v1/learner/enrollcourse	    @controllers.LearnerController.enrollCourse()
+POST     /v1/learner/getcontentstate	@controllers.LearnerController.getContentState()
+POST     /v1/learner/updatecontentstate	@controllers.LearnerController.updateContentState()
