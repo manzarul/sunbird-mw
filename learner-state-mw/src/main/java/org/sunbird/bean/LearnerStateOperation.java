@@ -6,6 +6,11 @@ package org.sunbird.bean;
  *
  */
 public enum LearnerStateOperation {
-	addCourse,getCourse,updateToc;
+	ADD_COURSE("addCourse"),GET_COURSE("getCourse"),UPDATE_TOC("updateToc");
 
+	private String value;
+
+	LearnerStateOperation(String value){
+		this.value=value;
+	}
 }

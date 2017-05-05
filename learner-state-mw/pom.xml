@@ -1,44 +1,57 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>org.sunbird.learner</groupId>
-  <artifactId>learner-actor</artifactId>
-  <version>1.0-SNAPSHOT</version>
-  <name>sunbird_learner_actor</name>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.sunbird.learner</groupId>
+    <artifactId>learner-actor</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <name>sunbird_learner_actor</name>
 
     <properties>
-        <version.compiler.plugin>2.3.1</version.compiler.plugin>
+        <!--<version.compiler.plugin>2.3.1</version.compiler.plugin>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.source>1.8</maven.compiler.source>-->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <scoverage.plugin.version>1.1.1</scoverage.plugin.version>
-    </properties>	
-     <dependencies>
-                <dependency>
+    </properties>
+    <dependencies>
+        <dependency>
             <groupId>com.typesafe.akka</groupId>
             <artifactId>akka-actor_2.11</artifactId>
-            <version>2.4.8</version>
+            <version>2.5.1</version>
         </dependency>
         <dependency>
             <groupId>com.typesafe.akka</groupId>
             <artifactId>akka-slf4j_2.11</artifactId>
-            <version>2.4.6</version>
+            <version>2.5.1</version>
         </dependency>
-		<dependency>
+        <dependency>
             <groupId>org.sunbird.common</groupId>
             <artifactId>sunbird-common</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
-		    <dependency>
-		     <groupId>org.sunbird.common.leastic</groupId>
+        <dependency>
+            <groupId>org.sunbird.common.leastic</groupId>
             <artifactId>sunbird-common.elastic</artifactId>
-             <version>1.0-SNAPSHOT</version>
-			</dependency> 
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.typesafe.akka</groupId>
+            <artifactId>akka-remote_2.11</artifactId>
+            <version>2.5.1</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok-maven -->
+        <!--<dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok-maven</artifactId>
+            <version>1.16.8.0</version>
+        </dependency>-->
+
     </dependencies>
 
-   <build>
-		<sourceDirectory>${basedir}/src/main/java</sourceDirectory>
-        <testSourceDirectory>${basedir}/src/test</testSourceDirectory>
+    <build>
+        <sourceDirectory>${basedir}/src/main/java</sourceDirectory>
+        <testSourceDirectory>${basedir}/src/test/java</testSourceDirectory>
         <pluginManagement>
             <plugins>
                 <plugin>
@@ -50,19 +63,18 @@
                         <target>1.8</target>
                     </configuration>
                 </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-                <version>2.20</version>
-                <configuration>
-                    <includes>
-                        <include>**/*Spec.java</include>
-                        <include>**/*Test.java</include>
-                    </includes>
-                </configuration>
-            </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.20</version>
+                    <configuration>
+                        <includes>
+                            <include>**/*Spec.java</include>
+                            <include>**/*Test.java</include>
+                        </includes>
+                    </configuration>
+                </plugin>
             </plugins>
         </pluginManagement>
-       
     </build>
 </project>
