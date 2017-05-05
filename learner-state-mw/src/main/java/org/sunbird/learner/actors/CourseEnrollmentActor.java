@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.sunbird.learner;
+package org.sunbird.learner.actors;
 
 import org.sunbird.bean.ActorMessage;
 
@@ -20,6 +20,9 @@ public class CourseEnrollmentActor  extends UntypedActor{
 	public void onReceive(Object message) throws Throwable {
 		if(message instanceof ActorMessage) {
 			//TODO check the operation type and handle it.
+			// call to cassndra for the course enrollmant
+			//cassandraUtil.
+
 		}
 		
 	}
