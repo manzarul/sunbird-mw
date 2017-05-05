@@ -4,7 +4,6 @@ import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
 import com.typesafe.config.ConfigFactory;
-import lombok.extern.slf4j.Slf4j;
 import org.sunbird.learner.actors.CourseEnrollmentActor;
 import org.sunbird.learner.actors.LearnerStateActor;
 import org.sunbird.learner.actors.LearnerStateUpdateActor;
@@ -12,14 +11,11 @@ import org.sunbird.learner.actors.LearnerStateUpdateActor;
 /**
  * Created by arvind on 5/5/17.
  */
-@Slf4j
 public class Application {
 
     private static ActorSystem system;
 
     public static void main(String[] args) {
-
-        log.info("APPLICATION STARTED");
 
         startRemoteCreationSystem();
 
