@@ -23,11 +23,17 @@ public class CassandraOperationImpl implements CassandraOperation{
 	
 	
 	public void insertCourse(Course course) {
+		LOGGER.info("method started==");
 		PreparedStatement statement = CassandraConnectionManager.getSession().prepare(CassandraQuery.Course.INSERT_COURSE);
 		BoundStatement boundStatement = new BoundStatement(statement);
+		try {
+	    LOGGER.info("trying to insert in Cassandra=="+ statement.getQueryString());	
 		ResultSet result = CassandraConnectionManager.getSession().execute(boundStatement.bind(course.getCourseId(), course.getCourseName(),course.getUserId(),
 			course.getEnrolledDate(),course.getDescription(),course.getTocUrl(),course.getCourseProgressStatus(),course.isActive(),course.getDeltaMap()));
-		LOGGER.info(result.toString());
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage());
+		}
+		
 	}
 	
 	public Course getCourseById(int courseId){

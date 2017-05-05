@@ -1,11 +1,17 @@
 package org.sunbird.model;
 
+import java.io.Serializable;
 import java.util.Map;
 
 import com.datastax.driver.mapping.annotations.Table;
 
 @Table(name = "course",keyspace="cassandraKeySpace")
-public class Course {
+public class Course implements Serializable{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	
 	private String courseId;
 	private String courseName;

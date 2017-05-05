@@ -47,6 +47,7 @@ public class LearnerController extends BaseController {
 		msg.setOperation(LearnerStateOperation.ADD_COURSE);
 		Map map = new HashMap<String,Object>();
 		map.put("Course 1",course);
+		msg.setData(map);
 		selection.tell(msg, ActorRef.noSender());
 		return ok("success");
 	}

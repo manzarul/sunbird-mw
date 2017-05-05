@@ -31,11 +31,13 @@ public class CourseEnrollmentActor  extends UntypedActor{
 			ActorMessage actorMessage = (ActorMessage)message;
 
 			if(actorMessage.getOperation().getValue().equalsIgnoreCase(LearnerStateOperation.ADD_COURSE.getValue())){
-				logger.info("OP type match");
-				Object obj = actorMessage.getData().keySet().toArray()[0];
+				logger.info("OP type match"+actorMessage.getData().size());
+				Object obj = actorMessage.getData().get("Course 1");
+				//Object obj = actorMessage.getData().keySet().toArray()[0];
 				if(obj instanceof Course) {
 					logger.info("Obj match");
 					Course course = (Course) obj;
+					logger.info(course.toString());
 					cassandraOperation.insertCourse(course);
 					sender().tell("SUCCESS", getSelf());
 				}else{
