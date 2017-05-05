@@ -3,7 +3,7 @@ package controllers;
 import play.libs.F.Promise;
 import play.mvc.Result;
 import play.mvc.Results;
-import org.sunbird.learner.*;
+import org.sunbird.learner.actors.*;
 /**
  * This controller will handler all the request related 
  * to learner state.
