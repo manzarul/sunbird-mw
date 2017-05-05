@@ -13,6 +13,7 @@ import akka.actor.Props;
 import com.typesafe.config.ConfigFactory;
 import org.sunbird.bean.*;
 import org.sunbird.model.*;
+import java.util.*;
 /**
  * This controller will handler all the request related 
  * to learner state.
@@ -31,7 +32,7 @@ public class LearnerController extends BaseController {
 		ActorSystem system =null;
 		system = ActorSystem.create("HelloApplication", ConfigFactory.load()
                 .getConfig("HelloConfig"));
-		ActorSelection selection = system.actorSelection("akka.tcp://WorldApplication@127.0.0.1:8088/user/WorldActor");
+		ActorSelection selection = system.actorSelection("akka.tcp://RemoteMiddlewareSystem@127.0.0.1:8088/user/CourseEnrollmentActor");
 		
 		Course course= new Course();
     	course.setCourseId("Course 12");

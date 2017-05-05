@@ -11,6 +11,7 @@ import org.sunbird.cassandra.CassandraOperation;
 import org.sunbird.cassandraImpl.CassandraOperationImpl;
 import org.sunbird.common.*;
 import org.sunbird.model.Course;
+import org.apache.log4j.*;
 
 /**
  * This class will handle course enrollment
@@ -19,21 +20,26 @@ import org.sunbird.model.Course;
  *
  */
 public class CourseEnrollmentActor  extends UntypedActor{
+	 Logger logger = Logger.getLogger(CourseEnrollmentActor.class.getName());
 
 	private CassandraOperation cassandraOperation = new CassandraOperationImpl();
 	@Override
 	public void onReceive(Object message) throws Throwable {
 		if(message instanceof ActorMessage) {
+			logger.info("onReceive called");
 			//TODO check the operation type and handle it.
 			ActorMessage actorMessage = (ActorMessage)message;
 
 			if(actorMessage.getOperation().getValue().equalsIgnoreCase(LearnerStateOperation.ADD_COURSE.getValue())){
+				logger.info("OP type match");
 				Object obj = actorMessage.getData().keySet().toArray()[0];
 				if(obj instanceof Course) {
+					logger.info("Obj match");
 					Course course = (Course) obj;
 					cassandraOperation.insertCourse(course);
-					sender().tell("SUCCESS", self());
+					sender().tell("SUCCESS", getSelf());
 				}else{
+					logger.info("Mis match");
 					sender().tell("UNSUPPORTED COURSE OBJECT",self());
 				}
 			}
