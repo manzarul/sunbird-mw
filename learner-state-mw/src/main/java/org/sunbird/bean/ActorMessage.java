@@ -1,4 +1,5 @@
 package org.sunbird.bean;
+import java.io.Serializable;
 import java.util.Map;
 
 import org.sunbird.bean.LearnerStateOperation;
@@ -7,7 +8,8 @@ import org.sunbird.bean.LearnerStateOperation;
  * operation type and data.
  * @author Manzarul
  */
-public class ActorMessage {
+public class ActorMessage implements Serializable{
+
 	private LearnerStateOperation operation;
 	private Map<String,Object> data;
 	
