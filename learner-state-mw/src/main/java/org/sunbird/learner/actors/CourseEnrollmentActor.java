@@ -5,7 +5,7 @@ package org.sunbird.learner.actors;
 
 import org.sunbird.bean.ActorMessage;
 
-import akka.actor.UntypedActor;
+import akka.actor.UntypedAbstractActor;
 import org.sunbird.bean.LearnerStateOperation;
 import org.sunbird.cassandra.CassandraOperation;
 import org.sunbird.cassandraImpl.CassandraOperationImpl;
@@ -19,7 +19,7 @@ import org.apache.log4j.*;
  * @author Manzarul
  *
  */
-public class CourseEnrollmentActor  extends UntypedActor{
+public class CourseEnrollmentActor  extends UntypedAbstractActor  {
 	 Logger logger = Logger.getLogger(CourseEnrollmentActor.class.getName());
 
 	private CassandraOperation cassandraOperation = new CassandraOperationImpl();
@@ -33,7 +33,6 @@ public class CourseEnrollmentActor  extends UntypedActor{
 			if(actorMessage.getOperation().getValue().equalsIgnoreCase(LearnerStateOperation.ADD_COURSE.getValue())){
 				logger.info("OP type match"+actorMessage.getData().size());
 				Object obj = actorMessage.getData().get("Course 1");
-				//Object obj = actorMessage.getData().keySet().toArray()[0];
 				if(obj instanceof Course) {
 					logger.info("Obj match");
 					Course course = (Course) obj;

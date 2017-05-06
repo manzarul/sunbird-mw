@@ -4,11 +4,10 @@
 package org.sunbird.learner.actors;
 
 import org.sunbird.bean.ActorMessage;
-
-import akka.actor.UntypedActor;
 import org.sunbird.cassandra.CassandraOperation;
 import org.sunbird.cassandraImpl.CassandraOperationImpl;
-import org.sunbird.common.CassandraUtil;
+
+import akka.actor.UntypedAbstractActor;
 
 /**
  * This class is responsible to merger the 
@@ -16,7 +15,7 @@ import org.sunbird.common.CassandraUtil;
  * @author Manzarul
  *
  */
-public class LearnerStateUpdateActor extends UntypedActor{
+public class LearnerStateUpdateActor extends UntypedAbstractActor{
 
 	private CassandraOperation cassandraOperation = new CassandraOperationImpl();
 

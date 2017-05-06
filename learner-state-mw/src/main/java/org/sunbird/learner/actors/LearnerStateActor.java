@@ -1,18 +1,18 @@
 package org.sunbird.learner.actors;
 
 
-import akka.actor.UntypedActor;
 import org.sunbird.bean.ActorMessage;
 import org.sunbird.cassandra.CassandraOperation;
 import org.sunbird.cassandraImpl.CassandraOperationImpl;
-import org.sunbird.common.CassandraUtil;
+
+import akka.actor.UntypedAbstractActor;
 
 /**
  * This actor will provide learner TOC state.
  * @author Manzarul
  *
  */
-public class LearnerStateActor extends UntypedActor{
+public class LearnerStateActor extends UntypedAbstractActor{
 
 	private CassandraOperation cassandraOperation = new CassandraOperationImpl();
 

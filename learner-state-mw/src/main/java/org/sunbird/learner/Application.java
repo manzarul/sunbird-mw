@@ -4,6 +4,8 @@ import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import akka.actor.Props;
 import com.typesafe.config.ConfigFactory;
+
+import org.apache.log4j.Logger;
 import org.sunbird.learner.actors.CourseEnrollmentActor;
 import org.sunbird.learner.actors.LearnerStateActor;
 import org.sunbird.learner.actors.LearnerStateUpdateActor;
@@ -12,7 +14,7 @@ import org.sunbird.learner.actors.LearnerStateUpdateActor;
  * Created by arvind on 5/5/17.
  */
 public class Application {
-
+   private static final Logger LOGGER = Logger.getLogger(Application.class); 
     private static ActorSystem system;
 
     public static void main(String[] args) {
@@ -20,9 +22,10 @@ public class Application {
         startRemoteCreationSystem();
 
     }
-
+   /**
+    * This method will do the basic setup for actors.
+    */
     public static void startRemoteCreationSystem(){
-
         system = ActorSystem.create("RemoteMiddlewareSystem", ConfigFactory.load()
                 .getConfig("RemoteMWConfig"));
         ActorRef learnerStateActorRef = system.actorOf(Props.create(LearnerStateActor.class),
@@ -31,7 +34,6 @@ public class Application {
                 "LearnerStateUpdateActor");
         ActorRef courseEnrollmentActorRef = system.actorOf(Props.create(CourseEnrollmentActor.class),
                 "CourseEnrollmentActor");
-        System.out.println("ACTORS STARTED");
-
+        LOGGER.info("ACTORS STARTED");
     }
 }
