@@ -20,10 +20,6 @@ public class LearnerStateActor extends UntypedAbstractActor{
     public void onReceive(Object message) throws Exception {
 		if(message instanceof ActorMessage) {
 			//TODO
-			// call to cassndra for the learner state
-			//cassandraUtil.
-
-
 
 		}
 	  
