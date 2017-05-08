@@ -19,5 +19,19 @@ public interface Constants {
 	
 	//CONSTANT
 	public static final String COURSE_ID="courseId";
+	
+	public enum LearnerStateOperation {
+		NOT_STARTED("notStarted"),STARTED("started"),COMPLETED("completed");
+
+		private String value;
+
+		LearnerStateOperation(String value){
+			this.value=value;
+		}
+
+		public String getValue(){
+			return this.value;
+		}
+	}
 
 }

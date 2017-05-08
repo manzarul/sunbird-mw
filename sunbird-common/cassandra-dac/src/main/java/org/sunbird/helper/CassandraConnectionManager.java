@@ -23,13 +23,16 @@ import com.datastax.driver.core.policies.DefaultRetryPolicy;
  * This class will handle cassandra database 
  * connection and session.
  * @author Manzarul
- *
+ * @author Amit Kumar
  */
 public class CassandraConnectionManager {
 	private final static Logger LOGGER = Logger.getLogger(CassandraOperationImpl.class.getName());
 	private static Cluster cluster;
     private static Session session;
     
+    /*
+     * creating cassandra connection and session
+     */
 	static{
 		try{
 			   PropertiesCache instance = PropertiesCache.getInstance();
@@ -70,6 +73,9 @@ public class CassandraConnectionManager {
 		        }
 	}
 	
+	/*
+	 * exposing session for application 
+	 */
 	public static Session getSession() {
         return CassandraConnectionManager.session;
     }

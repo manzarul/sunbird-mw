@@ -20,7 +20,7 @@ public class Course implements Serializable{
 	private String description;
 	private String tocUrl;
 	private Map<String,String> deltaMap;
-	private String courseProgressStatus;				//(notstarted, started,completed)
+	private String courseProgressStatus;				
 	private boolean active;
 	/**
 	 * @return the courseId

@@ -1,0 +1,56 @@
+2017-05-08 14:22  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.insertCourse:33 - method started==
+2017-05-08 14:22  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.<clinit>:65 - Connected to cluster: Test Cluster
+2017-05-08 14:22  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.<clinit>:72 - Datacenter: datacenter1; Host: /127.0.0.1; Rack: rack1
+2017-05-08 14:22  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.insertCourse:37 - trying to insert in Cassandra==INSERT INTO cassandraKeySpace.course(courseId,courseName,userId, enrolledDate, description, tocUrl,courseProgressStatus,active,deltaMap)VALUES (?,?,?,?,?,?,?,?,?);
+2017-05-08 14:22  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.deleteCourseById:76 - ResultSet[ exhausted: true, Columns[]]
+2017-05-08 14:28  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.<clinit>:65 - Connected to cluster: Test Cluster
+2017-05-08 14:28  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.<clinit>:72 - Datacenter: datacenter1; Host: /127.0.0.1; Rack: rack1
+2017-05-08 14:28  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.deleteCourseById:76 - ResultSet[ exhausted: true, Columns[]]
+2017-05-08 14:28  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.insertCourse:33 - method started==
+2017-05-08 14:28  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.insertCourse:37 - trying to insert in Cassandra==INSERT INTO cassandraKeySpace.course(courseId,courseName,userId, enrolledDate, description, tocUrl,courseProgressStatus,active,deltaMap)VALUES (?,?,?,?,?,?,?,?,?);
+2017-05-08 14:30  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.<clinit>:65 - Connected to cluster: Test Cluster
+2017-05-08 14:30  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.<clinit>:72 - Datacenter: datacenter1; Host: /127.0.0.1; Rack: rack1
+2017-05-08 14:30  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.deleteCourseById:76 - ResultSet[ exhausted: true, Columns[]]
+2017-05-08 14:30  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.insertCourse:33 - method started==
+2017-05-08 14:30  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.insertCourse:37 - trying to insert in Cassandra==INSERT INTO cassandraKeySpace.course(courseId,courseName,userId, enrolledDate, description, tocUrl,courseProgressStatus,active,deltaMap)VALUES (?,?,?,?,?,?,?,?,?);
+2017-05-08 14:34  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.insertCourse:33 - method started==
+2017-05-08 14:34  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.<clinit>:65 - Connected to cluster: Test Cluster
+2017-05-08 14:34  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.<clinit>:72 - Datacenter: datacenter1; Host: /127.0.0.1; Rack: rack1
+2017-05-08 14:34  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.insertCourse:37 - trying to insert in Cassandra==INSERT INTO cassandraKeySpace.course(courseId,courseName,userId, enrolledDate, description, tocUrl,courseProgressStatus,active,deltaMap)VALUES (?,?,?,?,?,?,?,?,?);
+2017-05-08 14:34  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.getCourseById:58 - SELECT * FROM cassandraKeySpace.course WHERE courseId='Course 100';
+2017-05-08 14:34  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.getCourseById:63 - Course [courseId=Course 100, courseName=Course Name, userId=user ID 1, enrolledDate=2017-05-05, description=Teacher training Course Material, tocUrl=null, courseProgressStatus=Not Started, active=true]
+2017-05-08 14:34  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.deleteCourseById:77 - ResultSet[ exhausted: true, Columns[]]
+2017-05-08 14:34  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.getCourseById:58 - SELECT * FROM cassandraKeySpace.course WHERE courseId='Course 100';
+2017-05-08 14:37  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.insertCourse:33 - method started==
+2017-05-08 14:37  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.<clinit>:65 - Connected to cluster: Test Cluster
+2017-05-08 14:37  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.<clinit>:72 - Datacenter: datacenter1; Host: /127.0.0.1; Rack: rack1
+2017-05-08 14:37  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.insertCourse:37 - trying to insert in Cassandra==INSERT INTO cassandraKeySpace.course(courseId,courseName,userId, enrolledDate, description, tocUrl,courseProgressStatus,active,deltaMap)VALUES (?,?,?,?,?,?,?,?,?);
+2017-05-08 14:37  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.getCourseById:58 - SELECT * FROM cassandraKeySpace.course WHERE courseId='Course 100';
+2017-05-08 14:37  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.getCourseById:63 - Course [courseId=Course 100, courseName=Course Name, userId=user ID 1, enrolledDate=2017-05-05, description=Teacher training Course Material, tocUrl=null, courseProgressStatus=Not Started, active=true]
+2017-05-08 14:37  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.deleteCourseById:77 - ResultSet[ exhausted: true, Columns[]]
+2017-05-08 14:38  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.getCourseById:58 - SELECT * FROM cassandraKeySpace.course WHERE courseId='Course 100';
+2017-05-08 14:38  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.<clinit>:65 - Connected to cluster: Test Cluster
+2017-05-08 14:38  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.<clinit>:72 - Datacenter: datacenter1; Host: /127.0.0.1; Rack: rack1
+2017-05-08 14:38  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.deleteCourseById:77 - ResultSet[ exhausted: true, Columns[]]
+2017-05-08 14:38  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.insertCourse:33 - method started==
+2017-05-08 14:38  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.insertCourse:37 - trying to insert in Cassandra==INSERT INTO cassandraKeySpace.course(courseId,courseName,userId, enrolledDate, description, tocUrl,courseProgressStatus,active,deltaMap)VALUES (?,?,?,?,?,?,?,?,?);
+2017-05-08 14:40  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.<clinit>:65 - Connected to cluster: Test Cluster
+2017-05-08 14:40  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.<clinit>:72 - Datacenter: datacenter1; Host: /127.0.0.1; Rack: rack1
+2017-05-08 14:40  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.deleteCourseById:77 - ResultSet[ exhausted: true, Columns[]]
+2017-05-08 14:40  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.getCourseById:58 - SELECT * FROM cassandraKeySpace.course WHERE courseId='Course 101';
+2017-05-08 14:40  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.insertCourse:33 - method started==
+2017-05-08 14:40  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.insertCourse:37 - trying to insert in Cassandra==INSERT INTO cassandraKeySpace.course(courseId,courseName,userId, enrolledDate, description, tocUrl,courseProgressStatus,active,deltaMap)VALUES (?,?,?,?,?,?,?,?,?);
+2017-05-08 14:44  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.insertCourse:33 - method started==
+2017-05-08 14:44  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.<clinit>:65 - Connected to cluster: Test Cluster
+2017-05-08 14:44  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.<clinit>:72 - Datacenter: datacenter1; Host: /127.0.0.1; Rack: rack1
+2017-05-08 14:44  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.insertCourse:37 - trying to insert in Cassandra==INSERT INTO cassandraKeySpace.course(courseId,courseName,userId, enrolledDate, description, tocUrl,courseProgressStatus,active,deltaMap)VALUES (?,?,?,?,?,?,?,?,?);
+2017-05-08 14:44  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.getCourseById:60 - SELECT * FROM cassandraKeySpace.course WHERE courseId='Course 101';
+2017-05-08 14:44  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.getCourseById:65 - Course [courseId=Course 101, courseName=Course Name, userId=user ID 1, enrolledDate=2017-05-05, description=Teacher training Course Material, tocUrl=null, courseProgressStatus=Not Started, active=true]
+2017-05-08 14:44  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.deleteCourseById:82 - ResultSet[ exhausted: true, Columns[]]
+2017-05-08 14:45  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.insertCourse:33 - method started==
+2017-05-08 14:45  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.<clinit>:65 - Connected to cluster: Test Cluster
+2017-05-08 14:45  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.<clinit>:72 - Datacenter: datacenter1; Host: /127.0.0.1; Rack: rack1
+2017-05-08 14:45  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.insertCourse:37 - trying to insert in Cassandra==INSERT INTO cassandraKeySpace.course(courseId,courseName,userId, enrolledDate, description, tocUrl,courseProgressStatus,active,deltaMap)VALUES (?,?,?,?,?,?,?,?,?);
+2017-05-08 14:45  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.getCourseById:60 - SELECT * FROM cassandraKeySpace.course WHERE courseId='Course 101';
+2017-05-08 14:45  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.getCourseById:65 - Course [courseId=Course 101, courseName=Course Name, userId=user ID 1, enrolledDate=2017-05-05, description=Teacher training Course Material, tocUrl=null, courseProgressStatus=Not Started, active=true]
+2017-05-08 14:45  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.deleteCourseById:82 - ResultSet[ exhausted: true, Columns[]]

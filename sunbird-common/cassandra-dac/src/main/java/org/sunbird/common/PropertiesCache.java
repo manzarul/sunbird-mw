@@ -5,13 +5,16 @@ import java.io.InputStream;
 import java.util.Properties;
 import java.util.Set;
 
+/*
+ * @author Amit Kumar
+ * this class is used for reading cassndra properties file
+ */
 public class PropertiesCache {
 	
 	private final Properties configProp = new Properties();
     
 	   private PropertiesCache()
 	   {
-	      //Private constructor to restrict new instances
 	      InputStream in = this.getClass().getClassLoader().getResourceAsStream(Constants.CASSANDRA_PROPERTIES_FILE);
 	      try {
 	          configProp.load(in);
