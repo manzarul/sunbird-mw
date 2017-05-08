@@ -21,6 +21,12 @@ import java.util.*;
  *
  */
 public class LearnerController extends BaseController {
+	private static ActorSelection selection=null;
+	static{
+		ActorSystem system = ActorSystem.create("HelloApplication", ConfigFactory.load()
+                .getConfig("HelloConfig"));
+		selection = system.actorSelection("akka.tcp://RemoteMiddlewareSystem@127.0.0.1:8088/user/LearnerActorSelector");
+	}
 	
 	/**
 	 * This method will provide list of enrolled courses
@@ -28,15 +34,11 @@ public class LearnerController extends BaseController {
 	 * @return Result
 	 */
 	public Result getEnrolledCourses() {
-		LearnerStateActor actor = null;
-		ActorSystem system =null;
-		system = ActorSystem.create("HelloApplication", ConfigFactory.load()
-                .getConfig("HelloConfig"));
-		ActorSelection selection = system.actorSelection("akka.tcp://RemoteMiddlewareSystem@127.0.0.1:8088/user/CourseEnrollmentActor");
 		
+		//akka://RemoteMiddlewareSystem/user/LearnerActorSelector
 		Course course= new Course();
-    	course.setCourseId("Course 12");
-    	course.setCourseName("Course Name");
+    	course.setCourseId("Course 121234");
+    	course.setCourseName("Course Name121234");
     	course.setUserId("user ID 1");
     	course.setEnrolledDate("2017-05-05");
     	course.setDescription("Teacher training Course Material");

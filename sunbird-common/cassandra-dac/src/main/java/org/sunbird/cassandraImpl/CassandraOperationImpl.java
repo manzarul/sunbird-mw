@@ -37,7 +37,7 @@ public class CassandraOperationImpl implements CassandraOperation{
 	    LOGGER.info("trying to insert in Cassandra=="+ statement.getQueryString());	
 		ResultSet result = CassandraConnectionManager.getSession().execute(boundStatement.bind(course.getCourseId(), course.getCourseName(),course.getUserId(),
 			course.getEnrolledDate(),course.getDescription(),course.getTocUrl(),course.getCourseProgressStatus(),course.isActive(),course.getDeltaMap()));
-		LOGGER.debug(result.toString());
+		LOGGER.info(result.toString());
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
 		}
@@ -62,7 +62,7 @@ public class CassandraOperationImpl implements CassandraOperation{
 		 MappingManager manager = new MappingManager(CassandraConnectionManager.getSession());
 		 Mapper<Course> m = manager.mapper(Course.class);
 		 course= m.map(results).one();
-		 LOGGER.info(course.toString());
+		// LOGGER.info(course.toString());
 		}catch(Exception e){
 			e.printStackTrace();
 		}

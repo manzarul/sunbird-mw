@@ -35,7 +35,7 @@ public class CassandraTest {
 		
 		//courseId,courseName,userId, enrolledDate, description, tocUrl,courseProgressStatus,active,deltaMap
     	Course course= new Course();
-    	course.setCourseId("Course 101");
+    	course.setCourseId("Course 1211");
     	course.setCourseName("Course Name");
     	course.setUserId("user ID 1");
     	course.setEnrolledDate("2017-05-05");
@@ -64,13 +64,13 @@ public class CassandraTest {
 
 	@Test
 	public void testGetCourse() {
-		Course course = cassandraOperation.getCourseById("Course 101");
+		Course course = cassandraOperation.getCourseById("Course 1211");
 		assertEquals(course.getDescription(),"Teacher training Course Material");
 	}
 	
 	@Test
 	public void testdeleteCourse() {
-		boolean deleted=cassandraOperation.deleteCourseById("Course 101");
+		boolean deleted=cassandraOperation.deleteCourseById("Course 1211");
 		assertEquals(deleted,true);
 	}
 
