@@ -7,11 +7,13 @@ import com.typesafe.config.ConfigFactory;
 
 import org.apache.log4j.Logger;
 import org.sunbird.learner.actors.CourseEnrollmentActor;
+import org.sunbird.learner.actors.LearnerActorSelector;
 import org.sunbird.learner.actors.LearnerStateActor;
 import org.sunbird.learner.actors.LearnerStateUpdateActor;
 
 /**
  * Created by arvind on 5/5/17.
+ * Remote actor Application start point .
  */
 public class Application {
    private static final Logger LOGGER = Logger.getLogger(Application.class); 
@@ -28,12 +30,8 @@ public class Application {
     public static void startRemoteCreationSystem(){
         system = ActorSystem.create("RemoteMiddlewareSystem", ConfigFactory.load()
                 .getConfig("RemoteMWConfig"));
-        ActorRef learnerStateActorRef = system.actorOf(Props.create(LearnerStateActor.class),
-                "LearnerStateActor");
-        ActorRef learnerStateUpdateActorRef = system.actorOf(Props.create(LearnerStateUpdateActor.class),
-                "LearnerStateUpdateActor");
-        ActorRef courseEnrollmentActorRef = system.actorOf(Props.create(CourseEnrollmentActor.class),
-                "CourseEnrollmentActor");
+        ActorRef learnerActorSelectorRef = system.actorOf(Props.create(LearnerActorSelector.class),
+                "LearnerActorSelector");
         LOGGER.info("ACTORS STARTED");
     }
 }
