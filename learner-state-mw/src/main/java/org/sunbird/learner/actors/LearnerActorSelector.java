@@ -3,6 +3,7 @@ package org.sunbird.learner.actors;
 import akka.actor.ActorRef;
 import akka.actor.Props;
 import akka.actor.UntypedAbstractActor;
+import akka.routing.FromConfig;
 import org.apache.log4j.Logger;
 import org.sunbird.bean.ActorMessage;
 import org.sunbird.bean.LearnerStateOperation;
@@ -14,6 +15,21 @@ import org.sunbird.bean.LearnerStateOperation;
 public class LearnerActorSelector extends UntypedAbstractActor {
 
     Logger logger = Logger.getLogger(LearnerActorSelector.class.getName());
+    ActorRef courseEnrollmentActorRouter;
+    ActorRef learnerStateActorRouter;
+    ActorRef learnerStateUpdateActorRouter;
+
+    public LearnerActorSelector(){
+        courseEnrollmentActorRouter =
+                getContext().actorOf(FromConfig.getInstance().props(Props.create(CourseEnrollmentActor.class)),
+                        "router1");
+        learnerStateActorRouter =
+                getContext().actorOf(FromConfig.getInstance().props(Props.create(LearnerStateActor.class)),
+                        "router2");
+        learnerStateUpdateActorRouter =
+                getContext().actorOf(FromConfig.getInstance().props(Props.create(LearnerStateUpdateActor.class)),
+                        "router3");
+    }
 
     @Override
     public void onReceive(Object message) throws Exception {
@@ -24,23 +40,15 @@ public class LearnerActorSelector extends UntypedAbstractActor {
             ActorMessage actorMessage = (ActorMessage) message;
             if (actorMessage.getOperation().getValue().equalsIgnoreCase(LearnerStateOperation.ADD_COURSE.getValue())) {
 
-                ActorRef courseEnrollmentActorRef = getContext().actorOf(Props.create(CourseEnrollmentActor.class),
-                        "CourseEnrollmentActor");
-                logger.info("actor path :"+courseEnrollmentActorRef.path()+" and reference is "+courseEnrollmentActorRef.toString());
-                courseEnrollmentActorRef.tell(message, self());
+                courseEnrollmentActorRouter.tell(message, self());
 
             } else if (actorMessage.getOperation().getValue().equalsIgnoreCase(LearnerStateOperation.GET_COURSE.getValue())) {
 
-                ActorRef learnerActorSelectorRef = getContext().actorOf(Props.create(LearnerActorSelector.class),
-                        "LearnerActorSelector");
-                learnerActorSelectorRef.tell(message, self());
+                learnerStateActorRouter.tell(message, self());
 
             } else if (actorMessage.getOperation().getValue().equalsIgnoreCase(LearnerStateOperation.UPDATE_TOC.getValue())) {
 
-                ActorRef learnerStateUpdateActorRef = getContext().actorOf(Props.create(LearnerStateUpdateActor.class),
-                        "LearnerStateUpdateActor");
-
-                learnerStateUpdateActorRef.tell(message, self());
+                learnerStateUpdateActorRouter.tell(message, self());
 
             }
 
