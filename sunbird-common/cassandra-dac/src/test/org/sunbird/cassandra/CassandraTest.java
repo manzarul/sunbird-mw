@@ -62,11 +62,11 @@ public class CassandraTest {
     	cassandraOperation.insertCourse(course);
 	}
 
-	@Test
+	/*@Test
 	public void testGetCourse() {
 		Course course = cassandraOperation.getCourseById("Course 1211");
 		assertEquals(course.getDescription(),"Teacher training Course Material");
-	}
+	}*/
 	
 	@Test
 	public void testdeleteCourse() {

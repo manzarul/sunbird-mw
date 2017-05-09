@@ -48,6 +48,8 @@ public class LearnerActorSelector extends UntypedAbstractActor {
             //TODO check the operation type and handle it.
             ActorMessage actorMessage = (ActorMessage) message;
             if (actorMessage.getOperation().getValue().equalsIgnoreCase(LearnerStateOperation.ADD_COURSE.getValue())) {
+            	
+            	ActorRef parent = sender();
 
                 Timeout timeout = new Timeout(Duration.create(5, "seconds"));
                 Future<Object> future = Patterns.ask(courseEnrollmentActorRouter, message, timeout);
@@ -58,9 +60,9 @@ public class LearnerActorSelector extends UntypedAbstractActor {
                         if (failure != null) {
                             //We got a failure, handle it here
                         } else {
-                            logger.info("PARENT RESULT IS ");
+                            logger.info("PARENT RESULT IS " + result);
                             // We got a result, do something with it
-                            sender().tell("SUCCESS", ActorRef.noSender());
+                            parent.tell("SUCCESS", ActorRef.noSender());
                         }
                     }
                 }, ec);
@@ -71,16 +73,16 @@ public class LearnerActorSelector extends UntypedAbstractActor {
 
                 Timeout timeout = new Timeout(Duration.create(5, "seconds"));
                 Future<Object> future = Patterns.ask(learnerStateActorRouter, message, timeout);
-
+                ActorRef parent = sender();
                 future.onComplete(new OnComplete<Object>() {
                     @Override
                     public void onComplete(Throwable failure, Object result) {
                         if (failure != null) {
                             //We got a failure, handle it here
                         } else {
-                            logger.info("PARENT RESULT IS ");
+                            logger.info("PARENT RESULT IS " + result);
                             // We got a result, do something with it
-                            sender().tell("SUCCESS", ActorRef.noSender());
+                            parent.tell(result, ActorRef.noSender());
                         }
                     }
                 }, ec);

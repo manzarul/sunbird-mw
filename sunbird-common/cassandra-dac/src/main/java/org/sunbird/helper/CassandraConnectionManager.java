@@ -52,7 +52,7 @@ public class CassandraConnectionManager {
 		        		.withRetryPolicy(DefaultRetryPolicy.INSTANCE)
 		        		.withTimestampGenerator(new AtomicMonotonicTimestampGenerator())
 		        		.withPoolingOptions(poolingOptions)
-		        		.withCredentials(instance.getProperty(Constants.CASSANDRA_USERNAME), instance.getProperty(Constants.CASSANDRA_PASSWORD))
+		        		//.withCredentials(instance.getProperty(Constants.CASSANDRA_USERNAME), instance.getProperty(Constants.CASSANDRA_PASSWORD))
 		        		.build();
 		        QueryLogger queryLogger = QueryLogger.builder().withConstantThreshold(Integer.parseInt(instance.getProperty(Constants.QUERY_LOGGER_THRESHOLD))).build();
 		        cluster.register(queryLogger);

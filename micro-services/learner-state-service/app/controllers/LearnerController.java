@@ -1,24 +1,26 @@
 package controllers;
 
-import play.libs.F.Promise;
-import play.mvc.Result;
-import play.mvc.Results;
-import org.sunbird.learner.actors.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
+import org.sunbird.bean.ActorMessage;
+import org.sunbird.bean.LearnerStateOperation;
 import org.sunbird.model.Course;
 
-import akka.actor.ActorRef;
+import com.typesafe.config.ConfigFactory;
+
 import akka.actor.ActorSelection;
 import akka.actor.ActorSystem;
-import akka.actor.Props;
-import com.typesafe.config.ConfigFactory;
-import org.sunbird.bean.*;
-import org.sunbird.model.*;
-import java.util.*;
 import akka.pattern.Patterns;
 import akka.util.Timeout;
+import play.libs.F.Promise;
+import play.libs.Json;
+import play.mvc.Result;
+import play.mvc.Results;
 import scala.concurrent.Await;
 import scala.concurrent.Future;
-import java.util.concurrent.TimeUnit;
 
 /**
  * This controller will handler all the request related 
@@ -47,15 +49,16 @@ public class LearnerController extends BaseController {
 		msg.setData(map);
 		Timeout timeout = new Timeout(3, TimeUnit.SECONDS);
         Future<Object> future = Patterns.ask(selection, msg, timeout);
+        Promise p = Promise.pure(future);
         List<Course> courseList = null;
         try {
-        	courseList =(List) Await.result(future, timeout.duration());
-            System.out.println(" final retun response=="+courseList.size());
+        	courseList =(List<Course>) Await.result(future, timeout.duration());
+            System.out.println(" final retun response=="+courseList);
         } catch (Exception e1) {
             // TODO Auto-generated catch block
             e1.printStackTrace();
         }
-		return ok("courseList");
+		return ok(Json.toJson(courseList));
 		
 	}
 	

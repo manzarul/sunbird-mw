@@ -2,11 +2,15 @@ package org.sunbird.learner.actors;
 
 
 import akka.actor.UntypedAbstractActor;
+
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.sunbird.bean.ActorMessage;
 import org.sunbird.bean.LearnerStateOperation;
 import org.sunbird.cassandra.CassandraOperation;
 import org.sunbird.cassandraImpl.CassandraOperationImpl;
+import org.sunbird.model.Course;
 
 /**
  * This actor will provide learner TOC state.
@@ -31,8 +35,8 @@ public class LearnerStateActor extends UntypedAbstractActor {
                     String userId = (String) obj;
                     //TODO: add course by user id at Cassandra-Operation
                     //cassandraOperation.get
-                    cassandraOperation.getUserEnrolledCourse(userId);
-                    sender().tell("SUCCESS", self());
+                    List<Course> courseList = cassandraOperation.getUserEnrolledCourse(userId);
+                    sender().tell(courseList, self());
                 } else {
                     logger.info("Mis match");
                     sender().tell("UNSUPPORTED COURSE OBJECT", self());
