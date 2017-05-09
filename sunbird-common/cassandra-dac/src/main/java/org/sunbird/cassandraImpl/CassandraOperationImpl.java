@@ -1,5 +1,10 @@
 package org.sunbird.cassandraImpl;
 
+import static com.datastax.driver.core.querybuilder.QueryBuilder.eq;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.sunbird.cassandra.CassandraOperation;
 import org.sunbird.common.CassandraQuery;
@@ -17,9 +22,6 @@ import com.datastax.driver.core.querybuilder.Select;
 import com.datastax.driver.core.querybuilder.Select.Where;
 import com.datastax.driver.mapping.Mapper;
 import com.datastax.driver.mapping.MappingManager;
-import static com.datastax.driver.core.querybuilder.QueryBuilder.eq;
-
-import java.util.List;
 
 public class CassandraOperationImpl implements CassandraOperation{
 
@@ -93,8 +95,18 @@ public class CassandraOperationImpl implements CassandraOperation{
 	 */
 	@Override
 	public List<Course> getUserEnrolledCourse(String userId) {
-		// TODO Auto-generated method stub
-		return null;
+		Select selectQuery = QueryBuilder.select().all().from(CassandraQuery.KEY_SPACE_NAME, CassandraQuery.Course.COURSE_TABLE_NAME);
+	    Where selectWhere = selectQuery.where();
+	    Clause rkClause = QueryBuilder.eq(Constants.USER_ID, userId);
+	    selectWhere.and(rkClause);
+		ResultSet results  = CassandraConnectionManager.getSession().execute(selectQuery);
+		List<Course> courseList = new ArrayList<Course>();
+		while (!results.isExhausted()) {
+			MappingManager manager = new MappingManager(CassandraConnectionManager.getSession());
+			Mapper<Course> m = manager.mapper(Course.class);
+			courseList.add(m.map(results).one());
+		}
+		return courseList;
 	}
 		
 }
