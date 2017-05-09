@@ -6,10 +6,7 @@ import akka.actor.Props;
 import com.typesafe.config.ConfigFactory;
 
 import org.apache.log4j.Logger;
-import org.sunbird.learner.actors.CourseEnrollmentActor;
 import org.sunbird.learner.actors.LearnerActorSelector;
-import org.sunbird.learner.actors.LearnerStateActor;
-import org.sunbird.learner.actors.LearnerStateUpdateActor;
 
 /**
  * Created by arvind on 5/5/17.
