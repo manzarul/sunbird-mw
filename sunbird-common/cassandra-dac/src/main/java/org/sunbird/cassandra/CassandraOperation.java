@@ -2,6 +2,7 @@ package org.sunbird.cassandra;
 
 import java.util.List;
 
+import org.sunbird.model.Content;
 import org.sunbird.model.Course;
 
 public interface CassandraOperation {
@@ -28,5 +29,18 @@ public interface CassandraOperation {
 	 * 
 	 */
 	public List<Course> getUserEnrolledCourse(String userId);
+	
+
+	/*
+	 * @param String contentId
+	 * 
+	 */
+	public Content getContentById(String contentId);
+	
+	/*
+	 * @param Content contentId
+	 * 
+	 */
+	public void insertContent(Content content);
 
 }
