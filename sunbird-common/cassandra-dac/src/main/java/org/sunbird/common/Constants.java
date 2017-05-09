@@ -1,5 +1,8 @@
 package org.sunbird.common;
 
+/*
+ * @author Amit Kumar
+ */
 public interface Constants {
 	//CASSANDRA CONFIG PROPERTIES
 	public static final String CORE_CONNECTIONS_PER_HOST_FOR_LOCAL="coreConnectionsPerHostForLocal";
@@ -19,7 +22,7 @@ public interface Constants {
 	
 	//CONSTANT
 	public static final String COURSE_ID="courseId";
-	
+	public static final String USER_ID="userId";
 	public enum LearnerStateOperation {
 		NOT_STARTED("notStarted"),STARTED("started"),COMPLETED("completed");
 

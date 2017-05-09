@@ -14,6 +14,12 @@ import com.typesafe.config.ConfigFactory;
 import org.sunbird.bean.*;
 import org.sunbird.model.*;
 import java.util.*;
+import akka.pattern.Patterns;
+import akka.util.Timeout;
+import scala.concurrent.Await;
+import scala.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+
 /**
  * This controller will handler all the request related 
  * to learner state.
@@ -34,24 +40,23 @@ public class LearnerController extends BaseController {
 	 * @return Result
 	 */
 	public Result getEnrolledCourses() {
-		
-		//akka://RemoteMiddlewareSystem/user/LearnerActorSelector
-		Course course= new Course();
-    	course.setCourseId("Course 121234");
-    	course.setCourseName("Course Name121234");
-    	course.setUserId("user ID 1");
-    	course.setEnrolledDate("2017-05-05");
-    	course.setDescription("Teacher training Course Material");
-    	course.setCourseProgressStatus("Not Started");
-    	course.setActive(true);
-    	
 		ActorMessage msg = new ActorMessage();
-		msg.setOperation(LearnerStateOperation.ADD_COURSE);
+		msg.setOperation(LearnerStateOperation.GET_COURSE);
 		Map map = new HashMap<String,Object>();
-		map.put("Course 1",course);
+		map.put("Course 1","user ID 1");
 		msg.setData(map);
-		selection.tell(msg, ActorRef.noSender());
-		return ok("success");
+		Timeout timeout = new Timeout(3, TimeUnit.SECONDS);
+        Future<Object> future = Patterns.ask(selection, msg, timeout);
+        List<Course> courseList = null;
+        try {
+        	courseList =(List) Await.result(future, timeout.duration());
+            System.out.println(" final retun response=="+courseList.size());
+        } catch (Exception e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+        }
+		return ok("courseList");
+		
 	}
 	
 	/**
@@ -60,7 +65,31 @@ public class LearnerController extends BaseController {
 	 * @return Result
 	 */
 	public Result enrollCourse() {
-		return ok("success ho gaya!");
+				Course course= new Course();
+		    	course.setCourseId("Course 121234");
+		    	course.setCourseName("Course Name121234");
+		    	course.setUserId("user ID 1");
+		    	course.setEnrolledDate("2017-05-05");
+		    	course.setDescription("Teacher training Course Material");
+		    	course.setCourseProgressStatus("Not Started");
+		    	course.setActive(true);
+		    	
+				ActorMessage msg = new ActorMessage();
+				msg.setOperation(LearnerStateOperation.ADD_COURSE);
+				Map map = new HashMap<String,Object>();
+				map.put("Course 1",course);
+				msg.setData(map);
+				Timeout timeout = new Timeout(3, TimeUnit.SECONDS);
+		        Future<Object> future = Patterns.ask(selection, msg, timeout);
+		        String val = null;
+		        try {
+		        	val =(String) Await.result(future, timeout.duration());
+		            System.out.println(" final retun response=="+val);
+		        } catch (Exception e1) {
+		            // TODO Auto-generated catch block
+		            e1.printStackTrace();
+		        }
+				return ok(val);
 	}
 	
 	/**
@@ -70,6 +99,7 @@ public class LearnerController extends BaseController {
 	 * @return Result
 	 */
 	public Result getContentState() {
+		
 		return ok("success");
 	}
    

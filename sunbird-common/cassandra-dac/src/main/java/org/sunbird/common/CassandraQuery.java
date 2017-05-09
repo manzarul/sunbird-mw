@@ -1,5 +1,8 @@
 package org.sunbird.common;
 
+/*
+ * @author Amit Kumar
+ */
 public interface CassandraQuery {
 	public static final String KEY_SPACE_NAME="cassandraKeySpace";
 
