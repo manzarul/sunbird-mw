@@ -1,5 +1,7 @@
 package org.sunbird.cassandra;
 
+import java.util.List;
+
 import org.sunbird.model.Course;
 
 public interface CassandraOperation {
@@ -20,5 +22,11 @@ public interface CassandraOperation {
 	 * 
 	 */
 	public boolean deleteCourseById(String courseId);
+	
+	/*
+	 * @param String userId
+	 * 
+	 */
+	public List<Course> getUserEnrolledCourse(String userId);
 
 }

@@ -19,6 +19,8 @@ import com.datastax.driver.mapping.Mapper;
 import com.datastax.driver.mapping.MappingManager;
 import static com.datastax.driver.core.querybuilder.QueryBuilder.eq;
 
+import java.util.List;
+
 public class CassandraOperationImpl implements CassandraOperation{
 
 	private final static Logger LOGGER = Logger.getLogger(CassandraOperationImpl.class.getName());
@@ -82,6 +84,18 @@ public class CassandraOperationImpl implements CassandraOperation{
 		 LOGGER.info(results.toString());
 		 return results.isExhausted();
 		}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.sunbird.cassandra.CassandraOperation#getUserEnrolledCourse(String)
+	 * @param courseId
+	 * used to retrieve list of enrolled course information based on user id
+	 */
+	@Override
+	public List<Course> getUserEnrolledCourse(String userId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 		
 }
 
