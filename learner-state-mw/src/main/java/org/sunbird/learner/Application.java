@@ -29,6 +29,6 @@ public class Application {
                 .getConfig("RemoteMWConfig"));
         ActorRef learnerActorSelectorRef = system.actorOf(Props.create(LearnerActorSelector.class),
                 "LearnerActorSelector");
-        LOGGER.info("ACTORS STARTED");
+        LOGGER.info("ACTORS STARTED " + learnerActorSelectorRef);
     }
 }
