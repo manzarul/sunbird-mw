@@ -23,6 +23,8 @@ public interface Constants {
 	//CONSTANT
 	public static final String COURSE_ID="courseId";
 	public static final String USER_ID="userId";
+	public static final String CONTENT_ID="contentId";
+	
 	public enum LearnerStateOperation {
 		NOT_STARTED("notStarted"),STARTED("started"),COMPLETED("completed");
 

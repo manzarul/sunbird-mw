@@ -10,7 +10,7 @@ public interface CassandraOperation {
 	 * @param Course course
 	 * 
 	 */
-	public void insertCourse(Course course);
+	public boolean insertCourse(Course course);
 	
 	/*
 	 * @param String courseId
@@ -41,6 +41,12 @@ public interface CassandraOperation {
 	 * @param Content contentId
 	 * 
 	 */
-	public void insertContent(Content content);
+	public boolean insertContent(Content content);
+	
+	/*
+	 * @param String contentId
+	 * 
+	 */
+	public boolean deleteContentById(String contentId);
 
 }

@@ -34,18 +34,18 @@ public class CassandraOperationImpl implements CassandraOperation{
 	 * @param course
 	 * this method insert course info to db
 	 */
-	public void insertCourse(Course course) {
-		LOGGER.info("method started==");
+	public boolean insertCourse(Course course) {
 		PreparedStatement statement = CassandraConnectionManager.getSession().prepare(CassandraQuery.Course.INSERT_COURSE);
 		BoundStatement boundStatement = new BoundStatement(statement);
+		ResultSet result=null;
 		try {
-	    LOGGER.info("trying to insert in Cassandra=="+ statement.getQueryString());	
-		ResultSet result = CassandraConnectionManager.getSession().execute(boundStatement.bind(course.getCourseId(), course.getCourseName(),course.getUserId(),
+		result = CassandraConnectionManager.getSession().execute(boundStatement.bind(course.getCourseId(), course.getCourseName(),course.getUserId(),
 			course.getEnrolledDate(),course.getDescription(),course.getTocUrl(),course.getCourseProgressStatus(),course.isActive(),course.getDeltaMap()));
-		LOGGER.info(result.toString());
+			LOGGER.debug(result.toString());
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
 		}
+		return result.wasApplied();
 		
 	}
 	
@@ -60,16 +60,15 @@ public class CassandraOperationImpl implements CassandraOperation{
 		try{
 		 Select selectQuery = QueryBuilder.select().all().from(CassandraQuery.KEY_SPACE_NAME, CassandraQuery.Course.COURSE_TABLE_NAME);
 	     Where selectWhere = selectQuery.where();
-	     Clause rkClause = QueryBuilder.eq(Constants.COURSE_ID, courseId);
-	     selectWhere.and(rkClause);
-	     LOGGER.info(selectQuery);
-		 ResultSet results  = CassandraConnectionManager.getSession().execute(selectQuery);
+	     Clause clause = QueryBuilder.eq(Constants.COURSE_ID, courseId);
+	     selectWhere.and(clause);
+	     LOGGER.debug(selectQuery);
+		 ResultSet result  = CassandraConnectionManager.getSession().execute(selectQuery);
 		 MappingManager manager = new MappingManager(CassandraConnectionManager.getSession());
 		 Mapper<Course> m = manager.mapper(Course.class);
-		 course= m.map(results).one();
-		// LOGGER.info(course.toString());
+		 course= m.map(result).one();
 		}catch(Exception e){
-			e.printStackTrace();
+			LOGGER.error(e.getMessage());
 		}
 		 return course;
 		}
@@ -83,9 +82,9 @@ public class CassandraOperationImpl implements CassandraOperation{
 	public boolean deleteCourseById(String courseId){
 		Delete.Where delete = QueryBuilder.delete().from(CassandraQuery.KEY_SPACE_NAME, CassandraQuery.Course.COURSE_TABLE_NAME)
 				.where(eq(Constants.COURSE_ID, courseId));
-		 ResultSet results  = CassandraConnectionManager.getSession().execute(delete);
-		 LOGGER.info(results.toString());
-		 return results.isExhausted();
+		 ResultSet result  = CassandraConnectionManager.getSession().execute(delete);
+		 LOGGER.debug(result.toString());
+		 return result.wasApplied();
 		}
 
 	/*
@@ -98,14 +97,14 @@ public class CassandraOperationImpl implements CassandraOperation{
 	public List<Course> getUserEnrolledCourse(String userId) {
 		Select selectQuery = QueryBuilder.select().all().from(CassandraQuery.KEY_SPACE_NAME, CassandraQuery.Course.COURSE_TABLE_NAME);
 	    Where selectWhere = selectQuery.where();
-	    Clause rkClause = QueryBuilder.eq(Constants.USER_ID, userId);
-	    selectWhere.and(rkClause);
-		ResultSet results  = CassandraConnectionManager.getSession().execute(selectQuery);
+	    Clause clause = QueryBuilder.eq(Constants.USER_ID, userId);
+	    selectWhere.and(clause);
+		ResultSet result  = CassandraConnectionManager.getSession().execute(selectQuery);
 		List<Course> courseList = new ArrayList<Course>();
-		while (!results.isExhausted()) {
+		while (!result.isExhausted()) {
 			MappingManager manager = new MappingManager(CassandraConnectionManager.getSession());
 			Mapper<Course> m = manager.mapper(Course.class);
-			courseList.add(m.map(results).one());
+			courseList.add(m.map(result).one());
 		}
 		return courseList;
 	}
@@ -117,18 +116,18 @@ public class CassandraOperationImpl implements CassandraOperation{
 	 * @param course
 	 * this method insert content info to db
 	 */
-	public void insertContent(Content content) {
-		LOGGER.info("method started==");
+	public boolean insertContent(Content content) {
 		PreparedStatement statement = CassandraConnectionManager.getSession().prepare(CassandraQuery.Content.INSERT_CONTENT);
 		BoundStatement boundStatement = new BoundStatement(statement);
+		ResultSet result =null;
 		try {
-	    LOGGER.info("trying to insert in Cassandra=="+ statement.getQueryString());	
-		ResultSet result = CassandraConnectionManager.getSession().execute(boundStatement.bind(content.getContentId(),content.getViewCount(),content.getLastAccessTime(),content.getCompletedCount(),
+		result = CassandraConnectionManager.getSession().execute(boundStatement.bind(content.getContentId(),content.getViewCount(),content.getLastAccessTime(),content.getCompletedCount(),
 				content.getProgressstatus(),content.getUserId(),content.getCourseId(),content.getLastUpdatedTime(),content.getDeviceId(),content.getViewPosition()));
-		LOGGER.info(result.toString());
+		LOGGER.debug(result.toString());
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());
 		}
+		return result.wasApplied();
 	}
 	
 	/*
@@ -140,19 +139,33 @@ public class CassandraOperationImpl implements CassandraOperation{
 	public Content getContentById(String contentId){
 		Content content=null;
 		try{
-			Select selectQuery = QueryBuilder.select().all().from("cassandraKeySpace", "content");
+			Select selectQuery = QueryBuilder.select().all().from(CassandraQuery.KEY_SPACE_NAME, CassandraQuery.Content.CONTENT_TABLE_NAME);
 		    Where selectWhere = selectQuery.where();
-		    Clause rkClause = QueryBuilder.eq("contentId", contentId);
-		    selectWhere.and(rkClause);
+		    Clause clause = QueryBuilder.eq(Constants.CONTENT_ID, contentId);
+		    selectWhere.and(clause);
 			ResultSet results  = CassandraConnectionManager.getSession().execute(selectQuery);
 			MappingManager manager = new MappingManager(CassandraConnectionManager.getSession());
 			Mapper<Content> m = manager.mapper(Content.class);
 			content= m.map(results).one();
-			LOGGER.info(content.getContentId()+" "+content.getCompletedCount());
 		}catch(Exception e){
-			e.printStackTrace();
+			LOGGER.error(e.getMessage());
 		}
 		 return content;
 		}
+
+	/*
+	 * (non-Javadoc)
+	 * @see org.sunbird.cassandra.CassandraOperation#deleteContentById(String)
+	 * @param courseId
+	 * used to delete content information based on content id
+	 */
+	@Override
+	public boolean deleteContentById(String contentId) {
+		Delete.Where delete = QueryBuilder.delete().from(CassandraQuery.KEY_SPACE_NAME, CassandraQuery.Content.CONTENT_TABLE_NAME)
+				.where(eq(Constants.CONTENT_ID, contentId));
+		 ResultSet result  = CassandraConnectionManager.getSession().execute(delete);
+		 LOGGER.debug(result.toString());
+		 return result.wasApplied();
+	}
 }
 
