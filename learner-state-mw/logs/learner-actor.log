@@ -1,21 +1,51 @@
-2017-05-05 18:20  INFO  org.sunbird.learner.actors.CourseEnrollmentActor.onReceive:29 - onReceive called
-2017-05-05 18:20  INFO  org.sunbird.learner.actors.CourseEnrollmentActor.onReceive:34 - OP type match
-2017-05-05 18:34  INFO  org.sunbird.learner.actors.CourseEnrollmentActor.onReceive:29 - onReceive called
-2017-05-05 18:44  INFO  org.sunbird.learner.actors.CourseEnrollmentActor.onReceive:29 - onReceive called
-2017-05-05 18:44  INFO  org.sunbird.learner.actors.CourseEnrollmentActor.onReceive:34 - OP type match1
-2017-05-05 18:44  INFO  org.sunbird.learner.actors.CourseEnrollmentActor.onReceive:38 - Obj match
-2017-05-05 18:44  INFO  org.sunbird.learner.actors.CourseEnrollmentActor.onReceive:40 - Course [courseId=Course 12, courseName=Course Name, userId=user ID 1, enrolledDate=2017-05-05, description=Teacher training Course Material, tocUrl=null, courseProgressStatus=Not Started, active=true]
-2017-05-05 18:44  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.insertCourse:26 - method started==
-2017-05-05 18:48  INFO  org.sunbird.learner.actors.CourseEnrollmentActor.onReceive:29 - onReceive called
-2017-05-05 18:48  INFO  org.sunbird.learner.actors.CourseEnrollmentActor.onReceive:34 - OP type match1
-2017-05-05 18:48  INFO  org.sunbird.learner.actors.CourseEnrollmentActor.onReceive:38 - Obj match
-2017-05-05 18:48  INFO  org.sunbird.learner.actors.CourseEnrollmentActor.onReceive:40 - Course [courseId=Course 12, courseName=Course Name, userId=user ID 1, enrolledDate=2017-05-05, description=Teacher training Course Material, tocUrl=null, courseProgressStatus=Not Started, active=true]
-2017-05-05 18:48  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.insertCourse:26 - method started==
-2017-05-05 19:02  INFO  org.sunbird.learner.actors.CourseEnrollmentActor.onReceive:29 - onReceive called
-2017-05-05 19:02  INFO  org.sunbird.learner.actors.CourseEnrollmentActor.onReceive:34 - OP type match1
-2017-05-05 19:02  INFO  org.sunbird.learner.actors.CourseEnrollmentActor.onReceive:38 - Obj match
-2017-05-05 19:02  INFO  org.sunbird.learner.actors.CourseEnrollmentActor.onReceive:40 - Course [courseId=Course 12, courseName=Course Name, userId=user ID 1, enrolledDate=2017-05-05, description=Teacher training Course Material, tocUrl=null, courseProgressStatus=Not Started, active=true]
-2017-05-05 19:02  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.insertCourse:26 - method started==
-2017-05-05 19:02  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.<clinit>:62 - Connected to cluster: Test Cluster
-2017-05-05 19:02  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.<clinit>:69 - Datacenter: datacenter1; Host: /127.0.0.1; Rack: rack1
-2017-05-05 19:02  INFO  org.sunbird.cassandraImpl.CassandraOperationImpl.insertCourse:30 - trying to insert in Cassandra==INSERT INTO cassandraKeySpace.course(courseId,courseName,userId, enrolledDate, description, tocUrl,courseProgressStatus,active,deltaMap)VALUES (?,?,?,?,?,?,?,?,?);
+2017-05-10 15:11  DEBUG org.sunbird.learner.actors.LearnerActorSelector.onReceive:49 - Actor selector onReceive called
+2017-05-10 15:11  DEBUG org.sunbird.learner.actors.LearnerStateActor.onReceive:33 - LearnerStateActor onReceive called
+2017-05-10 15:20  INFO  org.sunbird.learner.Application.startRemoteCreationSystem:32 - ACTORS STARTED Actor[akka://RemoteMiddlewareSystem/user/LearnerActorSelector#-345455114]
+2017-05-10 15:21  DEBUG org.sunbird.learner.actors.LearnerActorSelector.onReceive:49 - Actor selector onReceive called
+2017-05-10 15:21  DEBUG org.sunbird.learner.actors.LearnerStateActor.onReceive:33 - LearnerStateActor onReceive called
+2017-05-10 15:21  INFO  org.sunbird.learner.actors.LearnerStateActor.onReceive:59 - op type get Content
+2017-05-10 15:21  INFO  org.sunbird.learner.actors.LearnerStateActor.onReceive:62 - obj type String
+2017-05-10 15:21  INFO  org.sunbird.learner.actors.LearnerStateActor.onReceive:65 - [content Id 10, content Id 11, content Id 12, content Id 13, content Id 14]
+2017-05-10 15:21  DEBUG io.netty.util.internal.logging.InternalLoggerFactory.newDefaultFactory:46 - Using Log4J as the default logging framework
+2017-05-10 15:21  DEBUG io.netty.util.internal.PlatformDependent0.<clinit>:74 - java.nio.Buffer.address: available
+2017-05-10 15:21  DEBUG io.netty.util.internal.PlatformDependent0.<clinit>:82 - sun.misc.Unsafe.theUnsafe: available
+2017-05-10 15:21  DEBUG io.netty.util.internal.PlatformDependent0.<clinit>:91 - sun.misc.Unsafe.copyMemory: available
+2017-05-10 15:21  DEBUG io.netty.util.internal.PlatformDependent0.<clinit>:151 - java.nio.Bits.unaligned: true
+2017-05-10 15:21  DEBUG io.netty.util.internal.PlatformDependent0.<clinit>:155 - java.nio.DirectByteBuffer.<init>(long, int): available
+2017-05-10 15:21  DEBUG io.netty.util.internal.PlatformDependent.isWindows0:660 - Platform: Windows
+2017-05-10 15:21  DEBUG io.netty.util.internal.PlatformDependent.javaVersion0:791 - Java version: 8
+2017-05-10 15:21  DEBUG io.netty.util.internal.PlatformDependent.hasUnsafe0:798 - -Dio.netty.noUnsafe: false
+2017-05-10 15:21  DEBUG io.netty.util.internal.PlatformDependent.hasUnsafe0:825 - sun.misc.Unsafe: available
+2017-05-10 15:21  DEBUG io.netty.util.internal.PlatformDependent.hasJavassist0:908 - -Dio.netty.noJavassist: false
+2017-05-10 15:21  DEBUG io.netty.util.internal.PlatformDependent.hasJavassist0:921 - Javassist: unavailable
+2017-05-10 15:21  DEBUG io.netty.util.internal.PlatformDependent.hasJavassist0:922 - You don't have Javassist in your class path or you don't have enough permission to load dynamically generated classes.  Please check the configuration for better performance.
+2017-05-10 15:21  DEBUG io.netty.util.internal.PlatformDependent.tmpdir0:940 - -Dio.netty.tmpdir: C:\Users\AMITKU~1\AppData\Local\Temp (java.io.tmpdir)
+2017-05-10 15:21  DEBUG io.netty.util.internal.PlatformDependent.bitMode0:1019 - -Dio.netty.bitMode: 64 (sun.arch.data.model)
+2017-05-10 15:21  DEBUG io.netty.util.internal.PlatformDependent.<clinit>:99 - -Dio.netty.noPreferDirect: false
+2017-05-10 15:21  DEBUG io.netty.util.internal.PlatformDependent.<clinit>:135 - io.netty.maxDirectMemory: 1888485376 bytes
+2017-05-10 15:21  DEBUG io.netty.channel.MultithreadEventLoopGroup.<clinit>:41 - -Dio.netty.eventLoopThreads: 8
+2017-05-10 15:21  DEBUG io.netty.channel.nio.NioEventLoop.<clinit>:105 - -Dio.netty.noKeySetOptimization: false
+2017-05-10 15:21  DEBUG io.netty.channel.nio.NioEventLoop.<clinit>:106 - -Dio.netty.selectorAutoRebuildThreshold: 512
+2017-05-10 15:21  DEBUG io.netty.util.ResourceLeakDetector.<clinit>:106 - -Dio.netty.leakDetection.level: simple
+2017-05-10 15:21  DEBUG io.netty.util.ResourceLeakDetector.<clinit>:107 - -Dio.netty.leakDetection.maxRecords: 4
+2017-05-10 15:21  DEBUG io.netty.buffer.PooledByteBufAllocator.<clinit>:107 - -Dio.netty.allocator.numHeapArenas: 8
+2017-05-10 15:21  DEBUG io.netty.buffer.PooledByteBufAllocator.<clinit>:108 - -Dio.netty.allocator.numDirectArenas: 8
+2017-05-10 15:21  DEBUG io.netty.buffer.PooledByteBufAllocator.<clinit>:110 - -Dio.netty.allocator.pageSize: 8192
+2017-05-10 15:21  DEBUG io.netty.buffer.PooledByteBufAllocator.<clinit>:115 - -Dio.netty.allocator.maxOrder: 11
+2017-05-10 15:21  DEBUG io.netty.buffer.PooledByteBufAllocator.<clinit>:119 - -Dio.netty.allocator.chunkSize: 16777216
+2017-05-10 15:21  DEBUG io.netty.buffer.PooledByteBufAllocator.<clinit>:120 - -Dio.netty.allocator.tinyCacheSize: 512
+2017-05-10 15:21  DEBUG io.netty.buffer.PooledByteBufAllocator.<clinit>:121 - -Dio.netty.allocator.smallCacheSize: 256
+2017-05-10 15:21  DEBUG io.netty.buffer.PooledByteBufAllocator.<clinit>:122 - -Dio.netty.allocator.normalCacheSize: 64
+2017-05-10 15:21  DEBUG io.netty.buffer.PooledByteBufAllocator.<clinit>:123 - -Dio.netty.allocator.maxCachedBufferCapacity: 32768
+2017-05-10 15:21  DEBUG io.netty.buffer.PooledByteBufAllocator.<clinit>:124 - -Dio.netty.allocator.cacheTrimInterval: 8192
+2017-05-10 15:21  DEBUG io.netty.util.internal.ThreadLocalRandom.newSeed:182 - -Dio.netty.initialSeedUniquifier: 0xc97e5004336b831a (took 0 ms)
+2017-05-10 15:21  DEBUG io.netty.buffer.ByteBufUtil.<clinit>:70 - -Dio.netty.allocator.type: unpooled
+2017-05-10 15:21  DEBUG io.netty.buffer.ByteBufUtil.<clinit>:82 - -Dio.netty.threadLocalDirectBufferSize: 65536
+2017-05-10 15:21  DEBUG io.netty.buffer.ByteBufUtil.<clinit>:85 - -Dio.netty.maxThreadLocalCharBufferSize: 16384
+2017-05-10 15:21  DEBUG io.netty.util.Recycler.<clinit>:69 - -Dio.netty.recycler.maxCapacity.default: 262144
+2017-05-10 15:21  DEBUG io.netty.util.Recycler.<clinit>:70 - -Dio.netty.recycler.linkCapacity: 16
+2017-05-10 15:21  DEBUG io.netty.buffer.AbstractByteBuf.<clinit>:48 - -Dio.netty.buffer.bytebuf.checkAccessible: true
+2017-05-10 15:21  DEBUG org.sunbird.cassandraImpl.CassandraOperationImpl.<clinit>:65 - Connected to cluster: Test Cluster
+2017-05-10 15:21  DEBUG org.sunbird.cassandraImpl.CassandraOperationImpl.<clinit>:72 - Datacenter: datacenter1; Host: /127.0.0.1; Rack: rack1
+2017-05-10 15:21  INFO  org.sunbird.learner.actors.LearnerStateActor.onReceive:67 - org.sunbird.model.ContentList@6311d52d
+2017-05-10 15:21  INFO  org.sunbird.learner.actors.LearnerActorSelector.onComplete:125 - PARENT RESULT IS org.sunbird.model.ContentList@6311d52d
