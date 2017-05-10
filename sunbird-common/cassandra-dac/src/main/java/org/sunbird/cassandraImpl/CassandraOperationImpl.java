@@ -13,6 +13,7 @@ import org.sunbird.helper.CassandraConnectionManager;
 import org.sunbird.model.Content;
 import org.sunbird.model.ContentList;
 import org.sunbird.model.Course;
+import org.sunbird.model.CourseList;
 
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.PreparedStatement;
@@ -95,18 +96,21 @@ public class CassandraOperationImpl implements CassandraOperation{
 	 * used to retrieve list of enrolled course information based on user id
 	 */
 	@Override
-	public List<Course> getUserEnrolledCourse(String userId) {
+	public CourseList getUserEnrolledCourse(String userId) {
 		Select selectQuery = QueryBuilder.select().all().from(CassandraQuery.KEY_SPACE_NAME, CassandraQuery.Course.COURSE_TABLE_NAME);
 	    Where selectWhere = selectQuery.where();
 	    Clause clause = QueryBuilder.eq(Constants.USER_ID, userId);
 	    selectWhere.and(clause);
 		ResultSet result  = CassandraConnectionManager.getSession().execute(selectQuery);
-		List<Course> courseList = new ArrayList<Course>();
+		List<Course> list = new ArrayList<Course>();
+		CourseList courseList = new CourseList();
 		while (!result.isExhausted()) {
 			MappingManager manager = new MappingManager(CassandraConnectionManager.getSession());
 			Mapper<Course> m = manager.mapper(Course.class);
-			courseList.add(m.map(result).one());
+			list.add(m.map(result).one());
 		}
+		
+		courseList.setCourseList(list);
 		return courseList;
 	}
 		
@@ -137,12 +141,12 @@ public class CassandraOperationImpl implements CassandraOperation{
 	 * @param courseId
 	 * used to fetch course information based on course id
 	 */
-	public Content getContentById(String userId,List<String> contentIdList){
+	public Content getContentById(String contentId){
 		Content content=null;
 		try{
 			Select selectQuery = QueryBuilder.select().all().from(CassandraQuery.KEY_SPACE_NAME, CassandraQuery.Content.CONTENT_TABLE_NAME);
 		    Where selectWhere = selectQuery.where();
-		    Clause clause = QueryBuilder.eq(Constants.CONTENT_ID, userId);
+		    Clause clause = QueryBuilder.eq(Constants.CONTENT_ID, contentId);
 		    selectWhere.and(clause);
 			ResultSet results  = CassandraConnectionManager.getSession().execute(selectQuery);
 			MappingManager manager = new MappingManager(CassandraConnectionManager.getSession());
@@ -169,10 +173,30 @@ public class CassandraOperationImpl implements CassandraOperation{
 		 return result.wasApplied();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * @see org.sunbird.cassandra.CassandraOperation#getContentState(String,List<String>)
+	 * @param courseId
+	 * used to retrieve list of enrolled course information based on user id and list of content id
+	 */
 	@Override
 	public ContentList getContentState(String userId, List<String> contentIdList) {
-		// TODO Auto-generated method stub
-		return null;
+		Select selectQuery = QueryBuilder.select().all().from(CassandraQuery.KEY_SPACE_NAME, CassandraQuery.Content.CONTENT_TABLE_NAME);
+	    Where selectWhere = selectQuery.where();
+	    Clause clause1 = QueryBuilder.eq(Constants.USER_ID, userId);
+	    Clause clause2 = QueryBuilder.in(Constants.CONTENT_ID, contentIdList);
+	    selectWhere.and(clause1);
+	    selectWhere.and(clause2);
+		ResultSet result  = CassandraConnectionManager.getSession().execute(selectQuery);
+		List<Content> list = new ArrayList<Content>();
+		while (!result.isExhausted()) {
+			MappingManager manager = new MappingManager(CassandraConnectionManager.getSession());
+			Mapper<Content> m = manager.mapper(Content.class);
+			list.add(m.map(result).one());
+		}
+		ContentList contentList= new ContentList();
+		contentList.setContentList(list);
+		return contentList;
 	}
 }
 
