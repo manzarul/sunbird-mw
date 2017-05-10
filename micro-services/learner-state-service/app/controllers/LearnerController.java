@@ -49,7 +49,7 @@ public class LearnerController extends BaseController {
 		Map<String,Object> map = new HashMap<>();
 		map.put("Course 1","user ID 1");
 		msg.setData(map);
-		Timeout timeout = new Timeout(1, TimeUnit.SECONDS);
+		Timeout timeout = new Timeout(5, TimeUnit.SECONDS);
         Future<Object> future = Patterns.ask(selection, msg, timeout);
        List<Course> courseList = null;
         try {
