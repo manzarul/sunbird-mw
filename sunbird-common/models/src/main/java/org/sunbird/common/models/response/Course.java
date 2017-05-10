@@ -1,9 +1,15 @@
-package org.sunbird.common.models.ResponseModel;
+package org.sunbird.common.models.response;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Course {
-	
+/**
+ * This class will hold course data.
+ * @author Manzarul
+ *
+ */
+public class Course implements Serializable{
+	private static final long serialVersionUID = -1888295560077745940L;
 	private String courseId;
 	private String courseName;
 	private String description;

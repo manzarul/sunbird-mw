@@ -1,7 +1,15 @@
-package org.sunbird.common.models.ResponseModel;
+package org.sunbird.common.models.response;
 
-public class Response {
-	
+import java.io.Serializable;
+
+/**
+ * This class will contains complete course 
+ * response object.
+ * @author Manzarul
+ *
+ */
+public class CourseResponse implements Serializable{
+	private static final long serialVersionUID = 1227364694267678889L;
 	private String responseCode;
 	private String id;
 	private String ts;

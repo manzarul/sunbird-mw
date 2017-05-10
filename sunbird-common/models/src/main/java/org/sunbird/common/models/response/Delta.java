@@ -1,7 +1,15 @@
-package org.sunbird.common.models.ResponseModel;
+package org.sunbird.common.models.response;
 
-public class Delta {
-	
+import java.io.Serializable;
+
+/**
+ * This will content details information for 
+ * a course.
+ * @author Manzarul
+ *
+ */
+public class Delta implements Serializable{
+	private static final long serialVersionUID = -1771624289282630137L;
 	private String beforeContentId;
 	private String afterContnetId;
 	private String contentId;

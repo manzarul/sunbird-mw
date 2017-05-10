@@ -1,9 +1,15 @@
-package org.sunbird.common.models.ResponseModel;
+package org.sunbird.common.models.response;
 
+import java.io.Serializable;
 import java.util.List;
-
-public class CourseList {
-
+/**
+ * This class will wrap course list inside CourseList
+ * 
+ * @author Manzarul
+ *
+ */
+public class CourseList implements Serializable{
+	private static final long serialVersionUID = -1972876254382299493L;
 	private List<Course> courseList;
 
 	/**

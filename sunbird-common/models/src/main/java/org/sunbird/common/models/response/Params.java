@@ -1,7 +1,14 @@
-package org.sunbird.common.models.ResponseModel;
+package org.sunbird.common.models.response;
 
-public class Params {
+import java.io.Serializable;
 
+/**
+ * Common response parameter bean
+ * @author Manzarul
+ *
+ */
+public class Params implements Serializable{
+	private static final long serialVersionUID = -8786004970726124473L;
 	private String resmsgid;
 	private String msgid;
 	private String err;

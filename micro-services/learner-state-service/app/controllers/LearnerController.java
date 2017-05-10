@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.log4j.Logger;
 import org.sunbird.bean.ActorMessage;
 import org.sunbird.bean.LearnerStateOperation;
 import org.sunbird.model.Course;
@@ -29,6 +30,7 @@ import scala.concurrent.Future;
  *
  */
 public class LearnerController extends BaseController {
+	private Logger logger = Logger.getLogger(LearnerController.class);
 	private static ActorSelection selection=null;
 	static{
 		ActorSystem system = ActorSystem.create("HelloApplication", ConfigFactory.load()
@@ -44,22 +46,20 @@ public class LearnerController extends BaseController {
 	public Result getEnrolledCourses() {
 		ActorMessage msg = new ActorMessage();
 		msg.setOperation(LearnerStateOperation.GET_COURSE);
-		Map map = new HashMap<String,Object>();
+		Map<String,Object> map = new HashMap<>();
 		map.put("Course 1","user ID 1");
 		msg.setData(map);
-		Timeout timeout = new Timeout(3, TimeUnit.SECONDS);
+		Timeout timeout = new Timeout(1, TimeUnit.SECONDS);
         Future<Object> future = Patterns.ask(selection, msg, timeout);
-        Promise p = Promise.pure(future);
-        List<Course> courseList = null;
+       List<Course> courseList = null;
         try {
         	courseList =(List<Course>) Await.result(future, timeout.duration());
             System.out.println(" final retun response=="+courseList);
-        } catch (Exception e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
+        } catch (Exception e) {
+        	logger.error(e);
+        	return ok("Failure");
         }
 		return ok(Json.toJson(courseList));
-		
 	}
 	
 	/**
@@ -89,7 +89,6 @@ public class LearnerController extends BaseController {
 		        	val =(String) Await.result(future, timeout.duration());
 		            System.out.println(" final retun response=="+val);
 		        } catch (Exception e1) {
-		            // TODO Auto-generated catch block
 		            e1.printStackTrace();
 		        }
 				return ok(val);
