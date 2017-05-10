@@ -102,9 +102,9 @@ public class LearnerActorSelector extends UntypedAbstractActor {
                             ProjectException exception = new ProjectException(ResponseCode.internalError.getErrorCode() ,ResponseCode.internalError.getErrorMessage());
                             parent.tell(exception , ActorRef.noSender());
                         } else {
-                            logger.info("PARENT RESULT IS ");
+                            logger.info("PARENT RESULT IS "+result);
                             // We got a result, handle it
-                            parent.tell("SUCCESS", ActorRef.noSender());
+                            parent.tell(result, ActorRef.noSender());
                         }
                     }
                 }, ec);
@@ -122,9 +122,9 @@ public class LearnerActorSelector extends UntypedAbstractActor {
                             ProjectException exception = new ProjectException(ResponseCode.internalError.getErrorCode() ,ResponseCode.internalError.getErrorMessage());
                             parent.tell(exception , ActorRef.noSender());
                         } else {
-                            logger.info("PARENT RESULT IS ");
+                            logger.info("PARENT RESULT IS "+result);
                             // We got a result, handle it
-                            parent.tell("SUCCESS", ActorRef.noSender());
+                            parent.tell(result, ActorRef.noSender());
                         }
                     }
                 }, ec);

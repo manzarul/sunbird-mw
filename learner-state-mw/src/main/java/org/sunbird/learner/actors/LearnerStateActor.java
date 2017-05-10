@@ -56,11 +56,15 @@ public class LearnerStateActor extends UntypedAbstractActor {
                     sender().tell(exception , ActorRef.noSender());
                 }
             }else if (actorMessage.getOperation().getValue().equalsIgnoreCase(LearnerStateOperation.GET_CONTENT.getValue())) {
+            	logger.info("op type get Content");
                 Object obj = actorMessage.getData().keySet().toArray()[0];
                 if (obj instanceof String) {
+                	logger.info("obj type String");
                     String userId = (String) obj;
                     List<String> contentList = (List<String>)actorMessage.getData().get(userId);
+                    logger.info(contentList);
                     ContentList result = cassandraOperation.getContentState(userId , contentList);
+                    logger.info(result);
                     sender().tell(result, self());
                 } else {
                     logger.info("LearnerStateUpdateActor message Mismatch");

@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 import org.apache.log4j.Logger;
 import org.sunbird.bean.ActorMessage;
 import org.sunbird.bean.LearnerStateOperation;
+import org.sunbird.model.Content;
 import org.sunbird.model.ContentList;
 import org.sunbird.model.Course;
 import org.sunbird.model.CourseList;
@@ -19,10 +20,8 @@ import akka.actor.ActorSelection;
 import akka.actor.ActorSystem;
 import akka.pattern.Patterns;
 import akka.util.Timeout;
-import play.libs.F.Promise;
 import play.libs.Json;
 import play.mvc.Result;
-import play.mvc.Results;
 import scala.concurrent.Await;
 import scala.concurrent.Future;
 
@@ -133,9 +132,35 @@ public class LearnerController extends BaseController {
 	/**
 	 *This method will update learner current state with last 
 	 *store state.
-	 * @return Promise<Result>
+	 * @return Result
 	 */
-	public Promise<Result> updateContentState() {
-		return Promise.<Result>pure(Results.ok());
+	public Result updateContentState() {
+       Content content = new Content();
+	   content.setContentId("content Id 1");
+ 	   content.setCourseId("courseId 1");
+ 	   content.setUserId("user Id 2");
+ 	   content.setDeviceId("deviceId 1");
+ 	   content.setViewCount("viewCount 1");
+ 	   content.setViewPosition("viewPosition 1");
+ 	   content.setLastAccessTime("2013-10-15 16:16:39");
+ 	   content.setLastUpdatedTime("2013-10-15 16:16:39");
+ 	   content.setCompletedCount("completedCount");
+ 	   content.setProgressstatus("not started");
+
+		ActorMessage msg = new ActorMessage();
+		msg.setOperation(LearnerStateOperation.ADD_CONTENT);
+		HashMap<String, Object> map = new HashMap<String,Object>();
+		map.put("content Id 1",content);
+		msg.setData(map);
+		Timeout timeout = new Timeout(5, TimeUnit.SECONDS);
+        Future<Object> future = Patterns.ask(selection, msg, timeout);
+        String val = null;
+        try {
+        	val =(String) Await.result(future, timeout.duration());
+            System.out.println(" final retun response=="+val);
+        } catch (Exception e1) {
+            e1.printStackTrace();
+        }
+		return ok(val);
 	}
 }
