@@ -14,6 +14,7 @@ import org.sunbird.cassandraImpl.CassandraOperationImpl;
 import org.sunbird.helper.CassandraConnectionManager;
 import org.sunbird.model.Content;
 import org.sunbird.model.Course;
+import org.sunbird.model.CourseList;
 import org.sunbird.model.Delta;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -109,6 +110,11 @@ public class CassandraTest {
 		boolean deleted=cassandraOperation.deleteCourseById(course.getCourseId());
 		assertEquals(true,deleted);
 	}
+	//@Test
+		public void testUserEnrolledCourse() {
+			CourseList list=cassandraOperation.getUserEnrolledCourse(course.getUserId());
+			assertNotNull(list);
+		}
 	@AfterClass
 	public static void delete() {
 		boolean result1=cassandraOperation.deleteCourseById(course.getCourseId());

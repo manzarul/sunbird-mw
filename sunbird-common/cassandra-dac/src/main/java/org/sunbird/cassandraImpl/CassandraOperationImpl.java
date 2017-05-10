@@ -3,7 +3,9 @@ package org.sunbird.cassandraImpl;
 import static com.datastax.driver.core.querybuilder.QueryBuilder.eq;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.sunbird.cassandra.CassandraOperation;
@@ -189,11 +191,20 @@ public class CassandraOperationImpl implements CassandraOperation{
 	    selectWhere.and(clause2);
 		ResultSet result  = CassandraConnectionManager.getSession().execute(selectQuery);
 		List<Content> list = new ArrayList<Content>();
+		Map<String ,Content> map = new HashMap<String ,Content>();
 		while (!result.isExhausted()) {
 			MappingManager manager = new MappingManager(CassandraConnectionManager.getSession());
 			Mapper<Content> m = manager.mapper(Content.class);
-			list.add(m.map(result).one());
+			Content content =m.map(result).one();
+			map.put(content.getContentId(), content);
 		}
+		for(String contentId : contentIdList){
+			Content content = map.get(contentId);
+			if(null != content){
+				list.add(content);
+			}
+		}
+		map=null;
 		ContentList contentList= new ContentList();
 		contentList.setContentList(list);
 		return contentList;
