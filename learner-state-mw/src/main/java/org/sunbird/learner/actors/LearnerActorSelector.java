@@ -20,10 +20,10 @@ import scala.concurrent.duration.Duration;
  */
 public class LearnerActorSelector extends UntypedAbstractActor {
 
-    Logger logger = Logger.getLogger(LearnerActorSelector.class.getName());
-    ActorRef courseEnrollmentActorRouter;
-    ActorRef learnerStateActorRouter;
-    ActorRef learnerStateUpdateActorRouter;
+    private Logger logger = Logger.getLogger(LearnerActorSelector.class.getName());
+    private ActorRef courseEnrollmentActorRouter;
+    private ActorRef learnerStateActorRouter;
+    private ActorRef learnerStateUpdateActorRouter;
     private ExecutionContext ec;
 
     // constructor to initialize router actor with child actor pool
@@ -44,30 +44,27 @@ public class LearnerActorSelector extends UntypedAbstractActor {
     public void onReceive(Object message) throws Exception {
 
         if (message instanceof ActorMessage) {
-            logger.info("onReceive called");
+            logger.debug("Actor selector onReceive called");
             //TODO check the operation type and handle it.
             ActorMessage actorMessage = (ActorMessage) message;
             if (actorMessage.getOperation().getValue().equalsIgnoreCase(LearnerStateOperation.ADD_COURSE.getValue())) {
-            	
-            	ActorRef parent = sender();
 
+                ActorRef parent = sender();
                 Timeout timeout = new Timeout(Duration.create(5, "seconds"));
                 Future<Object> future = Patterns.ask(courseEnrollmentActorRouter, message, timeout);
-
                 future.onComplete(new OnComplete<Object>() {
                     @Override
                     public void onComplete(Throwable failure, Object result) {
                         if (failure != null) {
                             //We got a failure, handle it here
+                            parent.tell(failure , ActorRef.noSender());
                         } else {
                             logger.info("PARENT RESULT IS " + result);
-                            // We got a result, do something with it
+                            // We got a result, handle it
                             parent.tell("SUCCESS", ActorRef.noSender());
                         }
                     }
                 }, ec);
-
-                //courseEnrollmentActorRouter.tell(message, self());
 
             } else if (actorMessage.getOperation().getValue().equalsIgnoreCase(LearnerStateOperation.GET_COURSE.getValue())) {
 
@@ -79,39 +76,45 @@ public class LearnerActorSelector extends UntypedAbstractActor {
                     public void onComplete(Throwable failure, Object result) {
                         if (failure != null) {
                             //We got a failure, handle it here
+                            parent.tell(failure , ActorRef.noSender());
                         } else {
                             logger.info("PARENT RESULT IS " + result);
-                            // We got a result, do something with it
+                            // We got a result, handle it
                             parent.tell(result, ActorRef.noSender());
                         }
                     }
                 }, ec);
 
-                //learnerStateActorRouter.tell(message, self());
-
             } else if (actorMessage.getOperation().getValue().equalsIgnoreCase(LearnerStateOperation.UPDATE_TOC.getValue())) {
 
                 Timeout timeout = new Timeout(Duration.create(5, "seconds"));
                 Future<Object> future = Patterns.ask(learnerStateUpdateActorRouter, message, timeout);
-
+                ActorRef parent = sender();
                 future.onComplete(new OnComplete<Object>() {
                     @Override
                     public void onComplete(Throwable failure, Object result) {
                         if (failure != null) {
                             //We got a failure, handle it here
+                            parent.tell(failure , ActorRef.noSender());
                         } else {
                             logger.info("PARENT RESULT IS ");
-                            // We got a result, do something with it
-                            sender().tell("SUCCESS", ActorRef.noSender());
+                            // We got a result, handle it
+                            parent.tell("SUCCESS", ActorRef.noSender());
                         }
                     }
                 }, ec);
 
-                //learnerStateUpdateActorRouter.tell(message, self());
-
+            }else{
+                logger.info("UNSUPPORTED OPERATION TYPE");
+                RuntimeException exception = new RuntimeException("UNSUPPORTED OPERATION TYPE");
+                sender().tell(exception , ActorRef.noSender());
             }
 
 
+        }else{
+            logger.info("UNSUPPORTED MESSAGE");
+            RuntimeException exception = new RuntimeException("UNSUPPORTED MESSAGE");
+            sender().tell(exception , ActorRef.noSender());
         }
 
     }
