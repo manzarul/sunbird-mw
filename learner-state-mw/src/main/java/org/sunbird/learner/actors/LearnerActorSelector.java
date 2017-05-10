@@ -10,6 +10,8 @@ import akka.util.Timeout;
 import org.apache.log4j.Logger;
 import org.sunbird.bean.ActorMessage;
 import org.sunbird.bean.LearnerStateOperation;
+import org.sunbird.common.exception.ProjectException;
+import org.sunbird.common.responsecode.ResponseCode;
 import scala.concurrent.ExecutionContext;
 import scala.concurrent.Future;
 import scala.concurrent.duration.Duration;
@@ -57,11 +59,12 @@ public class LearnerActorSelector extends UntypedAbstractActor {
                     public void onComplete(Throwable failure, Object result) {
                         if (failure != null) {
                             //We got a failure, handle it here
-                            parent.tell(failure , ActorRef.noSender());
+                            ProjectException exception = new ProjectException(ResponseCode.internalError.getErrorCode() ,ResponseCode.internalError.getErrorMessage());
+                            parent.tell(exception , ActorRef.noSender());
                         } else {
                             logger.info("PARENT RESULT IS " + result);
                             // We got a result, handle it
-                            parent.tell("SUCCESS", ActorRef.noSender());
+                            parent.tell(result, ActorRef.noSender());
                         }
                     }
                 }, ec);
@@ -76,7 +79,8 @@ public class LearnerActorSelector extends UntypedAbstractActor {
                     public void onComplete(Throwable failure, Object result) {
                         if (failure != null) {
                             //We got a failure, handle it here
-                            parent.tell(failure , ActorRef.noSender());
+                            ProjectException exception = new ProjectException(ResponseCode.internalError.getErrorCode() ,ResponseCode.internalError.getErrorMessage());
+                            parent.tell(exception , ActorRef.noSender());
                         } else {
                             logger.info("PARENT RESULT IS " + result);
                             // We got a result, handle it
@@ -95,7 +99,8 @@ public class LearnerActorSelector extends UntypedAbstractActor {
                     public void onComplete(Throwable failure, Object result) {
                         if (failure != null) {
                             //We got a failure, handle it here
-                            parent.tell(failure , ActorRef.noSender());
+                            ProjectException exception = new ProjectException(ResponseCode.internalError.getErrorCode() ,ResponseCode.internalError.getErrorMessage());
+                            parent.tell(exception , ActorRef.noSender());
                         } else {
                             logger.info("PARENT RESULT IS ");
                             // We got a result, handle it
@@ -106,14 +111,14 @@ public class LearnerActorSelector extends UntypedAbstractActor {
 
             }else{
                 logger.info("UNSUPPORTED OPERATION TYPE");
-                RuntimeException exception = new RuntimeException("UNSUPPORTED OPERATION TYPE");
+                ProjectException exception = new ProjectException(ResponseCode.invalidOperationName.getErrorCode() ,ResponseCode.invalidOperationName.getErrorMessage() );
                 sender().tell(exception , ActorRef.noSender());
             }
 
 
         }else{
             logger.info("UNSUPPORTED MESSAGE");
-            RuntimeException exception = new RuntimeException("UNSUPPORTED MESSAGE");
+            ProjectException exception = new ProjectException(ResponseCode.invalidRequestData.getErrorCode() ,ResponseCode.invalidRequestData.getErrorMessage() );
             sender().tell(exception , ActorRef.noSender());
         }
 

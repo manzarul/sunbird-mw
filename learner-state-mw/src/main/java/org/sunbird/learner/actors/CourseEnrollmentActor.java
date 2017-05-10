@@ -9,6 +9,8 @@ import org.sunbird.bean.ActorMessage;
 import org.sunbird.bean.LearnerStateOperation;
 import org.sunbird.cassandra.CassandraOperation;
 import org.sunbird.cassandraImpl.CassandraOperationImpl;
+import org.sunbird.common.exception.ProjectException;
+import org.sunbird.common.responsecode.ResponseCode;
 import org.sunbird.model.Course;
 
 /**
@@ -32,22 +34,23 @@ public class CourseEnrollmentActor extends UntypedAbstractActor {
                 Object obj = actorMessage.getData().get(actorMessage.getData().keySet().toArray()[0]);
                 if (obj instanceof Course) {
                     Course course = (Course) obj;
-                    cassandraOperation.insertCourse(course);
-                    sender().tell("SUCCESS", getSelf());
+                    boolean result = cassandraOperation.insertCourse(course);
+                    String response = (result ? "ENROLLMENT SUCCESS":"ENROLLMENT FAILED");
+                    sender().tell(response, getSelf());
                 } else {
                     logger.info("Course Object not match");
-                    RuntimeException exception = new RuntimeException("UNSUPPORTED COURSE OBJECT");
+                    ProjectException exception = new ProjectException(ResponseCode.invalidRequestData.getErrorCode() ,ResponseCode.invalidRequestData.getErrorMessage() );
                     sender().tell(exception, self());
                 }
             } else {
                 logger.info("UNSUPPORTED OPERATION");
-                RuntimeException exception = new RuntimeException("UNSUPPORTED OPERATION");
+                ProjectException exception = new ProjectException(ResponseCode.invalidOperationName.getErrorCode() ,ResponseCode.invalidOperationName.getErrorMessage() );
                 sender().tell(exception, self());
             }
         } else {
             // Throw exception as message body not as per expected
             logger.info("UNSUPPORTED MESSAGE");
-            RuntimeException exception = new RuntimeException("UNSUPPORTED MESSAGE");
+            ProjectException exception = new ProjectException(ResponseCode.invalidRequestData.getErrorCode() ,ResponseCode.invalidRequestData.getErrorMessage() );
             sender().tell(exception, self());
         }
     }
