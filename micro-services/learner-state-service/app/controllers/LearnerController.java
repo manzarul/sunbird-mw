@@ -1,5 +1,6 @@
 package controllers;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,7 +9,9 @@ import java.util.concurrent.TimeUnit;
 import org.apache.log4j.Logger;
 import org.sunbird.bean.ActorMessage;
 import org.sunbird.bean.LearnerStateOperation;
+import org.sunbird.model.ContentList;
 import org.sunbird.model.Course;
+import org.sunbird.model.CourseList;
 
 import com.typesafe.config.ConfigFactory;
 
@@ -51,10 +54,10 @@ public class LearnerController extends BaseController {
 		msg.setData(map);
 		Timeout timeout = new Timeout(5, TimeUnit.SECONDS);
         Future<Object> future = Patterns.ask(selection, msg, timeout);
-       List<Course> courseList = null;
+        CourseList courseList = null;
         try {
-        	courseList =(List<Course>) Await.result(future, timeout.duration());
-            System.out.println(" final retun response=="+courseList);
+        	courseList =(CourseList) Await.result(future, timeout.duration());
+            System.out.println(" final retun response=="+courseList.getCourseList());
         } catch (Exception e) {
         	logger.error(e);
         	return ok("Failure");
@@ -79,7 +82,7 @@ public class LearnerController extends BaseController {
 		    	
 				ActorMessage msg = new ActorMessage();
 				msg.setOperation(LearnerStateOperation.ADD_COURSE);
-				Map map = new HashMap<String,Object>();
+				HashMap<String, Object> map = new HashMap<String,Object>();
 				map.put("Course 1",course);
 				msg.setData(map);
 				Timeout timeout = new Timeout(3, TimeUnit.SECONDS);
@@ -101,8 +104,30 @@ public class LearnerController extends BaseController {
 	 * @return Result
 	 */
 	public Result getContentState() {
-		
-		return ok("success");
+		   List<String> contentIdList= new ArrayList<String>();
+	  	   contentIdList.add("content Id 10");
+	  	   contentIdList.add("content Id 11");
+	  	   contentIdList.add("content Id 12");
+	  	   contentIdList.add("content Id 13");
+	  	   contentIdList.add("content Id 14");
+  	   
+		ActorMessage msg = new ActorMessage();
+		msg.setOperation(LearnerStateOperation.GET_CONTENT);
+		HashMap<String, Object> map = new HashMap<String,Object>();
+		map.put("user Id 2",contentIdList);
+		msg.setData(map);
+		Timeout timeout = new Timeout(5, TimeUnit.SECONDS);
+        Future<Object> future = Patterns.ask(selection, msg, timeout);
+        ContentList contentList = null;
+        try {
+        	contentList =(ContentList) Await.result(future, timeout.duration());
+            System.out.println(" final retun response=="+contentList.getContentList());
+        } catch (Exception e) {
+        	logger.error(e);
+        	return ok("Failure");
+        }
+		return ok(Json.toJson(contentList));
+
 	}
    
 	/**
