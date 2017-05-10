@@ -15,5 +15,5 @@ dist
 /.target/
 .gitignore
 /bin/
-
+/logs
 

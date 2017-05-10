@@ -19,6 +19,7 @@ public interface ResponseMessage {
 		public static final String API_KEY_MISSING_ERROR = "APi key is mandatory.";
 		public static final String API_KEY_INVALID_ERROR = "APi key is invalid.";
 		public static final String INTERNAL_ERROR = "Process failed,please try after some time.";
+		public static final String COURSE_NAME_MISSING = "Please provide the course name.";
 	}
 
 	public interface Key {
@@ -26,14 +27,15 @@ public interface ResponseMessage {
 		public static final String INVALID_USER_CREDENTIALS = "INVALID_USER_CREDENTIALS";
 		public static final String INVALID_OPERATION_NAME = "INVALID_OPERATION_NAME";
 		public static final String INVALID_REQUESTED_DATA = "INVALID_REQUESTED_DATA";
-		public static final String COMSUMER_ID_MISSING_ERROR = "COMSUMER_ID_MISSING_ERROR";
+		public static final String COMSUMER_ID_MISSING_ERROR = "COMSUMER_ID_REQUIRED_ERROR";
 		public static final String COMSUMER_ID_INVALID_ERROR = "COMSUMER_ID_INVALID_ERROR";
-		public static final String DEVICE_ID_MISSING_ERROR = "DEVICE_ID_MISSING_ERROR";
+		public static final String DEVICE_ID_MISSING_ERROR = "DEVICE_ID_REQUIRED_ERROR";
 		public static final String CONTENT_ID_INVALID_ERROR = "CONTENT_ID_INVALID_ERROR";
-		public static final String CONTENT_ID_MISSING_ERROR = "CONTENT_ID_MISSING_ERROR";
-		public static final String API_KEY_MISSING_ERROR = "API_KEY_MISSING_ERROR";
+		public static final String CONTENT_ID_MISSING_ERROR = "CONTENT_ID_REQUIRED_ERROR";
+		public static final String API_KEY_MISSING_ERROR = "API_KEY_REQUIRED_ERROR";
 		public static final String API_KEY_INVALID_ERROR = "API_KEY_INVALID_ERROR";
 		public static final String INTERNAL_ERROR = "API_KEY_INVALID_ERROR";
+		public static final String COURSE_NAME_MISSING = "COURSE_NAME_REQUIRED_ERROR";
 	}
 }
 
