@@ -11,8 +11,8 @@ public class Course implements Serializable{
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 1L;
-	
+	private static final long serialVersionUID = 3460122653241867175L;
+		
 	private String courseId;
 	private String courseName;
 	private String userId;
@@ -22,6 +22,7 @@ public class Course implements Serializable{
 	private Map<String,String> deltaMap;
 	private String courseProgressStatus;				
 	private boolean active;
+	
 	/**
 	 * @return the courseId
 	 */

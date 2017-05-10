@@ -1,6 +1,7 @@
 package org.sunbird.learner.actors;
 
 
+import akka.actor.ActorRef;
 import akka.actor.UntypedAbstractActor;
 
 import java.util.List;
@@ -20,41 +21,44 @@ import org.sunbird.model.Course;
 public class LearnerStateActor extends UntypedAbstractActor {
 
     private CassandraOperation cassandraOperation = new CassandraOperationImpl();
-    Logger logger = Logger.getLogger(LearnerStateActor.class.getName());
+    private Logger logger = Logger.getLogger(LearnerStateActor.class.getName());
 
     @Override
     public void onReceive(Object message) throws Exception {
         if (message instanceof ActorMessage) {
-            logger.info("onReceive called");
+            logger.debug("LearnerStateActor onReceive called");
             ActorMessage actorMessage = (ActorMessage) message;
             if (actorMessage.getOperation().getValue().equalsIgnoreCase(LearnerStateOperation.GET_COURSE.getValue())) {
-                logger.info("OP type match" + actorMessage.getData().size());
                 Object obj = actorMessage.getData().get(actorMessage.getData().keySet().toArray()[0]);
                 if (obj instanceof String) {
-                    logger.info("Obj match");
                     String userId = (String) obj;
-                    //TODO: add course by user id at Cassandra-Operation
-                    //cassandraOperation.get
                     List<Course> courseList = cassandraOperation.getUserEnrolledCourse(userId);
                     sender().tell(courseList, self());
                 } else {
-                    logger.info("Mis match");
+                    logger.debug("LearnerStateActor message Mis match");
                     sender().tell("UNSUPPORTED COURSE OBJECT", self());
                 }
             } else if (actorMessage.getOperation().getValue().equalsIgnoreCase(LearnerStateOperation.GET_COURSE_BY_ID.getValue())) {
                 logger.info("OP type match" + actorMessage.getData().size());
                 Object obj = actorMessage.getData().get(actorMessage.getData().keySet().toArray()[0]);
                 if (obj instanceof String) {
-                    logger.info("Obj match");
                     String courseId = (String) obj;
                     cassandraOperation.getCourseById(courseId);
                     sender().tell("SUCCESS", getSelf());
                 } else {
-                    logger.info("Mis match");
+                    logger.info("LearnerStateActor message Mismatch");
                     sender().tell("UNSUPPORTED COURSE OBJECT", self());
                 }
+            }else{
+                logger.info("UNSUPPORTED OPERATION");
+                RuntimeException exception = new RuntimeException("UNSUPPORTED OPERATION");
+                sender().tell(exception , ActorRef.noSender());
             }
 
+        }else{
+            logger.info("UNSUPPORTED MESSAGE");
+            RuntimeException exception = new RuntimeException("UNSUPPORTED MESSAGE");
+            sender().tell(exception , ActorRef.noSender());
         }
 
     }

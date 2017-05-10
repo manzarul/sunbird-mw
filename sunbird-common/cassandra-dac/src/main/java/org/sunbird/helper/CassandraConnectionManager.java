@@ -25,7 +25,7 @@ import com.datastax.driver.core.policies.DefaultRetryPolicy;
  * @author Manzarul
  * @author Amit Kumar
  */
-public class CassandraConnectionManager {
+public final class CassandraConnectionManager {
 	private final static Logger LOGGER = Logger.getLogger(CassandraOperationImpl.class.getName());
 	private static Cluster cluster;
     private static Session session;
@@ -52,7 +52,7 @@ public class CassandraConnectionManager {
 		        		.withRetryPolicy(DefaultRetryPolicy.INSTANCE)
 		        		.withTimestampGenerator(new AtomicMonotonicTimestampGenerator())
 		        		.withPoolingOptions(poolingOptions)
-		        		//.withCredentials(instance.getProperty(Constants.CASSANDRA_USERNAME), instance.getProperty(Constants.CASSANDRA_PASSWORD))
+		        		.withCredentials(instance.getProperty(Constants.CASSANDRA_USERNAME), instance.getProperty(Constants.CASSANDRA_PASSWORD))
 		        		.build();
 		        QueryLogger queryLogger = QueryLogger.builder().withConstantThreshold(Integer.parseInt(instance.getProperty(Constants.QUERY_LOGGER_THRESHOLD))).build();
 		        cluster.register(queryLogger);
@@ -62,14 +62,14 @@ public class CassandraConnectionManager {
 			   }
 		        final Metadata metadata = cluster.getMetadata();
 		        String msg = String.format("Connected to cluster: %s", metadata.getClusterName());
-		        LOGGER.info(msg);
+		        LOGGER.debug(msg);
 		         
 		        for (final Host host : metadata.getAllHosts()){
 			        msg = String.format("Datacenter: %s; Host: %s; Rack: %s",
 			        host.getDatacenter(),
 			        host.getAddress(),
 			        host.getRack());
-			        LOGGER.info(msg);
+			        LOGGER.debug(msg);
 		        }
 	}
 	

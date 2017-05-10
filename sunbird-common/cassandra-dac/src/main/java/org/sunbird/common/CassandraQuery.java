@@ -14,7 +14,7 @@ public interface CassandraQuery {
 	}
 	
 	public interface Content{
-		public static final String COURSE_TABLE_NAME ="content";
+		public static final String CONTENT_TABLE_NAME ="content";
 		public static final String INSERT_CONTENT="INSERT INTO cassandraKeySpace.content" + "(contentId,viewCount,lastAccessTime, completedCount, progressstatus, userId,courseId,lastUpdatedTime,deviceId,viewPosition)"
 				+ "VALUES (?,?,?,?,?,?,?,?,?,?);";
 	}

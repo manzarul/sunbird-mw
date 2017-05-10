@@ -1,6 +1,13 @@
 package org.sunbird.model;
 
-public class Delta {
+import java.io.Serializable;
+
+public class Delta implements Serializable{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1032556371769540139L;
 	
 	private String contentId;
 	private String prevContentId;

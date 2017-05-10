@@ -1,9 +1,16 @@
 package org.sunbird.model;
 
+import java.io.Serializable;
+
 import com.datastax.driver.mapping.annotations.Table;
 
 @Table(name = "content",keyspace="cassandraKeySpace")
-public class Content {
+public class Content implements Serializable{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7630447305183779420L;
 	
 	private String contentId;
 	private String viewCount;
