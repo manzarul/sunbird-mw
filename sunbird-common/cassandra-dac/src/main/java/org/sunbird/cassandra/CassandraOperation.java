@@ -3,6 +3,7 @@ package org.sunbird.cassandra;
 import java.util.List;
 
 import org.sunbird.model.Content;
+import org.sunbird.model.ContentList;
 import org.sunbird.model.Course;
 
 public interface CassandraOperation {
@@ -35,7 +36,7 @@ public interface CassandraOperation {
 	 * @param String contentId
 	 * 
 	 */
-	public Content getContentById(String contentId);
+	public ContentList getContentState(String userId,List<String> contentIdList);
 	
 	/*
 	 * @param Content contentId

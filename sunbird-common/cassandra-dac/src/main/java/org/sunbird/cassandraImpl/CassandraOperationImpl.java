@@ -11,6 +11,7 @@ import org.sunbird.common.CassandraQuery;
 import org.sunbird.common.Constants;
 import org.sunbird.helper.CassandraConnectionManager;
 import org.sunbird.model.Content;
+import org.sunbird.model.ContentList;
 import org.sunbird.model.Course;
 
 import com.datastax.driver.core.BoundStatement;
@@ -132,16 +133,16 @@ public class CassandraOperationImpl implements CassandraOperation{
 	
 	/*
 	 * (non-Javadoc)
-	 * @see org.sunbird.cassandra.CassandraOperation#getCourseById(String)
+	 * @see org.sunbird.cassandra.CassandraOperation#getCourseById(String,List<String>)
 	 * @param courseId
 	 * used to fetch course information based on course id
 	 */
-	public Content getContentById(String contentId){
+	public Content getContentById(String userId,List<String> contentIdList){
 		Content content=null;
 		try{
 			Select selectQuery = QueryBuilder.select().all().from(CassandraQuery.KEY_SPACE_NAME, CassandraQuery.Content.CONTENT_TABLE_NAME);
 		    Where selectWhere = selectQuery.where();
-		    Clause clause = QueryBuilder.eq(Constants.CONTENT_ID, contentId);
+		    Clause clause = QueryBuilder.eq(Constants.CONTENT_ID, userId);
 		    selectWhere.and(clause);
 			ResultSet results  = CassandraConnectionManager.getSession().execute(selectQuery);
 			MappingManager manager = new MappingManager(CassandraConnectionManager.getSession());
@@ -166,6 +167,12 @@ public class CassandraOperationImpl implements CassandraOperation{
 		 ResultSet result  = CassandraConnectionManager.getSession().execute(delete);
 		 LOGGER.debug(result.toString());
 		 return result.wasApplied();
+	}
+
+	@Override
+	public ContentList getContentState(String userId, List<String> contentIdList) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
 
