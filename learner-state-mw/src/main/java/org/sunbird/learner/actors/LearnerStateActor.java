@@ -11,7 +11,10 @@ import org.sunbird.bean.ActorMessage;
 import org.sunbird.bean.LearnerStateOperation;
 import org.sunbird.cassandra.CassandraOperation;
 import org.sunbird.cassandraImpl.CassandraOperationImpl;
+import org.sunbird.common.exception.ProjectException;
+import org.sunbird.common.responsecode.ResponseCode;
 import org.sunbird.model.Course;
+import org.sunbird.model.CourseList;
 
 /**
  * This actor will provide learner TOC state.
@@ -32,11 +35,12 @@ public class LearnerStateActor extends UntypedAbstractActor {
                 Object obj = actorMessage.getData().get(actorMessage.getData().keySet().toArray()[0]);
                 if (obj instanceof String) {
                     String userId = (String) obj;
-                    List<Course> courseList = cassandraOperation.getUserEnrolledCourse(userId);
+                    CourseList courseList = cassandraOperation.getUserEnrolledCourse(userId);
                     sender().tell(courseList, self());
                 } else {
                     logger.debug("LearnerStateActor message Mis match");
-                    sender().tell("UNSUPPORTED COURSE OBJECT", self());
+                    ProjectException exception = new ProjectException(ResponseCode.invalidRequestData.getErrorCode() ,ResponseCode.invalidRequestData.getErrorMessage() );
+                    sender().tell(exception , ActorRef.noSender());
                 }
             } else if (actorMessage.getOperation().getValue().equalsIgnoreCase(LearnerStateOperation.GET_COURSE_BY_ID.getValue())) {
                 logger.info("OP type match" + actorMessage.getData().size());
@@ -47,17 +51,18 @@ public class LearnerStateActor extends UntypedAbstractActor {
                     sender().tell("SUCCESS", getSelf());
                 } else {
                     logger.info("LearnerStateActor message Mismatch");
-                    sender().tell("UNSUPPORTED COURSE OBJECT", self());
+                    ProjectException exception = new ProjectException(ResponseCode.invalidRequestData.getErrorCode() ,ResponseCode.invalidRequestData.getErrorMessage() );
+                    sender().tell(exception , ActorRef.noSender());
                 }
             }else{
                 logger.info("UNSUPPORTED OPERATION");
-                RuntimeException exception = new RuntimeException("UNSUPPORTED OPERATION");
+                ProjectException exception = new ProjectException(ResponseCode.invalidOperationName.getErrorCode() ,ResponseCode.invalidOperationName.getErrorMessage() );
                 sender().tell(exception , ActorRef.noSender());
             }
 
         }else{
             logger.info("UNSUPPORTED MESSAGE");
-            RuntimeException exception = new RuntimeException("UNSUPPORTED MESSAGE");
+            ProjectException exception = new ProjectException(ResponseCode.invalidRequestData.getErrorCode() ,ResponseCode.invalidRequestData.getErrorMessage() );
             sender().tell(exception , ActorRef.noSender());
         }
 
