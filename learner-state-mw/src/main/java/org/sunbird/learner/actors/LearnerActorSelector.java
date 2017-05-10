@@ -102,9 +102,8 @@ public class LearnerActorSelector extends UntypedAbstractActor {
                             ProjectException exception = new ProjectException(ResponseCode.internalError.getErrorCode() ,ResponseCode.internalError.getErrorMessage());
                             parent.tell(exception , ActorRef.noSender());
                         } else {
-                            logger.info("PARENT RESULT IS ");
                             // We got a result, handle it
-                            parent.tell("SUCCESS", ActorRef.noSender());
+                            parent.tell(result, ActorRef.noSender());
                         }
                     }
                 }, ec);
@@ -122,9 +121,27 @@ public class LearnerActorSelector extends UntypedAbstractActor {
                             ProjectException exception = new ProjectException(ResponseCode.internalError.getErrorCode() ,ResponseCode.internalError.getErrorMessage());
                             parent.tell(exception , ActorRef.noSender());
                         } else {
-                            logger.info("PARENT RESULT IS ");
                             // We got a result, handle it
-                            parent.tell("SUCCESS", ActorRef.noSender());
+                            parent.tell(result, ActorRef.noSender());
+                        }
+                    }
+                }, ec);
+
+            }else if (actorMessage.getOperation().getValue().equalsIgnoreCase(LearnerStateOperation.ADD_CONTENT.getValue())) {
+
+                Timeout timeout = new Timeout(Duration.create(5, "seconds"));
+                Future<Object> future = Patterns.ask(learnerStateUpdateActorRouter, message, timeout);
+                ActorRef parent = sender();
+                future.onComplete(new OnComplete<Object>() {
+                    @Override
+                    public void onComplete(Throwable failure, Object result) {
+                        if (failure != null) {
+                            //We got a failure, handle it here
+                            ProjectException exception = new ProjectException(ResponseCode.internalError.getErrorCode() ,ResponseCode.internalError.getErrorMessage());
+                            parent.tell(exception , ActorRef.noSender());
+                        } else {
+                            // We got a result, handle it
+                            parent.tell(result, ActorRef.noSender());
                         }
                     }
                 }, ec);
