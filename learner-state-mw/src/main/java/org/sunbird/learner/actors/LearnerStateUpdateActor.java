@@ -11,7 +11,12 @@ import org.sunbird.cassandra.CassandraOperation;
 import org.sunbird.cassandraImpl.CassandraOperationImpl;
 
 import akka.actor.UntypedAbstractActor;
+import org.sunbird.common.exception.ProjectException;
+import org.sunbird.common.responsecode.ResponseCode;
 import org.sunbird.model.Content;
+import org.sunbird.model.ContentList;
+
+import java.util.List;
 
 /**
  * This class is responsible to merge the
@@ -34,31 +39,34 @@ public class LearnerStateUpdateActor extends UntypedAbstractActor{
 				Object obj = actorMessage.getData().get(actorMessage.getData().keySet().toArray()[0]);
 				if (obj instanceof Content) {
 					Content content = (Content) obj;
-					cassandraOperation.insertContent(content);
-					sender().tell("SUCCESS", self());
+					boolean flag =cassandraOperation.insertContent(content);
+					String result = flag?"CONTENT ADDED SUCCESSFULLY":"CONTENT ADDITION FAILED";
+					sender().tell(result, self());
 				} else {
 					logger.info("LearnerStateUpdateActor message Mismatch");
-					sender().tell("UNSUPPORTED COURSE OBJECT", self());
+					ProjectException exception = new ProjectException(ResponseCode.invalidRequestData.getErrorCode() ,ResponseCode.invalidRequestData.getErrorMessage() );
+					sender().tell(exception , ActorRef.noSender());
 				}
 			}else if (actorMessage.getOperation().getValue().equalsIgnoreCase(LearnerStateOperation.GET_CONTENT.getValue())) {
-				Object obj = actorMessage.getData().get(actorMessage.getData().keySet().toArray()[0]);
+				Object obj = actorMessage.getData().keySet().toArray()[0];
 				if (obj instanceof String) {
-
-					String contentId = (String) obj;
-					cassandraOperation.getContentById(contentId);
-					sender().tell("SUCCESS", self());
+					String userId = (String) obj;
+					List<String> contentList = (List<String>)actorMessage.getData().get(userId);
+					ContentList result = cassandraOperation.getContentState(userId , contentList);
+					sender().tell(result, self());
 				} else {
 					logger.info("LearnerStateUpdateActor message Mismatch");
-					sender().tell("UNSUPPORTED COURSE OBJECT", self());
+					ProjectException exception = new ProjectException(ResponseCode.invalidRequestData.getErrorCode() ,ResponseCode.invalidRequestData.getErrorMessage() );
+					sender().tell(exception , ActorRef.noSender());
 				}
 			}else{
 				logger.info("UNSUPPORTED OPERATION");
-				RuntimeException exception = new RuntimeException("UNSUPPORTED OPERATION");
+				ProjectException exception = new ProjectException(ResponseCode.invalidOperationName.getErrorCode() ,ResponseCode.invalidOperationName.getErrorMessage() );
 				sender().tell(exception , ActorRef.noSender());
 			}
 		} else{
 			logger.info("UNSUPPORTED MESSAGE");
-			RuntimeException exception = new RuntimeException("UNSUPPORTED MESSAGE");
+			ProjectException exception = new ProjectException(ResponseCode.invalidRequestData.getErrorCode() ,ResponseCode.invalidRequestData.getErrorMessage() );
 			sender().tell(exception , ActorRef.noSender());
 		}
 	}
