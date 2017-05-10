@@ -186,9 +186,9 @@ public class CassandraOperationImpl implements CassandraOperation{
 		Select selectQuery = QueryBuilder.select().all().from(CassandraQuery.KEY_SPACE_NAME, CassandraQuery.Content.CONTENT_TABLE_NAME);
 	    Where selectWhere = selectQuery.where();
 	    Clause clause1 = QueryBuilder.eq(Constants.USER_ID, userId);
-	    Clause clause2 = QueryBuilder.in(Constants.CONTENT_ID, contentIdList);
+	    //Clause clause2 = QueryBuilder.in(Constants.CONTENT_ID, contentIdList);
 	    selectWhere.and(clause1);
-	    selectWhere.and(clause2);
+	    //selectWhere.and(clause2);
 		ResultSet result  = CassandraConnectionManager.getSession().execute(selectQuery);
 		List<Content> list = new ArrayList<Content>();
 		Map<String ,Content> map = new HashMap<String ,Content>();
@@ -204,9 +204,10 @@ public class CassandraOperationImpl implements CassandraOperation{
 				list.add(content);
 			}
 		}
-		map=null;
+		
 		ContentList contentList= new ContentList();
 		contentList.setContentList(list);
+		map=null;
 		return contentList;
 	}
 }

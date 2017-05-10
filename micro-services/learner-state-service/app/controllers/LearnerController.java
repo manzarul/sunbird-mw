@@ -1,5 +1,6 @@
 package controllers;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,7 +9,10 @@ import java.util.concurrent.TimeUnit;
 import org.apache.log4j.Logger;
 import org.sunbird.bean.ActorMessage;
 import org.sunbird.bean.LearnerStateOperation;
+import org.sunbird.model.Content;
+import org.sunbird.model.ContentList;
 import org.sunbird.model.Course;
+import org.sunbird.model.CourseList;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.typesafe.config.ConfigFactory;
@@ -21,7 +25,6 @@ import mapper.RequestMapper;
 import play.libs.F.Promise;
 import play.libs.Json;
 import play.mvc.Result;
-import play.mvc.Results;
 import scala.concurrent.Await;
 import scala.concurrent.Future;
 
@@ -55,10 +58,10 @@ public class LearnerController extends BaseController {
 		msg.setData(map);
 		Timeout timeout = new Timeout(5, TimeUnit.SECONDS);
         Future<Object> future = Patterns.ask(selection, msg, timeout);
-       List<Course> courseList = null;
+        CourseList courseList = null;
         try {
-        	courseList =(List<Course>) Await.result(future, timeout.duration());
-            System.out.println(" final retun response=="+courseList);
+        	courseList =(CourseList) Await.result(future, timeout.duration());
+            System.out.println(" final retun response=="+courseList.getCourseList());
         } catch (Exception e) {
         	logger.error(e);
         	return ok("Failure");
@@ -83,7 +86,7 @@ public class LearnerController extends BaseController {
 		    	
 				ActorMessage msg = new ActorMessage();
 				msg.setOperation(LearnerStateOperation.ADD_COURSE);
-				Map map = new HashMap<String,Object>();
+				HashMap<String, Object> map = new HashMap<String,Object>();
 				map.put("Course 1",course);
 				msg.setData(map);
 				Timeout timeout = new Timeout(3, TimeUnit.SECONDS);
@@ -105,16 +108,64 @@ public class LearnerController extends BaseController {
 	 * @return Result
 	 */
 	public Result getContentState() {
-		
-		return ok("success");
+		   List<String> contentIdList= new ArrayList<String>();
+	  	   contentIdList.add("content Id 10");
+	  	   contentIdList.add("content Id 11");
+	  	   contentIdList.add("content Id 12");
+	  	   contentIdList.add("content Id 13");
+	  	   contentIdList.add("content Id 14");
+  	   
+		ActorMessage msg = new ActorMessage();
+		msg.setOperation(LearnerStateOperation.GET_CONTENT);
+		HashMap<String, Object> map = new HashMap<String,Object>();
+		map.put("user Id 2",contentIdList);
+		msg.setData(map);
+		Timeout timeout = new Timeout(5, TimeUnit.SECONDS);
+        Future<Object> future = Patterns.ask(selection, msg, timeout);
+        ContentList contentList = null;
+        try {
+        	contentList =(ContentList) Await.result(future, timeout.duration());
+            System.out.println(" final retun response=="+contentList.getContentList());
+        } catch (Exception e) {
+        	logger.error(e);
+        	return ok("Failure");
+        }
+		return ok(Json.toJson(contentList));
+
 	}
    
 	/**
 	 *This method will update learner current state with last 
 	 *store state.
-	 * @return Promise<Result>
+	 * @return Result
 	 */
-	public Promise<Result> updateContentState() {
-		return Promise.<Result>pure(Results.ok());
+	public Result updateContentState() {
+       Content content = new Content();
+	   content.setContentId("content Id 1");
+ 	   content.setCourseId("courseId 1");
+ 	   content.setUserId("user Id 2");
+ 	   content.setDeviceId("deviceId 1");
+ 	   content.setViewCount("viewCount 1");
+ 	   content.setViewPosition("viewPosition 1");
+ 	   content.setLastAccessTime("2013-10-15 16:16:39");
+ 	   content.setLastUpdatedTime("2013-10-15 16:16:39");
+ 	   content.setCompletedCount("completedCount");
+ 	   content.setProgressstatus("not started");
+
+		ActorMessage msg = new ActorMessage();
+		msg.setOperation(LearnerStateOperation.ADD_CONTENT);
+		HashMap<String, Object> map = new HashMap<String,Object>();
+		map.put("content Id 1",content);
+		msg.setData(map);
+		Timeout timeout = new Timeout(5, TimeUnit.SECONDS);
+        Future<Object> future = Patterns.ask(selection, msg, timeout);
+        String val = null;
+        try {
+        	val =(String) Await.result(future, timeout.duration());
+            System.out.println(" final retun response=="+val);
+        } catch (Exception e1) {
+            e1.printStackTrace();
+        }
+		return ok(val);
 	}
 }

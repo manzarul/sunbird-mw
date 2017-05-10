@@ -1,0 +1,9 @@
+2017-05-10 15:06:20,707 [WARN] from application in main - Logger configuration in conf files is deprecated and has no effect. Use a logback configuration file instead.
+2017-05-10 15:06:21,676 [INFO] from play.api.Play in main - Application started (Prod)
+2017-05-10 15:06:21,865 [INFO] from play.core.server.NettyServer in main - Listening for HTTP on /0:0:0:0:0:0:0:0:9000
+2017-05-10 15:09:03,592 [WARN] from application in main - Logger configuration in conf files is deprecated and has no effect. Use a logback configuration file instead.
+2017-05-10 15:09:04,695 [INFO] from play.api.Play in main - Application started (Prod)
+2017-05-10 15:09:04,870 [INFO] from play.core.server.NettyServer in main - Listening for HTTP on /0:0:0:0:0:0:0:0:9000
+2017-05-10 15:21:16,142 [WARN] from application in main - Logger configuration in conf files is deprecated and has no effect. Use a logback configuration file instead.
+2017-05-10 15:21:17,026 [INFO] from play.api.Play in main - Application started (Prod)
+2017-05-10 15:21:17,211 [INFO] from play.core.server.NettyServer in main - Listening for HTTP on /0:0:0:0:0:0:0:0:9000
