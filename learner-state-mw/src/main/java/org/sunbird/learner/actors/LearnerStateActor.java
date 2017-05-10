@@ -13,6 +13,7 @@ import org.sunbird.cassandra.CassandraOperation;
 import org.sunbird.cassandraImpl.CassandraOperationImpl;
 import org.sunbird.common.exception.ProjectException;
 import org.sunbird.common.responsecode.ResponseCode;
+import org.sunbird.model.ContentList;
 import org.sunbird.model.Course;
 import org.sunbird.model.CourseList;
 
@@ -54,7 +55,20 @@ public class LearnerStateActor extends UntypedAbstractActor {
                     ProjectException exception = new ProjectException(ResponseCode.invalidRequestData.getErrorCode() ,ResponseCode.invalidRequestData.getErrorMessage() );
                     sender().tell(exception , ActorRef.noSender());
                 }
-            }else{
+            }else if (actorMessage.getOperation().getValue().equalsIgnoreCase(LearnerStateOperation.GET_CONTENT.getValue())) {
+                Object obj = actorMessage.getData().keySet().toArray()[0];
+                if (obj instanceof String) {
+                    String userId = (String) obj;
+                    List<String> contentList = (List<String>)actorMessage.getData().get(userId);
+                    ContentList result = cassandraOperation.getContentState(userId , contentList);
+                    sender().tell(result, self());
+                } else {
+                    logger.info("LearnerStateUpdateActor message Mismatch");
+                    ProjectException exception = new ProjectException(ResponseCode.invalidRequestData.getErrorCode() ,ResponseCode.invalidRequestData.getErrorMessage() );
+                    sender().tell(exception , ActorRef.noSender());
+                }
+            }
+            else{
                 logger.info("UNSUPPORTED OPERATION");
                 ProjectException exception = new ProjectException(ResponseCode.invalidOperationName.getErrorCode() ,ResponseCode.invalidOperationName.getErrorMessage() );
                 sender().tell(exception , ActorRef.noSender());
