@@ -79,7 +79,8 @@ public class LearnerActorSelector extends UntypedAbstractActor {
                     public void onComplete(Throwable failure, Object result) {
                         if (failure != null) {
                             //We got a failure, handle it here
-                            parent.tell(failure , ActorRef.noSender());
+                            ProjectException exception = new ProjectException(ResponseCode.internalError.getErrorCode() ,ResponseCode.internalError.getErrorMessage());
+                            parent.tell(exception , ActorRef.noSender());
                         } else {
                             logger.info("PARENT RESULT IS " + result);
                             // We got a result, handle it
@@ -98,7 +99,8 @@ public class LearnerActorSelector extends UntypedAbstractActor {
                     public void onComplete(Throwable failure, Object result) {
                         if (failure != null) {
                             //We got a failure, handle it here
-                            parent.tell(failure , ActorRef.noSender());
+                            ProjectException exception = new ProjectException(ResponseCode.internalError.getErrorCode() ,ResponseCode.internalError.getErrorMessage());
+                            parent.tell(exception , ActorRef.noSender());
                         } else {
                             logger.info("PARENT RESULT IS ");
                             // We got a result, handle it
