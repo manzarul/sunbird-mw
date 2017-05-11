@@ -19,8 +19,8 @@ public class RequestValidator {
 	 * if any mandatory data is missing then it will throw exception.
 	 * @param courseRequestDto CourseRequestDto
 	 */
-	public static void validateCreateCourse(CourseRequestDto courseRequestDto) {
-		if (ProjectUtil.isStringNullOREmpty(courseRequestDto.getCourseName())) {
+	public static void validateCreateCourse(Request courseRequestDto) {
+		if (ProjectUtil.isStringNullOREmpty(courseRequestDto.getOperation())) {
 			ProjectCommonException dataException = new ProjectCommonException(ResponseCode.courseNameRequired.getErrorCode(),
 					ResponseCode.courseNameRequired.getErrorMessage(),HeaderResponseCode.CLIENT_ERROR.code());
 			throw dataException;
