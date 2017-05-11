@@ -1,7 +1,9 @@
 package org.sunbird.cassandra;
 
 import java.util.List;
+import java.util.Map;
 
+import org.sunbird.common.models.response.Response;
 import org.sunbird.model.Content;
 import org.sunbird.model.ContentList;
 import org.sunbird.model.Course;
@@ -45,7 +47,7 @@ public interface CassandraOperation {
 	 */
 	public Content getContentById(String contentId);
 	
-	/*
+	/* 
 	 * @param Content contentId
 	 * 
 	 */
@@ -56,5 +58,59 @@ public interface CassandraOperation {
 	 * 
 	 */
 	public boolean deleteContentById(String contentId);
+	/**
+	 * used to insert record in cassandra db 
+	 * @param keyspaceName
+	 * @param tableName
+	 * @param request
+	 * @return Response
+	 */
+	public Response InsertRecord(String keyspaceName,String tableName,Map<String,Object> request);
 
+	/**
+	 * used to update record in cassandra db 
+	 * @param keyspaceName
+	 * @param tableName
+	 * @param request
+	 * @param identifier
+	 * @return Response
+	 */
+	public Response updateRecord(String keyspaceName,String tableName,Map<String,Object> request,String identifier);
+	
+	/**
+	 * used to delete record in cassandra db
+	 * @param keyspaceName
+	 * @param tableName
+	 * @param identifier
+	 * @return Response
+	 */
+	public Response deleteRecord(String keyspaceName,String tableName,String identifier);
+	
+	/**
+	 * used to fetch record based on primary key
+	 * @param keyspaceName
+	 * @param tableName
+	 * @param identifier
+	 * @return Response 
+	 */
+	public Response  GetById(String keyspaceName,String tableName,String identifier);
+	
+	/**
+	 * used to fetch record based on given parameter and it's value
+	 * @param keyspaceName
+	 * @param tableName
+	 * @param propertyName
+	 * @param propertyValue
+	 * @return Response
+	 */
+	public Response  GetByProperty(String keyspaceName,String tableName,String propertyName,String propertyValue);
+	
+	/**
+	 * used to fetch record based on given parameter list and their values
+	 * @param keyspaceName
+	 * @param tableName
+	 * @param propertyMap
+	 * @return Response
+	 */
+	public Response  GetByProperties(String keyspaceName,String tableName,Map<String,String> propertyMap);
 }

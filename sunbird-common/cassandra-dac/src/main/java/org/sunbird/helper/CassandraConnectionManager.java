@@ -30,6 +30,7 @@ import com.datastax.driver.core.policies.DefaultRetryPolicy;
  */
 public final class CassandraConnectionManager {
 	private final static Logger LOGGER = Logger.getLogger(CassandraOperationImpl.class.getName());
+	//Map<keySpaceName,Session>
     private static Map<String,Session> cassandraSessionMap = new HashMap<>();
     private static Map<String,Cluster> cassandraclusterMap = new HashMap<>();
     

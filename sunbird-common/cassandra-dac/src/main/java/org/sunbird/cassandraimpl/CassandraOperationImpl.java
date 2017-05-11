@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import org.sunbird.cassandra.CassandraOperation;
 import org.sunbird.common.CassandraQuery;
 import org.sunbird.common.Constants;
+import org.sunbird.common.models.response.Response;
 import org.sunbird.helper.CassandraConnectionManager;
 import org.sunbird.model.Content;
 import org.sunbird.model.ContentList;
@@ -223,5 +224,51 @@ public class CassandraOperationImpl implements CassandraOperation{
 		map=null;
 		return contentList;
 	}
+
+
+	@Override
+	public Response InsertRecord(String keyspaceName, String tableName, Map<String, Object> request) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public Response updateRecord(String keyspaceName, String tableName, Map<String, Object> request,
+			String identifier) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public Response deleteRecord(String keyspaceName, String tableName, String identifier) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public Response GetById(String keyspaceName, String tableName, String identifier) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public Response GetByProperty(String keyspaceName, String tableName, String propertyName, String propertyValue) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public Response GetByProperties(String keyspaceName, String tableName, Map<String, String> propertyMap) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	
 }
 
