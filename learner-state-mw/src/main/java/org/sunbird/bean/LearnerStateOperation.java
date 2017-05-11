@@ -1,7 +1,7 @@
 package org.sunbird.bean;
 /**
- * This enum will contains different state
- *  for a learner {addCourse, getCourse, update}
+ * This enum will contains different operation
+ *  for a learner {addCourse, getCourse, update , getContent}
  * @author Manzarul
  *
  */
@@ -11,10 +11,18 @@ public enum LearnerStateOperation {
 
 	private String value;
 
+	/**
+	 * constructor
+	 * @param value
+	 */
 	LearnerStateOperation(String value){
 		this.value=value;
 	}
 
+	/**
+	 * returns the enum value
+	 * @return
+	 */
 	public String getValue(){
 		return this.value;
 	}
