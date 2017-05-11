@@ -18,8 +18,7 @@ import org.sunbird.model.Course;
 import org.sunbird.model.CourseList;
 
 /**
- * This actor will provide learner TOC state.
- *
+ * This actor will handle leaner's state operation like get course , get content etc.
  * @author Manzarul
  */
 public class LearnerStateActor extends UntypedAbstractActor {

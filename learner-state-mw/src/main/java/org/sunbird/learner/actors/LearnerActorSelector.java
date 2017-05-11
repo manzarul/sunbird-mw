@@ -51,7 +51,9 @@ public class LearnerActorSelector extends UntypedAbstractActor {
             ActorMessage actorMessage = (ActorMessage) message;
             if (actorMessage.getOperation().getValue().equalsIgnoreCase(LearnerStateOperation.ADD_COURSE.getValue())) {
 
-                ActorRef parent = sender();
+                route(courseEnrollmentActorRouter , actorMessage);
+
+                /*ActorRef parent = sender();
                 Timeout timeout = new Timeout(Duration.create(5, "seconds"));
                 Future<Object> future = Patterns.ask(courseEnrollmentActorRouter, message, timeout);
                 future.onComplete(new OnComplete<Object>() {
@@ -67,11 +69,13 @@ public class LearnerActorSelector extends UntypedAbstractActor {
                             parent.tell(result, ActorRef.noSender());
                         }
                     }
-                }, ec);
+                }, ec);*/
 
             } else if (actorMessage.getOperation().getValue().equalsIgnoreCase(LearnerStateOperation.GET_COURSE.getValue())) {
 
-                Timeout timeout = new Timeout(Duration.create(5, "seconds"));
+                route(learnerStateActorRouter , actorMessage);
+
+                /*Timeout timeout = new Timeout(Duration.create(5, "seconds"));
                 Future<Object> future = Patterns.ask(learnerStateActorRouter, message, timeout);
                 ActorRef parent = sender();
                 future.onComplete(new OnComplete<Object>() {
@@ -87,11 +91,13 @@ public class LearnerActorSelector extends UntypedAbstractActor {
                             parent.tell(result, ActorRef.noSender());
                         }
                     }
-                }, ec);
+                }, ec);*/
 
             } else if (actorMessage.getOperation().getValue().equalsIgnoreCase(LearnerStateOperation.UPDATE_TOC.getValue())) {
 
-                Timeout timeout = new Timeout(Duration.create(5, "seconds"));
+                route(learnerStateUpdateActorRouter , actorMessage);
+
+                /*Timeout timeout = new Timeout(Duration.create(5, "seconds"));
                 Future<Object> future = Patterns.ask(learnerStateUpdateActorRouter, message, timeout);
                 ActorRef parent = sender();
                 future.onComplete(new OnComplete<Object>() {
@@ -107,11 +113,13 @@ public class LearnerActorSelector extends UntypedAbstractActor {
                             parent.tell(result, ActorRef.noSender());
                         }
                     }
-                }, ec);
+                }, ec);*/
 
             }else if (actorMessage.getOperation().getValue().equalsIgnoreCase(LearnerStateOperation.GET_CONTENT.getValue())) {
 
-                Timeout timeout = new Timeout(Duration.create(5, "seconds"));
+                route(learnerStateActorRouter , actorMessage);
+
+                /*Timeout timeout = new Timeout(Duration.create(5, "seconds"));
                 Future<Object> future = Patterns.ask(learnerStateActorRouter, message, timeout);
                 ActorRef parent = sender();
                 future.onComplete(new OnComplete<Object>() {
@@ -127,11 +135,13 @@ public class LearnerActorSelector extends UntypedAbstractActor {
                             parent.tell(result, ActorRef.noSender());
                         }
                     }
-                }, ec);
+                }, ec);*/
 
             }else if (actorMessage.getOperation().getValue().equalsIgnoreCase(LearnerStateOperation.ADD_CONTENT.getValue())) {
 
-                Timeout timeout = new Timeout(Duration.create(5, "seconds"));
+                route(learnerStateUpdateActorRouter , actorMessage);
+
+                /*Timeout timeout = new Timeout(Duration.create(5, "seconds"));
                 Future<Object> future = Patterns.ask(learnerStateUpdateActorRouter, message, timeout);
                 ActorRef parent = sender();
                 future.onComplete(new OnComplete<Object>() {
@@ -146,7 +156,7 @@ public class LearnerActorSelector extends UntypedAbstractActor {
                             parent.tell(result, ActorRef.noSender());
                         }
                     }
-                }, ec);
+                }, ec);*/
 
             }
             else{
@@ -162,5 +172,34 @@ public class LearnerActorSelector extends UntypedAbstractActor {
             sender().tell(exception , ActorRef.noSender());
         }
 
+    }
+
+    /**
+     * method will route the message to corresponding router pass into the argument .
+     * @param router
+     * @param message
+     * @return
+     */
+    private boolean route(ActorRef router , ActorMessage message){
+
+        Timeout timeout = new Timeout(Duration.create(5, "seconds"));
+        Future<Object> future = Patterns.ask(router, message, timeout);
+        ActorRef parent = sender();
+        future.onComplete(new OnComplete<Object>() {
+            @Override
+            public void onComplete(Throwable failure, Object result) {
+                if (failure != null) {
+                    //We got a failure, handle it here
+                    ProjectException exception = new ProjectException(ResponseCode.internalError.getErrorCode() ,ResponseCode.internalError.getErrorMessage());
+                    parent.tell(exception , ActorRef.noSender());
+                } else {
+                    logger.info("PARENT RESULT IS " + result);
+                    // We got a result, handle it
+                    parent.tell(result, ActorRef.noSender());
+                }
+            }
+        }, ec);
+
+        return true;
     }
 }

@@ -14,9 +14,7 @@ import org.sunbird.common.responsecode.ResponseCode;
 import org.sunbird.model.Course;
 
 /**
- * This class will handle course enrollment
- * details.
- *
+ * This actor will handle course enrollment operation .
  * @author Manzarul
  */
 public class CourseEnrollmentActor extends UntypedAbstractActor {
@@ -24,6 +22,11 @@ public class CourseEnrollmentActor extends UntypedAbstractActor {
 
     private CassandraOperation cassandraOperation = new CassandraOperationImpl();
 
+    /**
+     * Receives the actor message and perform the course enrollment operation .
+     * @param message
+     * @throws Throwable
+     */
     @Override
     public void onReceive(Object message) throws Throwable {
         if (message instanceof ActorMessage) {

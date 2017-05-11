@@ -19,8 +19,7 @@ import org.sunbird.model.ContentList;
 import java.util.List;
 
 /**
- * This class is responsible to merge the
- * learner state.
+ * This actor will handle learner's state update operation .
  * @author Manzarul
  *
  */
