@@ -11,7 +11,7 @@ import org.sunbird.bean.ActorMessage;
 import org.sunbird.bean.LearnerStateOperation;
 import org.sunbird.cassandra.CassandraOperation;
 import org.sunbird.cassandraImpl.CassandraOperationImpl;
-import org.sunbird.common.exception.ProjectException;
+import org.sunbird.common.exception.ProjectCommonException;
 import org.sunbird.common.responsecode.ResponseCode;
 import org.sunbird.model.ContentList;
 import org.sunbird.model.Course;
@@ -40,7 +40,7 @@ public class LearnerStateActor extends UntypedAbstractActor {
                     sender().tell(courseList, self());
                 } else {
                     logger.debug("LearnerStateActor message Mis match");
-                    ProjectException exception = new ProjectException(ResponseCode.invalidRequestData.getErrorCode() ,ResponseCode.invalidRequestData.getErrorMessage() );
+                    ProjectCommonException exception = new ProjectCommonException(ResponseCode.invalidRequestData.getErrorCode() ,ResponseCode.invalidRequestData.getErrorMessage() );
                     sender().tell(exception , ActorRef.noSender());
                 }
             } else if (actorMessage.getOperation().getValue().equalsIgnoreCase(LearnerStateOperation.GET_COURSE_BY_ID.getValue())) {
@@ -52,7 +52,7 @@ public class LearnerStateActor extends UntypedAbstractActor {
                     sender().tell("SUCCESS", getSelf());
                 } else {
                     logger.info("LearnerStateActor message Mismatch");
-                    ProjectException exception = new ProjectException(ResponseCode.invalidRequestData.getErrorCode() ,ResponseCode.invalidRequestData.getErrorMessage() );
+                    ProjectCommonException exception = new ProjectCommonException(ResponseCode.invalidRequestData.getErrorCode() ,ResponseCode.invalidRequestData.getErrorMessage() );
                     sender().tell(exception , ActorRef.noSender());
                 }
             }else if (actorMessage.getOperation().getValue().equalsIgnoreCase(LearnerStateOperation.GET_CONTENT.getValue())) {
@@ -68,19 +68,19 @@ public class LearnerStateActor extends UntypedAbstractActor {
                     sender().tell(result, self());
                 } else {
                     logger.info("LearnerStateUpdateActor message Mismatch");
-                    ProjectException exception = new ProjectException(ResponseCode.invalidRequestData.getErrorCode() ,ResponseCode.invalidRequestData.getErrorMessage() );
+                    ProjectCommonException exception = new ProjectCommonException(ResponseCode.invalidRequestData.getErrorCode() ,ResponseCode.invalidRequestData.getErrorMessage() );
                     sender().tell(exception , ActorRef.noSender());
                 }
             }
             else{
                 logger.info("UNSUPPORTED OPERATION");
-                ProjectException exception = new ProjectException(ResponseCode.invalidOperationName.getErrorCode() ,ResponseCode.invalidOperationName.getErrorMessage() );
+                ProjectCommonException exception = new ProjectCommonException(ResponseCode.invalidOperationName.getErrorCode() ,ResponseCode.invalidOperationName.getErrorMessage() );
                 sender().tell(exception , ActorRef.noSender());
             }
 
         }else{
             logger.info("UNSUPPORTED MESSAGE");
-            ProjectException exception = new ProjectException(ResponseCode.invalidRequestData.getErrorCode() ,ResponseCode.invalidRequestData.getErrorMessage() );
+            ProjectCommonException exception = new ProjectCommonException(ResponseCode.invalidRequestData.getErrorCode() ,ResponseCode.invalidRequestData.getErrorMessage() );
             sender().tell(exception , ActorRef.noSender());
         }
 

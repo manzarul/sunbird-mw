@@ -1,7 +1,8 @@
 package org.sunbird.common.request;
 
-import org.sunbird.common.exception.ProjectException;
+import org.sunbird.common.exception.ProjectCommonException;
 import org.sunbird.common.models.util.ProjectUtil;
+import org.sunbird.common.responsecode.HeaderResponseCode;
 import org.sunbird.common.responsecode.ResponseCode;
 
 /**
@@ -20,8 +21,8 @@ public class RequestValidator {
 	 */
 	public static void validateCreateCourse(CourseRequestDto courseRequestDto) {
 		if (ProjectUtil.isStringNullOREmpty(courseRequestDto.getCourseName())) {
-			ProjectException dataException = new ProjectException(ResponseCode.courseNameRequired.getErrorCode(),
-					ResponseCode.courseNameRequired.getErrorMessage());
+			ProjectCommonException dataException = new ProjectCommonException(ResponseCode.courseNameRequired.getErrorCode(),
+					ResponseCode.courseNameRequired.getErrorMessage(),HeaderResponseCode.CLIENT_ERROR.code());
 			throw dataException;
 		}
 	}

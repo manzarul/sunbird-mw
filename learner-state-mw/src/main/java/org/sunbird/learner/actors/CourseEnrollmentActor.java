@@ -9,7 +9,7 @@ import org.sunbird.bean.ActorMessage;
 import org.sunbird.bean.LearnerStateOperation;
 import org.sunbird.cassandra.CassandraOperation;
 import org.sunbird.cassandraImpl.CassandraOperationImpl;
-import org.sunbird.common.exception.ProjectException;
+import org.sunbird.common.exception.ProjectCommonException;
 import org.sunbird.common.responsecode.ResponseCode;
 import org.sunbird.model.Course;
 
@@ -39,18 +39,18 @@ public class CourseEnrollmentActor extends UntypedAbstractActor {
                     sender().tell(response, getSelf());
                 } else {
                     logger.info("Course Object not match");
-                    ProjectException exception = new ProjectException(ResponseCode.invalidRequestData.getErrorCode() ,ResponseCode.invalidRequestData.getErrorMessage() );
+                    ProjectCommonException exception = new ProjectCommonException(ResponseCode.invalidRequestData.getErrorCode() ,ResponseCode.invalidRequestData.getErrorMessage() );
                     sender().tell(exception, self());
                 }
             } else {
                 logger.info("UNSUPPORTED OPERATION");
-                ProjectException exception = new ProjectException(ResponseCode.invalidOperationName.getErrorCode() ,ResponseCode.invalidOperationName.getErrorMessage() );
+                ProjectCommonException exception = new ProjectCommonException(ResponseCode.invalidOperationName.getErrorCode() ,ResponseCode.invalidOperationName.getErrorMessage() );
                 sender().tell(exception, self());
             }
         } else {
             // Throw exception as message body not as per expected
             logger.info("UNSUPPORTED MESSAGE");
-            ProjectException exception = new ProjectException(ResponseCode.invalidRequestData.getErrorCode() ,ResponseCode.invalidRequestData.getErrorMessage() );
+            ProjectCommonException exception = new ProjectCommonException(ResponseCode.invalidRequestData.getErrorCode() ,ResponseCode.invalidRequestData.getErrorMessage() );
             sender().tell(exception, self());
         }
     }
