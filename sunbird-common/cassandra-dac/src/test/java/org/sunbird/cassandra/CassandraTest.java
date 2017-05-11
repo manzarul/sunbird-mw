@@ -10,7 +10,7 @@ import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.Test;
 import org.sunbird.cassandra.CassandraOperation;
-import org.sunbird.cassandraImpl.CassandraOperationImpl;
+import org.sunbird.cassandraimpl.CassandraOperationImpl;
 import org.sunbird.helper.CassandraConnectionManager;
 import org.sunbird.model.Content;
 import org.sunbird.model.Course;
