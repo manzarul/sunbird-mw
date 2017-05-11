@@ -14,6 +14,7 @@ import org.sunbird.common.models.util.LogHelper;
 import org.sunbird.common.responsecode.HeaderResponseCode;
 import org.sunbird.common.responsecode.ResponseCode;
 import org.sunbird.model.Content;
+import org.sunbird.common.request.Request;
 
 /**
  * This actor will handle learner's state update operation .
@@ -27,12 +28,12 @@ public class LearnerStateUpdateActor extends UntypedAbstractActor {
 
     @Override
     public void onReceive(Object message) throws Throwable {
-        if (message instanceof ActorMessage) {
+        if (message instanceof Request) {
             logger.debug("LearnerStateUpdateActor onReceive called");
-            ActorMessage actorMessage = (ActorMessage) message;
+            Request actorMessage = (Request) message;
 
-            if (actorMessage.getOperation().getValue().equalsIgnoreCase(LearnerStateOperation.ADD_CONTENT.getValue())) {
-                Object obj = actorMessage.getData().get(actorMessage.getData().keySet().toArray()[0]);
+            if (actorMessage.getOperation().equalsIgnoreCase(LearnerStateOperation.ADD_CONTENT.getValue())) {
+                Object obj = actorMessage.getRequest().get(actorMessage.getRequest().keySet().toArray()[0]);
                 if (obj instanceof Content) {
                     Content content = (Content) obj;
                     boolean flag = cassandraOperation.insertContent(content);

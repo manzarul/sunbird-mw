@@ -7,11 +7,10 @@ import akka.dispatch.OnComplete;
 import akka.pattern.Patterns;
 import akka.routing.FromConfig;
 import akka.util.Timeout;
-import org.apache.log4j.Logger;
-import org.sunbird.bean.ActorMessage;
 import org.sunbird.bean.LearnerStateOperation;
 import org.sunbird.common.exception.ProjectCommonException;
 import org.sunbird.common.models.util.LogHelper;
+import org.sunbird.common.request.Request;
 import org.sunbird.common.responsecode.HeaderResponseCode;
 import org.sunbird.common.responsecode.ResponseCode;
 import scala.concurrent.ExecutionContext;
@@ -53,24 +52,25 @@ public class RequestRouterActor extends UntypedAbstractActor {
      * Initialize the map with operation as key and corresponding router as value.
      */
     private void initializeRouterMap() {
-        routerMap.put(LearnerStateOperation.ADD_COURSE.getValue() ,courseEnrollmentActorRouter);
-        routerMap.put(LearnerStateOperation.GET_COURSE.getValue() , learnerStateActorRouter);
-        routerMap.put(LearnerStateOperation.UPDATE_TOC.getValue() ,learnerStateUpdateActorRouter);
-        routerMap.put(LearnerStateOperation.GET_CONTENT.getValue() ,learnerStateActorRouter);
-        routerMap.put(LearnerStateOperation.ADD_CONTENT.getValue() ,learnerStateUpdateActorRouter);
+        routerMap.put(LearnerStateOperation.ADD_COURSE.getValue(), courseEnrollmentActorRouter);
+        routerMap.put(LearnerStateOperation.GET_COURSE.getValue(), learnerStateActorRouter);
+        routerMap.put(LearnerStateOperation.UPDATE_TOC.getValue(), learnerStateUpdateActorRouter);
+        routerMap.put(LearnerStateOperation.GET_CONTENT.getValue(), learnerStateActorRouter);
+        routerMap.put(LearnerStateOperation.ADD_CONTENT.getValue(), learnerStateUpdateActorRouter);
+        routerMap.put(LearnerStateOperation.GET_COURSE_BY_ID.getValue(), learnerStateActorRouter);
     }
 
 
     @Override
     public void onReceive(Object message) throws Exception {
 
-        if (message instanceof ActorMessage) {
+        if (message instanceof Request) {
             logger.debug("Actor selector onReceive called");
-            ActorMessage actorMessage = (ActorMessage) message;
-            ActorRef ref = routerMap.get(actorMessage.getOperation().getValue());
-            if(null != ref){
-                route(ref , actorMessage);
-            }else {
+            Request actorMessage = (Request) message;
+            ActorRef ref = routerMap.get(actorMessage.getOperation());
+            if (null != ref) {
+                route(ref, actorMessage);
+            } else {
                 logger.info("UNSUPPORTED OPERATION TYPE");
                 ProjectCommonException exception = new ProjectCommonException(ResponseCode.invalidOperationName.getErrorCode(), ResponseCode.invalidOperationName.getErrorMessage(), HeaderResponseCode.CLIENT_ERROR.code());
                 sender().tell(exception, ActorRef.noSender());
@@ -90,7 +90,7 @@ public class RequestRouterActor extends UntypedAbstractActor {
      * @param message
      * @return
      */
-    private boolean route(ActorRef router, ActorMessage message) {
+    private boolean route(ActorRef router, Request message) {
 
         Timeout timeout = new Timeout(Duration.create(5, "seconds"));
         Future<Object> future = Patterns.ask(router, message, timeout);

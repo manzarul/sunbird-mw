@@ -13,6 +13,7 @@ import org.sunbird.common.models.util.LogHelper;
 import org.sunbird.common.responsecode.HeaderResponseCode;
 import org.sunbird.common.responsecode.ResponseCode;
 import org.sunbird.model.Course;
+import org.sunbird.common.request.Request;
 
 /**
  * This actor will handle course enrollment operation .
@@ -33,12 +34,12 @@ public class CourseEnrollmentActor extends UntypedAbstractActor {
      */
     @Override
     public void onReceive(Object message) throws Throwable {
-        if (message instanceof ActorMessage) {
+        if (message instanceof Request) {
             logger.info("CourseEnrollmentActor onReceive called");
-            ActorMessage actorMessage = (ActorMessage) message;
+            Request actorMessage = (Request) message;
 
-            if (actorMessage.getOperation().getValue().equalsIgnoreCase(LearnerStateOperation.ADD_COURSE.getValue())) {
-                Object obj = actorMessage.getData().get(actorMessage.getData().keySet().toArray()[0]);
+            if (actorMessage.getOperation().equalsIgnoreCase(LearnerStateOperation.ADD_COURSE.getValue())) {
+                Object obj = actorMessage.getRequest().get(actorMessage.getRequest().keySet().toArray()[0]);
                 if (obj instanceof Course) {
                     Course course = (Course) obj;
                     boolean result = cassandraOperation.insertCourse(course);
