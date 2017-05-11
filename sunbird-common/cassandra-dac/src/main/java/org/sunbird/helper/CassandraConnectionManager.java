@@ -30,9 +30,8 @@ import com.datastax.driver.core.policies.DefaultRetryPolicy;
  */
 public final class CassandraConnectionManager {
 	private final static Logger LOGGER = Logger.getLogger(CassandraOperationImpl.class.getName());
-	private static Cluster cluster;
-    private static Session session;
     private static Map<String,Session> cassandraSessionMap = new HashMap<>();
+    private static Map<String,Cluster> cassandraclusterMap = new HashMap<>();
     
     /**
      * @author Amit Kumar
@@ -43,8 +42,10 @@ public final class CassandraConnectionManager {
      * @return boolean
      * 
      */
-	public boolean createConnection(String ip,String port,String userName,String password){
+	public boolean createConnection(String ip,String port,String userName,String password,String keyspace){
 		boolean connection = false;
+		Cluster cluster= null;
+		Session session = null;
 		try{
 			   PropertiesCache cache = PropertiesCache.getInstance();
 			   PoolingOptions poolingOptions = new PoolingOptions();
@@ -55,7 +56,7 @@ public final class CassandraConnectionManager {
 			   poolingOptions.setMaxRequestsPerConnection(HostDistance.LOCAL, Integer.parseInt(cache.getProperty(Constants.MAX_REQUEST_PER_CONNECTION)));
 			   poolingOptions.setHeartbeatIntervalSeconds(Integer.parseInt(cache.getProperty(Constants.HEARTBEAT_INTERVAL)));
 			   poolingOptions.setPoolTimeoutMillis(Integer.parseInt(cache.getProperty(Constants.POOL_TIMEOUT)));
-		        cluster = Cluster
+			   cluster = Cluster
 		        		.builder()
 		        		.addContactPoint(ip)
 		        		.withPort(Integer.parseInt(port))
@@ -67,10 +68,11 @@ public final class CassandraConnectionManager {
 		        		.build();
 		        QueryLogger queryLogger = QueryLogger.builder().withConstantThreshold(Integer.parseInt(cache.getProperty(Constants.QUERY_LOGGER_THRESHOLD))).build();
 		        cluster.register(queryLogger);
-		        session = cluster.connect();
+		        session = cluster.connect(keyspace);
 		        if(null != session){
 		        	connection = true;
-		        	cassandraSessionMap.put(ip, session);
+		        	cassandraSessionMap.put(keyspace, session);
+		        	cassandraclusterMap.put(keyspace, cluster);
 		        }
 			   }catch(Exception e){
 				   LOGGER.error(e);
@@ -94,16 +96,27 @@ public final class CassandraConnectionManager {
 	 * @param ip
 	 * @return Session
 	 */
-	public static Session getSession(String ip) {
-        return cassandraSessionMap.get(ip);
+	public static Session getSession(String keyspaceName) {
+        return cassandraSessionMap.get(keyspaceName);
     }
  
 	/*
 	 * exposing session for application 
 	 */
 	public static Session getSession() {
-        return CassandraConnectionManager.session;
+        return cassandraSessionMap.get("ip");
     }
  
+	/**
+	 * @author Amit Kumar
+	 * 
+	 * this method will close all the session and cluster
+	 */
+	public static void  shutdownhook() {
+		for(String key: cassandraSessionMap.keySet()){
+			cassandraSessionMap.get(key).close();
+			cassandraclusterMap.get(key).close();
+		}
+    }
 
 }
