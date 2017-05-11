@@ -1,4 +1,4 @@
-package org.sunbird.cassandraImpl;
+package org.sunbird.cassandraimpl;
 
 import static com.datastax.driver.core.querybuilder.QueryBuilder.eq;
 
@@ -28,15 +28,23 @@ import com.datastax.driver.core.querybuilder.Select.Where;
 import com.datastax.driver.mapping.Mapper;
 import com.datastax.driver.mapping.MappingManager;
 
+/**
+ * 
+ * @author Amit Kumar
+ * 
+ * this class contains methods to interact with cassandra DB
+ * 
+ */
 public class CassandraOperationImpl implements CassandraOperation{
 
 	private final static Logger LOGGER = Logger.getLogger(CassandraOperationImpl.class.getName());
 	
-	/*
-	 * (non-Javadoc)
+	
+	/**
 	 * @see org.sunbird.cassandra.CassandraOperation#insertCourse(org.sunbird.model.Course)
 	 * @param course
-	 * this method insert course info to db
+	 * @return boolean
+	 * 
 	 */
 	public boolean insertCourse(Course course) {
 		PreparedStatement statement = CassandraConnectionManager.getSession().prepare(CassandraQuery.Course.INSERT_COURSE);
@@ -53,11 +61,12 @@ public class CassandraOperationImpl implements CassandraOperation{
 		
 	}
 	
-	/*
-	 * (non-Javadoc)
+
+	/**
 	 * @see org.sunbird.cassandra.CassandraOperation#getCourseById(String)
 	 * @param courseId
-	 * used to fetch course information based on course id
+	 * @return Course
+	 * 
 	 */
 	public Course getCourseById(String courseId){
 		Course course=null;
@@ -77,11 +86,12 @@ public class CassandraOperationImpl implements CassandraOperation{
 		 return course;
 		}
 	
-	/*
-	 * (non-Javadoc)
+	
+	/**
 	 * @see org.sunbird.cassandra.CassandraOperation#getCourseById(String)
 	 * @param courseId
-	 * used to delete course information based on course id
+	 * @return boolean
+	 * 
 	 */
 	public boolean deleteCourseById(String courseId){
 		Delete.Where delete = QueryBuilder.delete().from(CassandraQuery.KEY_SPACE_NAME, CassandraQuery.Course.COURSE_TABLE_NAME)
@@ -91,11 +101,10 @@ public class CassandraOperationImpl implements CassandraOperation{
 		 return result.wasApplied();
 		}
 
-	/*
-	 * (non-Javadoc)
+    /**
 	 * @see org.sunbird.cassandra.CassandraOperation#getUserEnrolledCourse(String)
 	 * @param courseId
-	 * used to retrieve list of enrolled course information based on user id
+	 * @return CourseList
 	 */
 	@Override
 	public CourseList getUserEnrolledCourse(String userId) {
@@ -117,11 +126,10 @@ public class CassandraOperationImpl implements CassandraOperation{
 	}
 		
 	
-	/*
-	 * (non-Javadoc)
+    /**
 	 * @see org.sunbird.cassandra.CassandraOperation#insertContent(org.sunbird.model.Content)
 	 * @param course
-	 * this method insert content info to db
+	 * @return boolean
 	 */
 	public boolean insertContent(Content content) {
 		PreparedStatement statement = CassandraConnectionManager.getSession().prepare(CassandraQuery.Content.INSERT_CONTENT);
@@ -137,11 +145,11 @@ public class CassandraOperationImpl implements CassandraOperation{
 		return result.wasApplied();
 	}
 	
-	/*
-	 * (non-Javadoc)
+	
+	/**
 	 * @see org.sunbird.cassandra.CassandraOperation#getCourseById(String,List<String>)
 	 * @param courseId
-	 * used to fetch course information based on course id
+	 * @return Content
 	 */
 	public Content getContentById(String contentId){
 		Content content=null;
@@ -166,6 +174,11 @@ public class CassandraOperationImpl implements CassandraOperation{
 	 * @param courseId
 	 * used to delete content information based on content id
 	 */
+	/**
+	 * @see org.sunbird.cassandra.CassandraOperation#deleteContentById(String)
+	 * @param courseId
+	 * @return boolean
+	 */
 	@Override
 	public boolean deleteContentById(String contentId) {
 		Delete.Where delete = QueryBuilder.delete().from(CassandraQuery.KEY_SPACE_NAME, CassandraQuery.Content.CONTENT_TABLE_NAME)
@@ -175,11 +188,11 @@ public class CassandraOperationImpl implements CassandraOperation{
 		 return result.wasApplied();
 	}
 
-	/*
-	 * (non-Javadoc)
+	
+	/**
 	 * @see org.sunbird.cassandra.CassandraOperation#getContentState(String,List<String>)
 	 * @param courseId
-	 * used to retrieve list of enrolled course information based on user id and list of content id
+	 * @return ContentList
 	 */
 	@Override
 	public ContentList getContentState(String userId, List<String> contentIdList) {
