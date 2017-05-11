@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import org.sunbird.bean.ActorMessage;
 import org.sunbird.bean.LearnerStateOperation;
 import org.sunbird.common.exception.ProjectCommonException;
+import org.sunbird.common.models.util.LogHelper;
 import org.sunbird.common.responsecode.HeaderResponseCode;
 import org.sunbird.common.responsecode.ResponseCode;
 import scala.concurrent.ExecutionContext;
@@ -26,7 +27,7 @@ import java.util.Map;
  */
 public class RequestRouterActor extends UntypedAbstractActor {
 
-    private Logger logger = Logger.getLogger(RequestRouterActor.class.getName());
+    private LogHelper logger = LogHelper.getInstance(RequestRouterActor.class.getName());
     private ActorRef courseEnrollmentActorRouter;
     private ActorRef learnerStateActorRouter;
     private ActorRef learnerStateUpdateActorRouter;
