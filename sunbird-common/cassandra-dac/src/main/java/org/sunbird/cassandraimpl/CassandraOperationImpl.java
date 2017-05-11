@@ -227,8 +227,8 @@ public class CassandraOperationImpl implements CassandraOperation{
 
 
 	@Override
-	public Response InsertRecord(String keyspaceName, String tableName, Map<String, Object> request) {
-		// TODO Auto-generated method stub
+	public Response insertRecord(String keyspaceName, String tableName, Map<String, Object> request) {
+		
 		return null;
 	}
 
@@ -249,21 +249,21 @@ public class CassandraOperationImpl implements CassandraOperation{
 
 
 	@Override
-	public Response GetById(String keyspaceName, String tableName, String identifier) {
+	public Response getById(String keyspaceName, String tableName, String identifier) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 
 	@Override
-	public Response GetByProperty(String keyspaceName, String tableName, String propertyName, String propertyValue) {
+	public Response getByProperty(String keyspaceName, String tableName, String propertyName, String propertyValue) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 
 	@Override
-	public Response GetByProperties(String keyspaceName, String tableName, Map<String, String> propertyMap) {
+	public Response getByProperties(String keyspaceName, String tableName, Map<String, String> propertyMap) {
 		// TODO Auto-generated method stub
 		return null;
 	}

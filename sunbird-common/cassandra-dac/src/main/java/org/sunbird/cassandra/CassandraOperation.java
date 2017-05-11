@@ -65,7 +65,7 @@ public interface CassandraOperation {
 	 * @param request
 	 * @return Response
 	 */
-	public Response InsertRecord(String keyspaceName,String tableName,Map<String,Object> request);
+	public Response insertRecord(String keyspaceName,String tableName,Map<String,Object> request);
 
 	/**
 	 * used to update record in cassandra db 
@@ -93,7 +93,7 @@ public interface CassandraOperation {
 	 * @param identifier
 	 * @return Response 
 	 */
-	public Response  GetById(String keyspaceName,String tableName,String identifier);
+	public Response  getById(String keyspaceName,String tableName,String identifier);
 	
 	/**
 	 * used to fetch record based on given parameter and it's value
@@ -103,7 +103,7 @@ public interface CassandraOperation {
 	 * @param propertyValue
 	 * @return Response
 	 */
-	public Response  GetByProperty(String keyspaceName,String tableName,String propertyName,String propertyValue);
+	public Response  getByProperty(String keyspaceName,String tableName,String propertyName,String propertyValue);
 	
 	/**
 	 * used to fetch record based on given parameter list and their values
@@ -112,5 +112,5 @@ public interface CassandraOperation {
 	 * @param propertyMap
 	 * @return Response
 	 */
-	public Response  GetByProperties(String keyspaceName,String tableName,Map<String,String> propertyMap);
+	public Response  getByProperties(String keyspaceName,String tableName,Map<String,String> propertyMap);
 }
