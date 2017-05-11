@@ -6,7 +6,7 @@ import akka.actor.Props;
 import com.typesafe.config.ConfigFactory;
 
 import org.apache.log4j.Logger;
-import org.sunbird.learner.actors.LearnerActorSelector;
+import org.sunbird.learner.actors.RequestRouterActor;
 
 /**
  * Created by arvind on 5/5/17.
@@ -27,8 +27,8 @@ public class Application {
     public static void startRemoteCreationSystem(){
         system = ActorSystem.create("RemoteMiddlewareSystem", ConfigFactory.load()
                 .getConfig("RemoteMWConfig"));
-        ActorRef learnerActorSelectorRef = system.actorOf(Props.create(LearnerActorSelector.class),
-                "LearnerActorSelector");
+        ActorRef learnerActorSelectorRef = system.actorOf(Props.create(RequestRouterActor.class),
+                "RequestRouterActor");
         LOGGER.info("ACTORS STARTED " + learnerActorSelectorRef);
     }
 }

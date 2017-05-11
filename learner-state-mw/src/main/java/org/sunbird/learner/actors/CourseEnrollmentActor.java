@@ -8,10 +8,10 @@ import org.apache.log4j.Logger;
 import org.sunbird.bean.ActorMessage;
 import org.sunbird.bean.LearnerStateOperation;
 import org.sunbird.cassandra.CassandraOperation;
-import org.sunbird.cassandraImpl.CassandraOperationImpl;
+import org.sunbird.cassandraimpl.CassandraOperationImpl;
 import org.sunbird.common.exception.ProjectCommonException;
+import org.sunbird.common.models.response.Course;
 import org.sunbird.common.responsecode.ResponseCode;
-import org.sunbird.model.Course;
 
 /**
  * This actor will handle course enrollment operation .
