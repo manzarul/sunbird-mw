@@ -14,12 +14,15 @@ import org.sunbird.model.ContentList;
 import org.sunbird.model.Course;
 import org.sunbird.model.CourseList;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.typesafe.config.ConfigFactory;
 
 import akka.actor.ActorSelection;
 import akka.actor.ActorSystem;
 import akka.pattern.Patterns;
 import akka.util.Timeout;
+import mapper.RequestMapper;
+import play.libs.F.Promise;
 import play.libs.Json;
 import play.mvc.Result;
 import scala.concurrent.Await;
@@ -46,6 +49,8 @@ public class LearnerController extends BaseController {
 	 * @return Result
 	 */
 	public Result getEnrolledCourses() {
+		JsonNode requestData = request().body().asJson();
+		//RequestMapper.mapRequest(requestData, );
 		ActorMessage msg = new ActorMessage();
 		msg.setOperation(LearnerStateOperation.GET_COURSE);
 		Map<String,Object> map = new HashMap<>();

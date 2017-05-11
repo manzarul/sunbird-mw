@@ -11,7 +11,7 @@ import org.sunbird.cassandra.CassandraOperation;
 import org.sunbird.cassandraImpl.CassandraOperationImpl;
 
 import akka.actor.UntypedAbstractActor;
-import org.sunbird.common.exception.ProjectException;
+import org.sunbird.common.exception.ProjectCommonException;
 import org.sunbird.common.responsecode.ResponseCode;
 import org.sunbird.model.Content;
 import org.sunbird.model.ContentList;
@@ -43,17 +43,17 @@ public class LearnerStateUpdateActor extends UntypedAbstractActor{
 					sender().tell(result, self());
 				} else {
 					logger.info("LearnerStateUpdateActor message Mismatch");
-					ProjectException exception = new ProjectException(ResponseCode.invalidRequestData.getErrorCode() ,ResponseCode.invalidRequestData.getErrorMessage() );
+					ProjectCommonException exception = new ProjectCommonException(ResponseCode.invalidRequestData.getErrorCode() ,ResponseCode.invalidRequestData.getErrorMessage() );
 					sender().tell(exception , ActorRef.noSender());
 				}
 			}else{
 				logger.info("UNSUPPORTED OPERATION");
-				ProjectException exception = new ProjectException(ResponseCode.invalidOperationName.getErrorCode() ,ResponseCode.invalidOperationName.getErrorMessage() );
+				ProjectCommonException exception = new ProjectCommonException(ResponseCode.invalidOperationName.getErrorCode() ,ResponseCode.invalidOperationName.getErrorMessage() );
 				sender().tell(exception , ActorRef.noSender());
 			}
 		} else{
 			logger.info("UNSUPPORTED MESSAGE");
-			ProjectException exception = new ProjectException(ResponseCode.invalidRequestData.getErrorCode() ,ResponseCode.invalidRequestData.getErrorMessage() );
+			ProjectCommonException exception = new ProjectCommonException(ResponseCode.invalidRequestData.getErrorCode() ,ResponseCode.invalidRequestData.getErrorMessage() );
 			sender().tell(exception , ActorRef.noSender());
 		}
 	}

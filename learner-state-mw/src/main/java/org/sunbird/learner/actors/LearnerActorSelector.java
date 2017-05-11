@@ -10,7 +10,7 @@ import akka.util.Timeout;
 import org.apache.log4j.Logger;
 import org.sunbird.bean.ActorMessage;
 import org.sunbird.bean.LearnerStateOperation;
-import org.sunbird.common.exception.ProjectException;
+import org.sunbird.common.exception.ProjectCommonException;
 import org.sunbird.common.responsecode.ResponseCode;
 import scala.concurrent.ExecutionContext;
 import scala.concurrent.Future;
@@ -61,7 +61,7 @@ public class LearnerActorSelector extends UntypedAbstractActor {
                     public void onComplete(Throwable failure, Object result) {
                         if (failure != null) {
                             //We got a failure, handle it here
-                            ProjectException exception = new ProjectException(ResponseCode.internalError.getErrorCode() ,ResponseCode.internalError.getErrorMessage());
+                            ProjectCommonException exception = new ProjectCommonException(ResponseCode.internalError.getErrorCode() ,ResponseCode.internalError.getErrorMessage());
                             parent.tell(exception , ActorRef.noSender());
                         } else {
                             logger.info("PARENT RESULT IS " + result);
@@ -83,7 +83,7 @@ public class LearnerActorSelector extends UntypedAbstractActor {
                     public void onComplete(Throwable failure, Object result) {
                         if (failure != null) {
                             //We got a failure, handle it here
-                            ProjectException exception = new ProjectException(ResponseCode.internalError.getErrorCode() ,ResponseCode.internalError.getErrorMessage());
+                            ProjectCommonException exception = new ProjectCommonException(ResponseCode.internalError.getErrorCode() ,ResponseCode.internalError.getErrorMessage());
                             parent.tell(exception , ActorRef.noSender());
                         } else {
                             logger.info("PARENT RESULT IS " + result);
@@ -105,7 +105,7 @@ public class LearnerActorSelector extends UntypedAbstractActor {
                     public void onComplete(Throwable failure, Object result) {
                         if (failure != null) {
                             //We got a failure, handle it here
-                            ProjectException exception = new ProjectException(ResponseCode.internalError.getErrorCode() ,ResponseCode.internalError.getErrorMessage());
+                            ProjectCommonException exception = new ProjectCommonException(ResponseCode.internalError.getErrorCode() ,ResponseCode.internalError.getErrorMessage());
                             parent.tell(exception , ActorRef.noSender());
                         } else {
                             logger.info("PARENT RESULT IS "+result);
@@ -127,7 +127,7 @@ public class LearnerActorSelector extends UntypedAbstractActor {
                     public void onComplete(Throwable failure, Object result) {
                         if (failure != null) {
                             //We got a failure, handle it here
-                            ProjectException exception = new ProjectException(ResponseCode.internalError.getErrorCode() ,ResponseCode.internalError.getErrorMessage());
+                            ProjectCommonException exception = new ProjectCommonException(ResponseCode.internalError.getErrorCode() ,ResponseCode.internalError.getErrorMessage());
                             parent.tell(exception , ActorRef.noSender());
                         } else {
                             logger.info("PARENT RESULT IS "+result);
@@ -149,7 +149,7 @@ public class LearnerActorSelector extends UntypedAbstractActor {
                     public void onComplete(Throwable failure, Object result) {
                         if (failure != null) {
                             //We got a failure, handle it here
-                            ProjectException exception = new ProjectException(ResponseCode.internalError.getErrorCode() ,ResponseCode.internalError.getErrorMessage());
+                            ProjectCommonException exception = new ProjectCommonException(ResponseCode.internalError.getErrorCode() ,ResponseCode.internalError.getErrorMessage());
                             parent.tell(exception , ActorRef.noSender());
                         } else {
                             // We got a result, handle it
@@ -161,14 +161,14 @@ public class LearnerActorSelector extends UntypedAbstractActor {
             }
             else{
                 logger.info("UNSUPPORTED OPERATION TYPE");
-                ProjectException exception = new ProjectException(ResponseCode.invalidOperationName.getErrorCode() ,ResponseCode.invalidOperationName.getErrorMessage() );
+                ProjectCommonException exception = new ProjectCommonException(ResponseCode.invalidOperationName.getErrorCode() ,ResponseCode.invalidOperationName.getErrorMessage() );
                 sender().tell(exception , ActorRef.noSender());
             }
 
 
         }else{
             logger.info("UNSUPPORTED MESSAGE");
-            ProjectException exception = new ProjectException(ResponseCode.invalidRequestData.getErrorCode() ,ResponseCode.invalidRequestData.getErrorMessage() );
+            ProjectCommonException exception = new ProjectCommonException(ResponseCode.invalidRequestData.getErrorCode() ,ResponseCode.invalidRequestData.getErrorMessage() );
             sender().tell(exception , ActorRef.noSender());
         }
 
