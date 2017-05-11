@@ -10,9 +10,11 @@ import org.sunbird.bean.LearnerStateOperation;
 import org.sunbird.cassandra.CassandraOperation;
 import org.sunbird.cassandraimpl.CassandraOperationImpl;
 import org.sunbird.common.exception.ProjectCommonException;
+import org.sunbird.common.models.response.Response;
 import org.sunbird.common.models.util.LogHelper;
 import org.sunbird.common.responsecode.HeaderResponseCode;
 import org.sunbird.common.responsecode.ResponseCode;
+import org.sunbird.learner.util.ActorUtility;
 import org.sunbird.model.Content;
 import org.sunbird.common.request.Request;
 
@@ -36,8 +38,8 @@ public class LearnerStateUpdateActor extends UntypedAbstractActor {
                 Object obj = actorMessage.getRequest().get(actorMessage.getRequest().keySet().toArray()[0]);
                 if (obj instanceof Content) {
                     Content content = (Content) obj;
-                    boolean flag = cassandraOperation.insertContent(content);
-                    String result = flag ? "CONTENT ADDED SUCCESSFULLY" : "CONTENT ADDITION FAILED";
+                    ActorUtility.DbInfo dbInfo = ActorUtility.dbInfoMap.get(LearnerStateOperation.ADD_CONTENT.getValue());
+                    Response result = cassandraOperation.insertRecord(dbInfo.getKeySpace(),dbInfo.getTableName() , null);
                     sender().tell(result, self());
                 } else {
                     logger.info("LearnerStateUpdateActor message Mismatch");

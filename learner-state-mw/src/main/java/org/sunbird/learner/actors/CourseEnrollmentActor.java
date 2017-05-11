@@ -4,14 +4,15 @@
 package org.sunbird.learner.actors;
 
 import akka.actor.UntypedAbstractActor;
-import org.sunbird.bean.ActorMessage;
 import org.sunbird.bean.LearnerStateOperation;
 import org.sunbird.cassandra.CassandraOperation;
 import org.sunbird.cassandraimpl.CassandraOperationImpl;
 import org.sunbird.common.exception.ProjectCommonException;
+import org.sunbird.common.models.response.Response;
 import org.sunbird.common.models.util.LogHelper;
 import org.sunbird.common.responsecode.HeaderResponseCode;
 import org.sunbird.common.responsecode.ResponseCode;
+import org.sunbird.learner.util.ActorUtility;
 import org.sunbird.model.Course;
 import org.sunbird.common.request.Request;
 
@@ -42,9 +43,9 @@ public class CourseEnrollmentActor extends UntypedAbstractActor {
                 Object obj = actorMessage.getRequest().get(actorMessage.getRequest().keySet().toArray()[0]);
                 if (obj instanceof Course) {
                     Course course = (Course) obj;
-                    boolean result = cassandraOperation.insertCourse(course);
-                    String response = (result ? "ENROLLMENT SUCCESS" : "ENROLLMENT FAILED");
-                    sender().tell(response, getSelf());
+                    ActorUtility.DbInfo dbInfo = ActorUtility.dbInfoMap.get(LearnerStateOperation.ADD_COURSE.getValue());
+                    Response result = cassandraOperation.insertRecord(dbInfo.getKeySpace(),dbInfo.getTableName(),actorMessage.getRequest());
+                    sender().tell(result, getSelf());
                 } else {
                     logger.info("Course Object not match");
                     ProjectCommonException exception = new ProjectCommonException(ResponseCode.invalidRequestData.getErrorCode(), ResponseCode.invalidRequestData.getErrorMessage(), HeaderResponseCode.CLIENT_ERROR.code());
