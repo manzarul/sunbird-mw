@@ -11,11 +11,14 @@ import org.sunbird.bean.LearnerStateOperation;
 public class ActorMessage implements Serializable{
 
 	/**
-	 * 
+	 * serialVersionUID
 	 */
 	private static final long serialVersionUID = -7802152094116542839L;
 	
 	private LearnerStateOperation operation;
+	/**
+	 * map contains the request data in key value format
+	 */
 	private Map<String,Object> data;
 	
 	/**
