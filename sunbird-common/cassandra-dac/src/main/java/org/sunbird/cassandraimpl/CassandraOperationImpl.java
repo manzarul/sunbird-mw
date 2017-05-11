@@ -10,6 +10,7 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.sunbird.cassandra.CassandraOperation;
 import org.sunbird.common.CassandraQuery;
+import org.sunbird.common.CassandraUtil;
 import org.sunbird.common.Constants;
 import org.sunbird.common.models.response.Response;
 import org.sunbird.helper.CassandraConnectionManager;
@@ -228,8 +229,21 @@ public class CassandraOperationImpl implements CassandraOperation{
 
 	@Override
 	public Response insertRecord(String keyspaceName, String tableName, Map<String, Object> request) {
+		String query = CassandraUtil.getPreparedStatement(request);
+		PreparedStatement statement = CassandraConnectionManager.getSession().prepare(query);
+		BoundStatement boundStatement = new BoundStatement(statement);
+		ResultSet result=null;
+		try {
+		//result = CassandraConnectionManager.getSession().execute(boundStatement.bind(course.getCourseId(), course.getCourseName(),course.getUserId(),
+		//	course.getEnrolledDate(),course.getDescription(),course.getTocUrl(),course.getCourseProgressStatus(),course.isActive(),course.getDeltaMap()));
+		//	LOGGER.debug(result.toString());
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage());
+		}
 		
-		return null;
+		Response response = new Response();
+		
+		return response;
 	}
 
 
@@ -263,7 +277,7 @@ public class CassandraOperationImpl implements CassandraOperation{
 
 
 	@Override
-	public Response getByProperties(String keyspaceName, String tableName, Map<String, String> propertyMap) {
+	public Response getByProperties(String keyspaceName, String tableName, Map<String, Object> propertyMap) {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -112,5 +112,5 @@ public interface CassandraOperation {
 	 * @param propertyMap
 	 * @return Response
 	 */
-	public Response  getByProperties(String keyspaceName,String tableName,Map<String,String> propertyMap);
+	public Response  getByProperties(String keyspaceName,String tableName,Map<String,Object> propertyMap);
 }
