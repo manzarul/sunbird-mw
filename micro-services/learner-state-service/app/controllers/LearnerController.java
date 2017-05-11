@@ -21,8 +21,6 @@ import akka.actor.ActorSelection;
 import akka.actor.ActorSystem;
 import akka.pattern.Patterns;
 import akka.util.Timeout;
-import mapper.RequestMapper;
-import play.libs.F.Promise;
 import play.libs.Json;
 import play.mvc.Result;
 import scala.concurrent.Await;
