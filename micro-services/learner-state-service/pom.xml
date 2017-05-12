@@ -86,7 +86,13 @@
             <groupId>org.sunbird</groupId>
             <artifactId>learner-actor</artifactId>
             <version>1.0-SNAPSHOT</version>
-        </dependency>	
+        </dependency>
+         <!-- <dependency>
+         <groupId>org.sunbird</groupId>
+		  <artifactId>common-util</artifactId>
+		  <version>0.0.1-SNAPSHOT</version>
+         </dependency> -->
+        	
     </dependencies>
     <build>
         <sourceDirectory>${basedir}/app</sourceDirectory>

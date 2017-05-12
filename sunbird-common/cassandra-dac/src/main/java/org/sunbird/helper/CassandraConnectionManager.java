@@ -43,7 +43,7 @@ public final class CassandraConnectionManager {
      * @return boolean
      * 
      */
-	public boolean createConnection(String ip,String port,String userName,String password,String keyspace){
+	public static boolean createConnection(String ip,String port,String userName,String password,String keyspace){
 		boolean connection = false;
 		Cluster cluster= null;
 		Session session = null;
@@ -99,13 +99,6 @@ public final class CassandraConnectionManager {
 	 */
 	public static Session getSession(String keyspaceName) {
         return cassandraSessionMap.get(keyspaceName);
-    }
- 
-	/*
-	 * exposing session for application 
-	 */
-	public static Session getSession() {
-        return cassandraSessionMap.get("ip");
     }
  
 	/**
