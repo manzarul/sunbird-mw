@@ -19,7 +19,10 @@ public enum ResponseCode {
     apiKeyRequired(ResponseMessage.Key.API_KEY_MISSING_ERROR, ResponseMessage.Message.API_KEY_MISSING_ERROR),
     invalidApiKey(ResponseMessage.Key.API_KEY_INVALID_ERROR, ResponseMessage.Message.API_KEY_INVALID_ERROR),
 	internalError(ResponseMessage.Key.INTERNAL_ERROR, ResponseMessage.Message.INTERNAL_ERROR),
-	courseNameRequired(ResponseMessage.Key.COURSE_NAME_MISSING, ResponseMessage.Message.COURSE_NAME_MISSING); 
+	courseNameRequired(ResponseMessage.Key.COURSE_NAME_MISSING, ResponseMessage.Message.COURSE_NAME_MISSING),
+	OK(200), CLIENT_ERROR(400), SERVER_ERROR(500), RESOURCE_NOT_FOUND(404); 
+	
+	private int responseCode;
 	/**
      * error code contains String value
      */
@@ -91,4 +94,40 @@ public enum ResponseCode {
 	}
 	return value;
     }
+    
+    private ResponseCode(int responseCode) {
+    	this.responseCode = responseCode;
+    }
+
+	public int getResponseCode() {
+		return responseCode;
+	}
+
+	public void setResponseCode(int responseCode) {
+		this.responseCode = responseCode;
+	}
+    
+	/**
+	 * This method will take header response code as int value and 
+	 * it provide matched enum value, if code is not matched or exception occurs
+	 * then it will provide SERVER_ERROR
+	 * @param code int
+	 * @return HeaderResponseCode
+	 */
+	public static ResponseCode getHeaderResponseCode(int code) {
+		if (code > 0) {
+			try {
+				ResponseCode[] arr = ResponseCode.values();
+				if (null != arr) {
+					for (ResponseCode rc : arr) {
+						if (rc.getResponseCode() == code)
+							return rc;
+					}
+				}
+			} catch (Exception e) {
+				return ResponseCode.SERVER_ERROR;
+			}
+		}
+		return ResponseCode.SERVER_ERROR;
+	}
 }

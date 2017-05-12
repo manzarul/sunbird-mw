@@ -3,8 +3,7 @@ package org.sunbird.common.models.response;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.sunbird.common.responsecode.HeaderResponseCode;
+import org.sunbird.common.responsecode.ResponseCode;
 
 
 /**
@@ -21,7 +20,7 @@ public class Response implements Serializable {
     private String ver;
     private String ts;
     private ResponseParams params;
-    private HeaderResponseCode responseCode = HeaderResponseCode.OK;
+    private ResponseCode responseCode = ResponseCode.OK;
     private Map<String, Object> result = new HashMap<String, Object>();
     
     /**
@@ -105,16 +104,16 @@ public class Response implements Serializable {
     }
     /**
      * Set the response code for header. 
-     * @param code  HeaderResponseCode
+     * @param code  ResponseCode
      */
-    public void setResponseCode(HeaderResponseCode code) {
+    public void setResponseCode(ResponseCode code) {
         this.responseCode = code;
     }
     /**
      * get the response code
-     * @return HeaderResponseCode
+     * @return ResponseCode
      */
-    public HeaderResponseCode getResponseCode() {
+    public ResponseCode getResponseCode() {
         return this.responseCode;
     }
 

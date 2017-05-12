@@ -5,9 +5,7 @@
   <groupId>org.sunbird</groupId>
   <artifactId>common-util</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <packaging>jar</packaging>
-
-  <name>models</name>
+  <name>common</name>
   <url>http://maven.apache.org</url>
 
   <properties>

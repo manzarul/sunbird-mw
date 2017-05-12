@@ -22,12 +22,13 @@ import akka.actor.ActorSystem;
 import akka.pattern.Patterns;
 import akka.util.Timeout;
 import mapper.RequestMapper;
+import play.api.mvc.Request;
 import play.libs.F.Promise;
 import play.libs.Json;
 import play.mvc.Result;
 import scala.concurrent.Await;
 import scala.concurrent.Future;
-
+import org.sunbird.common.models.util.LogHelper;
 /**
  * This controller will handler all the request related 
  * to learner state.
@@ -35,7 +36,7 @@ import scala.concurrent.Future;
  *
  */
 public class LearnerController extends BaseController {
-	private Logger logger = Logger.getLogger(LearnerController.class);
+	private LogHelper logger = LogHelper.getInstance(LearnerController.class.getName());
 	private static ActorSelection selection=null;
 	static{
 		ActorSystem system = ActorSystem.create("HelloApplication", ConfigFactory.load()
@@ -50,7 +51,7 @@ public class LearnerController extends BaseController {
 	 */
 	public Result getEnrolledCourses() {
 		JsonNode requestData = request().body().asJson();
-		//RequestMapper.mapRequest(requestData, );
+		play.mvc.Http.Request request = request();
 		ActorMessage msg = new ActorMessage();
 		msg.setOperation(LearnerStateOperation.GET_COURSE);
 		Map<String,Object> map = new HashMap<>();
