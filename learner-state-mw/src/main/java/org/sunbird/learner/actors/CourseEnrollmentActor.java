@@ -13,7 +13,6 @@ import org.sunbird.common.models.util.LogHelper;
 import org.sunbird.common.responsecode.HeaderResponseCode;
 import org.sunbird.common.responsecode.ResponseCode;
 import org.sunbird.learner.util.ActorUtility;
-import org.sunbird.model.Course;
 import org.sunbird.common.request.Request;
 
 /**
@@ -40,16 +39,9 @@ public class CourseEnrollmentActor extends UntypedAbstractActor {
 
             if (actorMessage.getOperation().equalsIgnoreCase(LearnerStateOperation.ADD_COURSE.getValue())) {
                 Object obj = actorMessage.getRequest().get(actorMessage.getRequest().keySet().toArray()[0]);
-                if (obj instanceof Course) {
-                    Course course = (Course) obj;
                     ActorUtility.DbInfo dbInfo = ActorUtility.dbInfoMap.get(LearnerStateOperation.ADD_COURSE.getValue());
                     Response result = cassandraOperation.insertRecord(dbInfo.getKeySpace(),dbInfo.getTableName(),actorMessage.getRequest());
                     sender().tell(result, getSelf());
-                } else {
-                    logger.info("Course Object not match");
-                    ProjectCommonException exception = new ProjectCommonException(ResponseCode.invalidRequestData.getErrorCode(), ResponseCode.invalidRequestData.getErrorMessage(), HeaderResponseCode.CLIENT_ERROR.code());
-                    sender().tell(exception, self());
-                }
             } else {
                 logger.info("UNSUPPORTED OPERATION");
                 ProjectCommonException exception = new ProjectCommonException(ResponseCode.invalidOperationName.getErrorCode(), ResponseCode.invalidOperationName.getErrorMessage(), HeaderResponseCode.CLIENT_ERROR.code());

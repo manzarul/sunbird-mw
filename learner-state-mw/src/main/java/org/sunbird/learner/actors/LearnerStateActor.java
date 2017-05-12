@@ -38,7 +38,7 @@ public class LearnerStateActor extends UntypedAbstractActor {
                 if (obj instanceof String) {
                     String userId = (String) obj;
                     ActorUtility.DbInfo dbInfo = ActorUtility.dbInfoMap.get(LearnerStateOperation.GET_COURSE.getValue());
-                    Response result = cassandraOperation.getById(dbInfo.getKeySpace() , dbInfo.getTableName(),userId);
+                    Response result = cassandraOperation.getRecordById(dbInfo.getKeySpace() , dbInfo.getTableName(),userId);
                     sender().tell(result, self());
                 } else {
                     logger.debug("LearnerStateActor message Mis match");
@@ -51,7 +51,7 @@ public class LearnerStateActor extends UntypedAbstractActor {
                 if (obj instanceof String) {
                     String courseId = (String) obj;
                     ActorUtility.DbInfo dbInfo = ActorUtility.dbInfoMap.get(LearnerStateOperation.GET_COURSE_BY_ID.getValue());
-                    Response result=cassandraOperation.getByProperty(dbInfo.getKeySpace() , dbInfo.getTableName() , "courseId", courseId);
+                    Response result=cassandraOperation.getRecordsByProperty(dbInfo.getKeySpace() , dbInfo.getTableName() , "courseId", courseId);
                     sender().tell(result, getSelf());
                 } else {
                     logger.info("LearnerStateActor message Mismatch");
@@ -70,7 +70,7 @@ public class LearnerStateActor extends UntypedAbstractActor {
                     Map<String , Object> requestMap = new HashMap<String , Object>();
                     requestMap.put("userId" , userId);
                     requestMap.put("contentIds" , contentList);
-                    Response result = cassandraOperation.getByProperties(dbInfo.getKeySpace() , dbInfo.getTableName() , requestMap);
+                    Response result = cassandraOperation.getRecordsByProperties(dbInfo.getKeySpace() , dbInfo.getTableName() , requestMap);
                     logger.info(result.toString());
                     sender().tell(result, self());
                 } else {
