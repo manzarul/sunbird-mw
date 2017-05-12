@@ -160,11 +160,11 @@ public class CassandraOperationImpl implements CassandraOperation{
 		    Where selectWhere = selectQuery.where();
 		    for (Entry<String, Object> entry : propertyMap.entrySet())
 		    {
-		    	if(entry.getValue() instanceof String){
-			    	Clause clause = QueryBuilder.eq(entry.getKey(), entry.getValue());
-				    selectWhere.and(clause);
-		    	}else if(entry.getValue() instanceof List){
+		    	if(entry.getValue() instanceof List){
 		    		Clause clause = QueryBuilder.in(entry.getKey(), entry.getValue());
+				    selectWhere.and(clause);
+		    	}else{
+		    		Clause clause = QueryBuilder.eq(entry.getKey(), entry.getValue());
 				    selectWhere.and(clause);
 		    	}
 		    }
