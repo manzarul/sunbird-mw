@@ -70,6 +70,7 @@ public final class CassandraConnectionManager {
 		        QueryLogger queryLogger = QueryLogger.builder().withConstantThreshold(Integer.parseInt(cache.getProperty(Constants.QUERY_LOGGER_THRESHOLD))).build();
 		        cluster.register(queryLogger);
 		        session = cluster.connect(keyspace);
+		        
 		        if(null != session){
 		        	connection = true;
 		        	cassandraSessionMap.put(keyspace, session);

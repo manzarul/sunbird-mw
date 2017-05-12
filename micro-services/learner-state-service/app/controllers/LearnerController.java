@@ -9,10 +9,6 @@ import java.util.concurrent.TimeUnit;
 import org.apache.log4j.Logger;
 import org.sunbird.bean.ActorMessage;
 import org.sunbird.bean.LearnerStateOperation;
-import org.sunbird.model.Content;
-import org.sunbird.model.ContentList;
-import org.sunbird.model.Course;
-import org.sunbird.model.CourseList;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.typesafe.config.ConfigFactory;
@@ -56,10 +52,8 @@ public class LearnerController extends BaseController {
 		msg.setData(map);
 		Timeout timeout = new Timeout(5, TimeUnit.SECONDS);
         Future<Object> future = Patterns.ask(selection, msg, timeout);
-        CourseList courseList = null;
         try {
         	courseList =(CourseList) Await.result(future, timeout.duration());
-            System.out.println(" final retun response=="+courseList.getCourseList());
         } catch (Exception e) {
         	logger.error(e);
         	return ok("Failure");

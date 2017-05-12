@@ -10,6 +10,7 @@ import java.util.Properties;
  */
 public class PropertiesCache {
 	
+	
 	private final Properties configProp = new Properties();
     
 	   private PropertiesCache()

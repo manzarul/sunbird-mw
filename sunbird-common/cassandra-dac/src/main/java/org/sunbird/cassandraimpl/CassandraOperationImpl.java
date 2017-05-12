@@ -52,7 +52,6 @@ public class CassandraOperationImpl implements CassandraOperation{
 			while (iterator.hasNext()) {
 				array[i++] = iterator.next();
 			}
-			System.out.println(Arrays.toString(array));
 		   	result = CassandraConnectionManager.getSession(keyspaceName).execute(boundStatement.bind(array));
 			LOGGER.debug(result.toString());
 			response.put("response", "SUCCESS");
@@ -79,8 +78,7 @@ public class CassandraOperationImpl implements CassandraOperation{
 		Response response = new Response();
 		try{
 		Delete.Where delete = QueryBuilder.delete().from(keyspaceName, tableName)
-				.where(eq(Constants.CONTENT_ID, identifier));
-				//.where(eq(Constants.IDENTIFIER, identifier));
+				.where(eq(Constants.IDENTIFIER, identifier));
 		 ResultSet result  = CassandraConnectionManager.getSession(keyspaceName).execute(delete);
 		 LOGGER.debug(result.toString());
 		 response.put("response", "SUCCESS");
@@ -99,8 +97,7 @@ public class CassandraOperationImpl implements CassandraOperation{
 		try{
 			Select selectQuery = QueryBuilder.select().all().from(keyspaceName, tableName);
 		    Where selectWhere = selectQuery.where();
-		  //  Clause clause = QueryBuilder.eq(Constants.IDENTIFIER, identifier);
-		    Clause clause = QueryBuilder.eq(Constants.CONTENT_ID, identifier);
+		    Clause clause = QueryBuilder.eq(Constants.IDENTIFIER, identifier);
 		    selectWhere.and(clause);
 			ResultSet results  = CassandraConnectionManager.getSession(keyspaceName).execute(selectQuery);
 			response = CassandraUtil.createResponse(results);
@@ -119,7 +116,6 @@ public class CassandraOperationImpl implements CassandraOperation{
 		try{
 			Select selectQuery = QueryBuilder.select().all().from(keyspaceName, tableName);
 		    Where selectWhere = selectQuery.where();
-		  //  Clause clause = QueryBuilder.eq(Constants.IDENTIFIER, identifier);
 		    Clause clause = QueryBuilder.eq(propertyName, propertyValue);
 		    selectWhere.and(clause);
 			ResultSet results  = CassandraConnectionManager.getSession(keyspaceName).execute(selectQuery);
@@ -139,7 +135,6 @@ public class CassandraOperationImpl implements CassandraOperation{
 		try{
 			Select selectQuery = QueryBuilder.select().all().from(keyspaceName, tableName);
 		    Where selectWhere = selectQuery.where();
-		    //Clause clause = QueryBuilder.eq(Constants.IDENTIFIER, identifier);
 		    Clause clause = QueryBuilder.in(propertyName, propertyValueList);
 		    selectWhere.and(clause);
 			ResultSet results  = CassandraConnectionManager.getSession(keyspaceName).execute(selectQuery);

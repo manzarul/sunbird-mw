@@ -6,7 +6,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.sunbird.cassandraimpl.CassandraOperationImpl;
 import org.sunbird.common.models.response.Response;
+import org.sunbird.common.models.util.LogHelper;
 
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
@@ -19,6 +21,8 @@ import com.datastax.driver.core.Row;
  */
 public final class CassandraUtil{
 
+	private final static LogHelper LOGGER = LogHelper.getInstance(CassandraUtil.class.getName());
+	
 	/**
 	 * this method is used to create prepared statement based on table name and column name provided
 	 * @param keyspaceName
@@ -44,7 +48,7 @@ public final class CassandraUtil{
 	      }
 	    }
 	    query.append(commaSepValueBuilder+");");
-	    System.out.println(query.toString());
+	    LOGGER.debug(query.toString());
 		return query.toString();
 		
 	}
@@ -70,6 +74,7 @@ public final class CassandraUtil{
 			responseList.add(map);
 			
 		}
+		LOGGER.debug(responseList.toString());
 		response.put("response", responseList);
 		return response;
 	}
