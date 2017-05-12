@@ -11,7 +11,6 @@ import org.sunbird.bean.LearnerStateOperation;
 import org.sunbird.common.exception.ProjectCommonException;
 import org.sunbird.common.models.util.LogHelper;
 import org.sunbird.common.request.Request;
-import org.sunbird.common.responsecode.HeaderResponseCode;
 import org.sunbird.common.responsecode.ResponseCode;
 import scala.concurrent.ExecutionContext;
 import scala.concurrent.Future;
@@ -74,12 +73,12 @@ public class RequestRouterActor extends UntypedAbstractActor {
                 route(ref, actorMessage);
             } else {
                 logger.info("UNSUPPORTED OPERATION TYPE");
-                ProjectCommonException exception = new ProjectCommonException(ResponseCode.invalidOperationName.getErrorCode(), ResponseCode.invalidOperationName.getErrorMessage(), HeaderResponseCode.CLIENT_ERROR.code());
+                ProjectCommonException exception = new ProjectCommonException(ResponseCode.invalidOperationName.getErrorCode(), ResponseCode.invalidOperationName.getErrorMessage(), ResponseCode.CLIENT_ERROR.getResponseCode());
                 sender().tell(exception, ActorRef.noSender());
             }
         } else {
             logger.info("UNSUPPORTED MESSAGE");
-            ProjectCommonException exception = new ProjectCommonException(ResponseCode.invalidRequestData.getErrorCode(), ResponseCode.invalidRequestData.getErrorMessage(), HeaderResponseCode.SERVER_ERROR.code());
+            ProjectCommonException exception = new ProjectCommonException(ResponseCode.invalidRequestData.getErrorCode(), ResponseCode.invalidRequestData.getErrorMessage(), ResponseCode.SERVER_ERROR.getResponseCode());
             sender().tell(exception, ActorRef.noSender());
         }
 
@@ -102,7 +101,7 @@ public class RequestRouterActor extends UntypedAbstractActor {
             public void onComplete(Throwable failure, Object result) {
                 if (failure != null) {
                     //We got a failure, handle it here
-                    ProjectCommonException exception = new ProjectCommonException(ResponseCode.internalError.getErrorCode(), ResponseCode.internalError.getErrorMessage(), HeaderResponseCode.CLIENT_ERROR.code());
+                    ProjectCommonException exception = new ProjectCommonException(ResponseCode.internalError.getErrorCode(), ResponseCode.internalError.getErrorMessage(), ResponseCode.CLIENT_ERROR.getResponseCode());
                     parent.tell(exception, ActorRef.noSender());
                 } else {
                     logger.info("PARENT RESULT IS " + result);

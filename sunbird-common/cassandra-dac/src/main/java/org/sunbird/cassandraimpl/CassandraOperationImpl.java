@@ -14,7 +14,6 @@ import org.sunbird.common.Constants;
 import org.sunbird.common.exception.ProjectCommonException;
 import org.sunbird.common.models.response.Response;
 import org.sunbird.common.models.util.LogHelper;
-import org.sunbird.common.responsecode.HeaderResponseCode;
 import org.sunbird.common.responsecode.ResponseCode;
 import org.sunbird.helper.CassandraConnectionManager;
 
@@ -58,7 +57,7 @@ public class CassandraOperationImpl implements CassandraOperation{
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
 			//response.put("response", "FAILURE");
-			throw new ProjectCommonException(ResponseCode.internalError.getErrorCode(), e.getMessage(), HeaderResponseCode.SERVER_ERROR.code());
+			throw new ProjectCommonException(ResponseCode.internalError.getErrorCode(), e.getMessage(), ResponseCode.SERVER_ERROR.getResponseCode());
 			
 		}
 		return response;
@@ -85,7 +84,7 @@ public class CassandraOperationImpl implements CassandraOperation{
 		}catch(Exception e){
 			LOGGER.error(e.getMessage(), e);
 			//response.put("response", "FAILURE");
-			throw new ProjectCommonException(ResponseCode.internalError.getErrorCode(), e.getMessage(), HeaderResponseCode.SERVER_ERROR.code());
+			throw new ProjectCommonException(ResponseCode.internalError.getErrorCode(), e.getMessage(), ResponseCode.SERVER_ERROR.getResponseCode());
 		}
 		 return response;
 	}
@@ -104,7 +103,7 @@ public class CassandraOperationImpl implements CassandraOperation{
 		}catch(Exception e){
 			LOGGER.error(e.getMessage(), e);
 			//response.put("response", "FAILURE");
-			throw new ProjectCommonException(ResponseCode.internalError.getErrorCode(), e.getMessage(), HeaderResponseCode.SERVER_ERROR.code());
+			throw new ProjectCommonException(ResponseCode.internalError.getErrorCode(), e.getMessage(), ResponseCode.SERVER_ERROR.getResponseCode());
 		}
 		 return response;
 	}
@@ -123,7 +122,7 @@ public class CassandraOperationImpl implements CassandraOperation{
 		}catch(Exception e){
 			LOGGER.error(e.getMessage(), e);
 			//response.put("response", "FAILURE");
-			throw new ProjectCommonException(ResponseCode.internalError.getErrorCode(), e.getMessage(), HeaderResponseCode.SERVER_ERROR.code());
+			throw new ProjectCommonException(ResponseCode.internalError.getErrorCode(), e.getMessage(), ResponseCode.SERVER_ERROR.getResponseCode());
 		}
 		 return response;
 	}
@@ -142,7 +141,7 @@ public class CassandraOperationImpl implements CassandraOperation{
 		}catch(Exception e){
 			LOGGER.error(e.getMessage(), e);
 			//response.put("response", "FAILURE");
-			throw new ProjectCommonException(ResponseCode.internalError.getErrorCode(), e.getMessage(), HeaderResponseCode.SERVER_ERROR.code());
+			throw new ProjectCommonException(ResponseCode.internalError.getErrorCode(), e.getMessage(), ResponseCode.SERVER_ERROR.getResponseCode());
 		}
 		 return response;
 	}
@@ -170,7 +169,7 @@ public class CassandraOperationImpl implements CassandraOperation{
 		}catch(Exception e){
 			LOGGER.error(e.getMessage(), e);
 			//response.put("response", "FAILURE");
-			throw new ProjectCommonException(ResponseCode.internalError.getErrorCode(), e.getMessage(), HeaderResponseCode.SERVER_ERROR.code());
+			throw new ProjectCommonException(ResponseCode.internalError.getErrorCode(), e.getMessage(), ResponseCode.SERVER_ERROR.getResponseCode());
 		}
 		 return response;
 	}

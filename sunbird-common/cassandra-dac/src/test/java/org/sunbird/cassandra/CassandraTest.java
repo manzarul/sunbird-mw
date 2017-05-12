@@ -16,8 +16,12 @@ import org.sunbird.cassandraimpl.CassandraOperationImpl;
 import org.sunbird.common.models.response.Response;
 import org.sunbird.helper.CassandraConnectionManager;
 
+
+public class CassandraTest {/*
+=======
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CassandraTest {
+>>>>>>> b46cd88fbdf55e248e007ab321d446f1c3e5e2f6
 	
 	static CassandraOperation cassandraOperation = null;
 	static CassandraOperation operation= new CassandraOperationImpl();
@@ -85,4 +89,4 @@ public class CassandraTest {
     }
 
 
-}
+*/}
