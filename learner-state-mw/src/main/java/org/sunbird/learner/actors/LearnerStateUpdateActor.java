@@ -5,7 +5,6 @@ package org.sunbird.learner.actors;
 
 import akka.actor.ActorRef;
 import akka.actor.UntypedAbstractActor;
-import org.sunbird.bean.ActorMessage;
 import org.sunbird.bean.LearnerStateOperation;
 import org.sunbird.cassandra.CassandraOperation;
 import org.sunbird.cassandraimpl.CassandraOperationImpl;

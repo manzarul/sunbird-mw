@@ -22,7 +22,6 @@ import org.sunbird.common.request.Request;
  * @author Manzarul
  */
 public class CourseEnrollmentActor extends UntypedAbstractActor {
-    //private Logger logger = Logger.getLogger(CourseEnrollmentActor.class.getName());
     private LogHelper logger = LogHelper.getInstance(CourseEnrollmentActor.class.getName());
 
     private CassandraOperation cassandraOperation = new CassandraOperationImpl();
@@ -57,7 +56,7 @@ public class CourseEnrollmentActor extends UntypedAbstractActor {
                 sender().tell(exception, self());
             }
         } else {
-            // Throw exception as message body not as per expected
+            // Throw exception as message body
             logger.info("UNSUPPORTED MESSAGE");
             ProjectCommonException exception = new ProjectCommonException(ResponseCode.invalidRequestData.getErrorCode(), ResponseCode.invalidRequestData.getErrorMessage(), HeaderResponseCode.CLIENT_ERROR.code());
             sender().tell(exception, self());

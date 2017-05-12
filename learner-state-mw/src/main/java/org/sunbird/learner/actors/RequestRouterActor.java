@@ -33,7 +33,9 @@ public class RequestRouterActor extends UntypedAbstractActor {
     private ExecutionContext ec;
     Map<String, ActorRef> routerMap = new HashMap<>();
 
-    // constructor to initialize router actor with child actor pool
+    /**
+     * constructor to initialize router actor with child actor pool
+     */
     public RequestRouterActor() {
         courseEnrollmentActorRouter =
                 getContext().actorOf(FromConfig.getInstance().props(Props.create(CourseEnrollmentActor.class)),
