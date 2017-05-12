@@ -9,11 +9,6 @@ import java.util.concurrent.TimeUnit;
 import org.apache.log4j.Logger;
 import org.sunbird.bean.ActorMessage;
 import org.sunbird.bean.LearnerStateOperation;
-import org.sunbird.model.Content;
-import org.sunbird.model.ContentList;
-import org.sunbird.model.Course;
-import org.sunbird.model.CourseList;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.typesafe.config.ConfigFactory;
 
@@ -22,13 +17,13 @@ import akka.actor.ActorSystem;
 import akka.pattern.Patterns;
 import akka.util.Timeout;
 import mapper.RequestMapper;
-import play.api.mvc.Request;
 import play.libs.F.Promise;
 import play.libs.Json;
 import play.mvc.Result;
 import scala.concurrent.Await;
 import scala.concurrent.Future;
 import org.sunbird.common.models.util.LogHelper;
+import org.sunbird.common.request.Request;
 /**
  * This controller will handler all the request related 
  * to learner state.
@@ -51,23 +46,21 @@ public class LearnerController extends BaseController {
 	 */
 	public Result getEnrolledCourses() {
 		JsonNode requestData = request().body().asJson();
-		play.mvc.Http.Request request = request();
-		ActorMessage msg = new ActorMessage();
-		msg.setOperation(LearnerStateOperation.GET_COURSE);
 		Map<String,Object> map = new HashMap<>();
 		map.put("Course 1","user ID 1");
-		msg.setData(map);
+		Request request = new Request();
+		request.setOperation(LearnerStateOperation.GET_COURSE.toString());
+		request.setRequest(map);
 		Timeout timeout = new Timeout(5, TimeUnit.SECONDS);
-        Future<Object> future = Patterns.ask(selection, msg, timeout);
-        CourseList courseList = null;
+        Future<Object> future = Patterns.ask(selection, request, timeout);
         try {
-        	courseList =(CourseList) Await.result(future, timeout.duration());
-            System.out.println(" final retun response=="+courseList.getCourseList());
+        	 Await.result(future, timeout.duration());
+            System.out.println(" final retun response==");
         } catch (Exception e) {
         	logger.error(e);
         	return ok("Failure");
         }
-		return ok(Json.toJson(courseList));
+		return ok("SUCCESS");
 	}
 	
 	/**
@@ -76,19 +69,9 @@ public class LearnerController extends BaseController {
 	 * @return Result
 	 */
 	public Result enrollCourse() {
-				Course course= new Course();
-		    	course.setCourseId("Course 121234");
-		    	course.setCourseName("Course Name121234");
-		    	course.setUserId("user ID 1");
-		    	course.setEnrolledDate("2017-05-05");
-		    	course.setDescription("Teacher training Course Material");
-		    	course.setCourseProgressStatus("Not Started");
-		    	course.setActive(true);
-		    	
 				ActorMessage msg = new ActorMessage();
 				msg.setOperation(LearnerStateOperation.ADD_COURSE);
 				HashMap<String, Object> map = new HashMap<String,Object>();
-				map.put("Course 1",course);
 				msg.setData(map);
 				Timeout timeout = new Timeout(3, TimeUnit.SECONDS);
 		        Future<Object> future = Patterns.ask(selection, msg, timeout);
@@ -123,15 +106,14 @@ public class LearnerController extends BaseController {
 		msg.setData(map);
 		Timeout timeout = new Timeout(5, TimeUnit.SECONDS);
         Future<Object> future = Patterns.ask(selection, msg, timeout);
-        ContentList contentList = null;
         try {
-        	contentList =(ContentList) Await.result(future, timeout.duration());
-            System.out.println(" final retun response=="+contentList.getContentList());
+        	 Await.result(future, timeout.duration());
+            System.out.println(" final retun response==");
         } catch (Exception e) {
         	logger.error(e);
         	return ok("Failure");
         }
-		return ok(Json.toJson(contentList));
+		return ok("SUCCESS");
 
 	}
    
@@ -141,22 +123,9 @@ public class LearnerController extends BaseController {
 	 * @return Result
 	 */
 	public Result updateContentState() {
-       Content content = new Content();
-	   content.setContentId("content Id 1");
- 	   content.setCourseId("courseId 1");
- 	   content.setUserId("user Id 2");
- 	   content.setDeviceId("deviceId 1");
- 	   content.setViewCount("viewCount 1");
- 	   content.setViewPosition("viewPosition 1");
- 	   content.setLastAccessTime("2013-10-15 16:16:39");
- 	   content.setLastUpdatedTime("2013-10-15 16:16:39");
- 	   content.setCompletedCount("completedCount");
- 	   content.setProgressstatus("not started");
-
 		ActorMessage msg = new ActorMessage();
 		msg.setOperation(LearnerStateOperation.ADD_CONTENT);
 		HashMap<String, Object> map = new HashMap<String,Object>();
-		map.put("content Id 1",content);
 		msg.setData(map);
 		Timeout timeout = new Timeout(5, TimeUnit.SECONDS);
         Future<Object> future = Patterns.ask(selection, msg, timeout);
