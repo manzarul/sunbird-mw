@@ -3,7 +3,6 @@ package org.sunbird.common;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
-import java.util.Set;
 
 /*
  * @author Amit Kumar
@@ -37,12 +36,4 @@ public class PropertiesCache {
 	      return configProp.getProperty(key);
 	   }
 	    
-	   public Set<String> getAllPropertyNames(){
-	      return configProp.stringPropertyNames();
-	   }
-	    
-	   public boolean containsKey(String key){
-	      return configProp.containsKey(key);
-	   }
-
 }

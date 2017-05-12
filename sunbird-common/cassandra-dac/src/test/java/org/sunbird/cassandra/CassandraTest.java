@@ -9,12 +9,14 @@ import java.util.Map;
 
 import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 import org.sunbird.cassandraimpl.CassandraOperationImpl;
 import org.sunbird.common.models.response.Response;
 import org.sunbird.helper.CassandraConnectionManager;
 
-
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CassandraTest {
 	
 	static CassandraOperation cassandraOperation = null;
@@ -49,7 +51,7 @@ public class CassandraTest {
 		assertEquals(true,bool);
 	}
 	@Test
-	public void testInsertion() {
+	public void testAInsertion() {
 		Response response=operation.insertRecord("cassandraKeySpace", "content", map);
     	assertEquals("SUCCESS", response.get("response"));
 	}
@@ -57,7 +59,7 @@ public class CassandraTest {
 	
 	@SuppressWarnings("unchecked")
 	@Test
-	public void testGetRecordById() {
+	public void testBGetRecordById() {
 		Response response=operation.getRecordById("cassandraKeySpace", "content", "content Id 1234567890");
 		assertEquals(1,((List<Map<String, Object>>)(response.get("response"))).size());
 	}
@@ -66,12 +68,16 @@ public class CassandraTest {
 	
 	@SuppressWarnings("unchecked")
 	@Test
-	public void testgetRecordByProperty() {
+	public void testCgetRecordByProperty() {
 		Response response=operation.getRecordsByProperty("cassandraKeySpace", "content", "courseid", "courseId 1");
 		assertTrue(((List<Map<String, Object>>)(response.get("response"))).size()>0);
 	}
 	
-	
+	@Test
+	public void testDelete() {
+		Response response=operation.deleteRecord("cassandraKeySpace", "content", "content Id 1234567890");
+		assertEquals("SUCCESS", response.get("response"));
+	}
 	
 	@AfterClass
 	public static void delete() {
