@@ -69,12 +69,11 @@ public class LearnerController extends BaseController {
 	 * @return Result
 	 */
 	public Result enrollCourse() {
-				ActorMessage msg = new ActorMessage();
-				msg.setOperation(LearnerStateOperation.ADD_COURSE);
-				HashMap<String, Object> map = new HashMap<String,Object>();
-				msg.setData(map);
+		        JsonNode requestData = request().body().asJson();
+		        logger.info(" get course request data=" + requestData);
+		        Request reqObj  = (Request) mapper.RequestMapper.mapRequest(requestData, Request.class);
 				Timeout timeout = new Timeout(3, TimeUnit.SECONDS);
-		        Future<Object> future = Patterns.ask(selection, msg, timeout);
+		        Future<Object> future = Patterns.ask(selection, reqObj, timeout);
 		        String val = null;
 		        try {
 		        	val =(String) Await.result(future, timeout.duration());
@@ -92,20 +91,11 @@ public class LearnerController extends BaseController {
 	 * @return Result
 	 */
 	public Result getContentState() {
-		   List<String> contentIdList= new ArrayList<String>();
-	  	   contentIdList.add("content Id 10");
-	  	   contentIdList.add("content Id 11");
-	  	   contentIdList.add("content Id 12");
-	  	   contentIdList.add("content Id 13");
-	  	   contentIdList.add("content Id 14");
-  	   
-		ActorMessage msg = new ActorMessage();
-		msg.setOperation(LearnerStateOperation.GET_CONTENT);
-		HashMap<String, Object> map = new HashMap<String,Object>();
-		map.put("user Id 2",contentIdList);
-		msg.setData(map);
+		 JsonNode requestData = request().body().asJson();
+	        logger.info(" get course request data=" + requestData);
+	        Request reqObj  = (Request) mapper.RequestMapper.mapRequest(requestData, Request.class);
 		Timeout timeout = new Timeout(5, TimeUnit.SECONDS);
-        Future<Object> future = Patterns.ask(selection, msg, timeout);
+        Future<Object> future = Patterns.ask(selection, reqObj, timeout);
         try {
         	 Await.result(future, timeout.duration());
             System.out.println(" final retun response==");
@@ -123,12 +113,11 @@ public class LearnerController extends BaseController {
 	 * @return Result
 	 */
 	public Result updateContentState() {
-		ActorMessage msg = new ActorMessage();
-		msg.setOperation(LearnerStateOperation.ADD_CONTENT);
-		HashMap<String, Object> map = new HashMap<String,Object>();
-		msg.setData(map);
+		JsonNode requestData = request().body().asJson();
+        logger.info(" get course request data=" + requestData);
+        Request reqObj  = (Request) mapper.RequestMapper.mapRequest(requestData, Request.class);
 		Timeout timeout = new Timeout(5, TimeUnit.SECONDS);
-        Future<Object> future = Patterns.ask(selection, msg, timeout);
+        Future<Object> future = Patterns.ask(selection, reqObj, timeout);
         String val = null;
         try {
         	val =(String) Await.result(future, timeout.duration());

@@ -92,6 +92,7 @@ public class Global extends GlobalSettings {
     	  String message = verifyGetRequestData(request);
     	  Response resp = new Response();
     	  resp.setId(message);
+    	  resp.setVer ("v1");
 	  return   Promise.<Result>pure(Results.ok(Json.toJson(resp)));
       }
 	
@@ -113,9 +114,15 @@ public class Global extends GlobalSettings {
 	 * @return String
 	 */
 	private String verifyGetRequestData(Request request) {
-		 if(ProjectUtil.isStringNullOREmpty(request.getHeader(HeaderParam.X_Consumer_ID.getName()))){
+		if (ProjectUtil.isStringNullOREmpty(request.getHeader(HeaderParam.X_Consumer_ID.getName()))) {
 			return ResponseCode.customerIdRequired.getErrorMessage();
-		 }
+		} else if (ProjectUtil.isStringNullOREmpty(request.getHeader(HeaderParam.X_Session_ID.getName()))) {
+			return ResponseCode.invalidUserCredentials.getErrorMessage();
+		} else if (ProjectUtil.isStringNullOREmpty(request.getHeader(HeaderParam.X_Device_ID.getName()))) {
+			return ResponseCode.deviceIdRequired.getErrorMessage();
+		} else if (ProjectUtil.isStringNullOREmpty(request.getHeader(HeaderParam.ts.getName()))) {
+			return ResponseCode.deviceIdRequired.getErrorMessage();
+		}
 		return "";
 	}
 	

@@ -18,7 +18,7 @@ public class RequestMapper {
      * @return Object
      */
     public static <T> Object  mapRequest(JsonNode requestData, Class<T> obj)
-	    throws Exception {
+	    throws RuntimeException {
 	try {
 	    return Json.fromJson(requestData, obj);
 	} catch (Exception e) {
