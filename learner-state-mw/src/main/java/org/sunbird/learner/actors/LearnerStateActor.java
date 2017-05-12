@@ -3,18 +3,20 @@ package org.sunbird.learner.actors;
 
 import akka.actor.ActorRef;
 import akka.actor.UntypedAbstractActor;
+
+import java.util.HashMap;
 import java.util.List;
-import org.sunbird.bean.ActorMessage;
+import java.util.Map;
+
 import org.sunbird.bean.LearnerStateOperation;
 import org.sunbird.cassandra.CassandraOperation;
 import org.sunbird.cassandraimpl.CassandraOperationImpl;
 import org.sunbird.common.exception.ProjectCommonException;
+import org.sunbird.common.models.response.Response;
 import org.sunbird.common.models.util.LogHelper;
 import org.sunbird.common.request.Request;
-import org.sunbird.common.responsecode.HeaderResponseCode;
 import org.sunbird.common.responsecode.ResponseCode;
-import org.sunbird.model.ContentList;
-import org.sunbird.model.CourseList;
+import org.sunbird.learner.util.ActorUtility;
 
 /**
  * This actor will handle leaner's state operation like get course , get content etc.
@@ -34,11 +36,12 @@ public class LearnerStateActor extends UntypedAbstractActor {
                 Object obj = actorMessage.getRequest().get(actorMessage.getRequest().keySet().toArray()[0]);
                 if (obj instanceof String) {
                     String userId = (String) obj;
-                    CourseList courseList = cassandraOperation.getUserEnrolledCourse(userId);
-                    sender().tell(courseList, self());
+                    ActorUtility.DbInfo dbInfo = ActorUtility.dbInfoMap.get(LearnerStateOperation.GET_COURSE.getValue());
+                    Response result = cassandraOperation.getRecordById(dbInfo.getKeySpace() , dbInfo.getTableName(),userId);
+                    sender().tell(result, self());
                 } else {
                     logger.debug("LearnerStateActor message Mis match");
-                    ProjectCommonException exception = new ProjectCommonException(ResponseCode.invalidRequestData.getErrorCode() ,ResponseCode.invalidRequestData.getErrorMessage() , HeaderResponseCode.CLIENT_ERROR.code());
+                    ProjectCommonException exception = new ProjectCommonException(ResponseCode.invalidRequestData.getErrorCode() ,ResponseCode.invalidRequestData.getErrorMessage() , ResponseCode.CLIENT_ERROR.getResponseCode());
                     sender().tell(exception , ActorRef.noSender());
                 }
             } else if (actorMessage.getOperation().equalsIgnoreCase(LearnerStateOperation.GET_COURSE_BY_ID.getValue())) {
@@ -46,11 +49,12 @@ public class LearnerStateActor extends UntypedAbstractActor {
                 Object obj = actorMessage.getRequest().get(actorMessage.getRequest().keySet().toArray()[0]);
                 if (obj instanceof String) {
                     String courseId = (String) obj;
-                    cassandraOperation.getCourseById(courseId);
-                    sender().tell("SUCCESS", getSelf());
+                    ActorUtility.DbInfo dbInfo = ActorUtility.dbInfoMap.get(LearnerStateOperation.GET_COURSE_BY_ID.getValue());
+                    Response result=cassandraOperation.getRecordsByProperty(dbInfo.getKeySpace() , dbInfo.getTableName() , "courseId", courseId);
+                    sender().tell(result, getSelf());
                 } else {
                     logger.info("LearnerStateActor message Mismatch");
-                    ProjectCommonException exception = new ProjectCommonException(ResponseCode.invalidRequestData.getErrorCode() ,ResponseCode.invalidRequestData.getErrorMessage() , HeaderResponseCode.CLIENT_ERROR.code());
+                    ProjectCommonException exception = new ProjectCommonException(ResponseCode.invalidRequestData.getErrorCode() ,ResponseCode.invalidRequestData.getErrorMessage() , ResponseCode.CLIENT_ERROR.getResponseCode());
                     sender().tell(exception , ActorRef.noSender());
                 }
             }else if (actorMessage.getOperation().equalsIgnoreCase(LearnerStateOperation.GET_CONTENT.getValue())) {
@@ -60,25 +64,29 @@ public class LearnerStateActor extends UntypedAbstractActor {
                 	logger.info("obj type String");
                     String userId = (String) obj;
                     List<String> contentList = (List<String>)actorMessage.getRequest().get(userId);
+                    ActorUtility.DbInfo dbInfo = ActorUtility.dbInfoMap.get(LearnerStateOperation.GET_CONTENT.getValue());
                     logger.info(contentList.toString());
-                    ContentList result = cassandraOperation.getContentState(userId , contentList);
+                    Map<String , Object> requestMap = new HashMap<String , Object>();
+                    requestMap.put("userId" , userId);
+                    requestMap.put("contentIds" , contentList);
+                    Response result = cassandraOperation.getRecordsByProperties(dbInfo.getKeySpace() , dbInfo.getTableName() , requestMap);
                     logger.info(result.toString());
                     sender().tell(result, self());
                 } else {
                     logger.info("LearnerStateUpdateActor message Mismatch");
-                    ProjectCommonException exception = new ProjectCommonException(ResponseCode.invalidRequestData.getErrorCode() ,ResponseCode.invalidRequestData.getErrorMessage(), HeaderResponseCode.CLIENT_ERROR.code() );
+                    ProjectCommonException exception = new ProjectCommonException(ResponseCode.invalidRequestData.getErrorCode() ,ResponseCode.invalidRequestData.getErrorMessage(), ResponseCode.CLIENT_ERROR.getResponseCode() );
                     sender().tell(exception , ActorRef.noSender());
                 }
             }
             else{
                 logger.info("UNSUPPORTED OPERATION");
-                ProjectCommonException exception = new ProjectCommonException(ResponseCode.invalidOperationName.getErrorCode() ,ResponseCode.invalidOperationName.getErrorMessage() , HeaderResponseCode.CLIENT_ERROR.code());
+                ProjectCommonException exception = new ProjectCommonException(ResponseCode.invalidOperationName.getErrorCode() ,ResponseCode.invalidOperationName.getErrorMessage() , ResponseCode.CLIENT_ERROR.getResponseCode());
                 sender().tell(exception , ActorRef.noSender());
             }
 
         }else{
             logger.info("UNSUPPORTED MESSAGE");
-            ProjectCommonException exception = new ProjectCommonException(ResponseCode.invalidRequestData.getErrorCode() ,ResponseCode.invalidRequestData.getErrorMessage(), HeaderResponseCode.CLIENT_ERROR.code() );
+            ProjectCommonException exception = new ProjectCommonException(ResponseCode.invalidRequestData.getErrorCode() ,ResponseCode.invalidRequestData.getErrorMessage(), ResponseCode.CLIENT_ERROR.getResponseCode() );
             sender().tell(exception , ActorRef.noSender());
         }
 
