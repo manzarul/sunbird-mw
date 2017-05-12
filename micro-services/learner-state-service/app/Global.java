@@ -19,6 +19,9 @@ import play.mvc.Results.Redirect;
 
 import org.sunbird.common.models.util.LogHelper;
 import org.sunbird.common.models.response.Response;
+import org.sunbird.common.request.HeaderParam;
+import org.sunbird.common.models.util.ProjectUtil;
+import org.sunbird.common.responsecode.ResponseCode;
 /**
  * This class will work as a filter.
  * @author Manzarul
@@ -47,10 +50,10 @@ public class Global extends GlobalSettings {
 	public Action onRequest(Request request, Method actionMethod) {
 		logger.info("method call start.." +  request + " "+ actionMethod);
 		long startTime = System.currentTimeMillis();
-		if (request.equals(GET_METHOD)) {
+		if (request.method().equals(GET_METHOD)) {
 		return new Action.Simple() {
 			public Promise<Result> call(Context ctx) throws Throwable {
-				Promise<Result> call = onDataValidationError();
+				Promise<Result> call = onDataValidationError(request);
 				call.onRedeem((r) -> {
 					try {
 						JsonNode requestData = request.body().asJson();
@@ -82,11 +85,13 @@ public class Global extends GlobalSettings {
 	
 	
 	 /**
-     * This method will be used to send the request header missing error message.
+	  *This method will do request data validation for GET method only.
+     * As a GET request user must send some key in header.
      */
-      public Promise<Result> onDataValidationError() {
+      public Promise<Result> onDataValidationError(Request request) {
+    	  String message = verifyGetRequestData(request);
     	  Response resp = new Response();
-    	  resp.setId("Failure Response !");
+    	  resp.setId(message);
 	  return   Promise.<Result>pure(Results.ok(Json.toJson(resp)));
       }
 	
@@ -108,6 +113,9 @@ public class Global extends GlobalSettings {
 	 * @return String
 	 */
 	private String verifyGetRequestData(Request request) {
+		 if(ProjectUtil.isStringNullOREmpty(request.getHeader(HeaderParam.X_Consumer_ID.getName()))){
+			return ResponseCode.customerIdRequired.getErrorMessage();
+		 }
 		return "";
 	}
 	
