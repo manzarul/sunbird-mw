@@ -1,14 +1,12 @@
 package controllers;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import org.apache.log4j.Logger;
-import org.sunbird.bean.ActorMessage;
 import org.sunbird.bean.LearnerStateOperation;
+import org.sunbird.common.models.util.LogHelper;
+import org.sunbird.common.request.Request;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.typesafe.config.ConfigFactory;
@@ -17,14 +15,9 @@ import akka.actor.ActorSelection;
 import akka.actor.ActorSystem;
 import akka.pattern.Patterns;
 import akka.util.Timeout;
-import mapper.RequestMapper;
-import play.libs.F.Promise;
-import play.libs.Json;
 import play.mvc.Result;
 import scala.concurrent.Await;
 import scala.concurrent.Future;
-import org.sunbird.common.models.util.LogHelper;
-import org.sunbird.common.request.Request;
 /**
  * This controller will handler all the request related 
  * to learner state.
@@ -46,7 +39,6 @@ public class LearnerController extends BaseController {
 	 * @return Result
 	 */
 	public Result getEnrolledCourses() {
-		JsonNode requestData = request().body().asJson();
 		Map<String,Object> map = new HashMap<>();
 		map.put("Course 1","user ID 1");
 		Request request = new Request();
