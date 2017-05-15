@@ -18,6 +18,7 @@ import scala.concurrent.duration.Duration;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by arvind on 8/5/17.
@@ -31,7 +32,7 @@ public class RequestRouterActor extends UntypedAbstractActor {
     private ActorRef learnerStateUpdateActorRouter;
     private ExecutionContext ec;
     Map<String, ActorRef> routerMap = new HashMap<>();
-
+    private static final int WAIT_TIME_VALUE =5;
     /**
      * constructor to initialize router actor with child actor pool
      */
@@ -89,11 +90,11 @@ public class RequestRouterActor extends UntypedAbstractActor {
      *
      * @param router
      * @param message
-     * @return
+     * @return boolean
      */
     private boolean route(ActorRef router, Request message) {
 
-        Timeout timeout = new Timeout(Duration.create(5, "seconds"));
+        Timeout timeout = new Timeout(Duration.create(WAIT_TIME_VALUE, TimeUnit.SECONDS));
         Future<Object> future = Patterns.ask(router, message, timeout);
         ActorRef parent = sender();
         future.onComplete(new OnComplete<Object>() {

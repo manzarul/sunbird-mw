@@ -30,7 +30,6 @@ public class LearnerStateUpdateActor extends UntypedAbstractActor {
         if (message instanceof Request) {
             logger.debug("LearnerStateUpdateActor onReceive called");
             Request actorMessage = (Request) message;
-
             if (actorMessage.getOperation().equalsIgnoreCase(LearnerStateOperation.ADD_CONTENT.getValue())) {
                 Object obj = actorMessage.getRequest().get(actorMessage.getRequest().keySet().toArray()[0]);
                     ActorUtility.DbInfo dbInfo = ActorUtility.dbInfoMap.get(LearnerStateOperation.ADD_CONTENT.getValue());
