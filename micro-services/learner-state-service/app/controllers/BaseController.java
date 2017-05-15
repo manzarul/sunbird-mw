@@ -2,6 +2,7 @@ package controllers;
 import play.mvc.Controller;
 import play.mvc.Http.Request;
 
+import org.sunbird.common.exception.ProjectCommonException;
 import org.sunbird.common.models.response.Response;
 import org.sunbird.common.models.response.ResponseParams;
 import org.sunbird.common.models.util.ProjectUtil;
@@ -26,11 +27,7 @@ public class BaseController extends Controller {
 		response.setId(ExecutionContext.getRequestId());
 		response.setTs(ProjectUtil.getFormattedDate());
 		response.setResponseCode(headerCode);
-		ResponseParams params = new ResponseParams();
-		params.setErr(code.getErrorCode());
-		params.setErrmsg(code.getErrorMessage());
-		params.setStatus(ResponseCode.getHeaderResponseCode(code.getResponseCode()).name());
-		response.setParams(params);
+		response.setParams(createResponseParamObj(code));
 		return response;
 	}
    
@@ -44,4 +41,60 @@ public class BaseController extends Controller {
 	     String reqPath = request+"";
 	    return reqPath.split("[/]")[1];
   }
+  
+    /**
+     * This method will create response param 
+     * @param code ResponseCode
+     * @return
+     */
+	public static ResponseParams createResponseParamObj(ResponseCode code) {
+		ResponseParams params = new ResponseParams();
+		params.setErr(code.getErrorCode());
+		params.setErrmsg(code.getErrorMessage());
+		params.setStatus(ResponseCode.getHeaderResponseCode(code.getResponseCode()).name());
+		return params;
+	}
+	
+	/**
+	 * This method will create data for success response.
+	 * @param response
+	 * @return
+	 */
+	public static Response createSuccessResponse(String request, Response response) {
+		response.setVer(getApiVersion(request));
+		response.setId(ExecutionContext.getRequestId());
+		response.setTs(ProjectUtil.getFormattedDate());
+		ResponseCode code = ResponseCode.getResponse(ResponseCode.success.getErrorMessage());
+		response.setParams(createResponseParamObj(code));
+		return response;
+	}
+	
+	/**
+	 * This method will provide api version.
+	 * @param request String
+	 * @return String
+	 */
+  public static String getApiVersion(String request) {
+	    return request.split("[/]")[1];
+  }
+  
+  
+  /**
+   * This method will handle response in case of exception
+   * @param request String
+   * @param exception ProjectCommonException
+   * @return Response
+   */
+	public static Response createResponseOnException(String request, ProjectCommonException exception) {
+		Response response = new Response();
+		response.setVer(getApiVersion(request));
+		response.setId(ExecutionContext.getRequestId());
+		response.setTs(ProjectUtil.getFormattedDate());
+		response.setResponseCode(ResponseCode.getHeaderResponseCode(exception.getResponseCode()));
+		ResponseCode code = ResponseCode.getResponse(exception.getCode());
+		response.setParams(createResponseParamObj(code));
+		return response;
+	}
+
+  
 }

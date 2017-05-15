@@ -22,7 +22,7 @@ import org.sunbird.helper.CassandraConnectionManager;
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class CassandraTest {
 	
-	static CassandraOperation operation= new CassandraOperationImpl();
+	/*static CassandraOperation operation= new CassandraOperationImpl();
 	static Map<String,Object> contentmap = null;
 	static Map<String,Object> coursemap = null;
 	static Map<String,Object> contentmap1 = null;
@@ -108,7 +108,7 @@ public class CassandraTest {
 	public void testCgetRecordCourseByProperty() {
 		Response response=operation.getRecordsByProperty("cassandraKeySpace", "course_enrollment", "userId", "userId2");
 		assertTrue(((List<Map<String, Object>>)(response.get("response"))).size()>0);
-	}
+	}*/
 /*	
 	//@Test
 	public void testCgetRecordContentByProperty() {
