@@ -139,11 +139,13 @@ public class CassandraOperationImpl implements CassandraOperation{
 		    Where selectWhere = selectQuery.where();
 		    Clause clause = QueryBuilder.eq(propertyName, propertyValue);
 		    selectWhere.and(clause);
+		    System.out.println("getRecordsByProperty : "+selectQuery);
 			ResultSet results  = CassandraConnectionManager.getSession(keyspaceName).execute(selectQuery);
+			System.out.println("Result ---- "+results);
 			response = CassandraUtil.createResponse(results);
 		}catch(Exception e){
 			LOGGER.error(e.getMessage(), e);
-			System.out.println(e.getMessage());
+			System.out.println("getRecordsByProperty : "+e.getMessage());
 			throw new ProjectCommonException(ResponseCode.internalError.getErrorCode(), e.getMessage(), ResponseCode.SERVER_ERROR.getResponseCode());
 		}
 		 return response;

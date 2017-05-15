@@ -33,7 +33,7 @@ public class LearnerController extends BaseController {
 	static{
 		ActorSystem system = ActorSystem.create("HelloApplication", ConfigFactory.load()
                 .getConfig("HelloConfig"));
-		selection = system.actorSelection("akka.tcp://RemoteMiddlewareSystem@127.0.0.1:8088/user/LearnerActorSelector");
+		selection = system.actorSelection("akka.tcp://RemoteMiddlewareSystem@127.0.0.1:8088/user/RequestRouterActor");
 	}
 	
 	/**
@@ -47,7 +47,7 @@ public class LearnerController extends BaseController {
 		map.put("userId", userId);
 		Request request = new Request();
 		request.setRequest(map);
-		request.setOperation(LearnerStateOperation.GET_COURSE.toString());
+		request.setOperation(LearnerStateOperation.GET_COURSE.getValue());
 		request.setRequest(map);
 		Timeout timeout = new Timeout(5, TimeUnit.SECONDS);
 

@@ -1,6 +1,7 @@
 package org.sunbird.common;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -60,6 +61,7 @@ public final class CassandraUtil{
 	 * @author Amit Kumar
 	 */
 	public static Response createResponse(ResultSet results){
+		System.out.println(" inside create Result");
 		Response response = new Response();
 		List<Row> rows =results.all();
 		Map<String, Object> map=null;
@@ -73,8 +75,9 @@ public final class CassandraUtil{
 				map.put(keyArray[i].substring(0,pos),valueArray[i]);
 			}
 			responseList.add(map);
-			
+			System.out.println(Arrays.toString(valueArray));
 		}
+		
 		LOGGER.debug(responseList.toString());
 		response.put("response", responseList);
 		return response;

@@ -92,7 +92,7 @@ public class CassandraTest {
     	assertEquals("SUCCESS", response.get("response"));
 	}
 	
-	//@Test
+	@Test
 	public void testBGetRecordCourseById() {
 		Response response=operation.getRecordById("cassandraKeySpace", "course_enrollment", "courseId2##userId2");
 		assertEquals(1,((List<Map<String, Object>>)(response.get("response"))).size());
@@ -104,12 +104,12 @@ public class CassandraTest {
 		assertEquals(1,((List<Map<String, Object>>)(response.get("response"))).size());
 	}
 	
-	//@Test
+	@Test
 	public void testCgetRecordCourseByProperty() {
 		Response response=operation.getRecordsByProperty("cassandraKeySpace", "course_enrollment", "userId", "userId2");
 		assertTrue(((List<Map<String, Object>>)(response.get("response"))).size()>0);
 	}
-	
+/*	
 	//@Test
 	public void testCgetRecordContentByProperty() {
 		Response response=operation.getRecordsByProperty("cassandraKeySpace", "content_consumption", "userId", "userId2");
@@ -165,7 +165,7 @@ public class CassandraTest {
 		assertEquals("SUCCESS", response.get("response"));
 	}
 	
-	@AfterClass
+	//@AfterClass
 	public static void shutdownhook() {
 		CassandraConnectionManager.shutdownhook();
 		contentmap = null;
@@ -173,6 +173,6 @@ public class CassandraTest {
 		contentmap1 = null;
 		coursemap1 = null;
     }
-
+*/
 }
 
