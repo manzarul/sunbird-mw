@@ -86,8 +86,9 @@ public class App {
 		    System.out.println(str);
 		    */
 			// AND status=1; userId='userId2' AND
-		    CassandraConnectionManager.getSession("cassandraKeySpace").execute( "SELECT * FROM cassandraKeySpace.content_consumption WHERE userId='userId2' AND  contentId='contentId1' ");
-		   
+		    CassandraConnectionManager.getSession("cassandraKeySpace").execute( "SELECT * FROM cassandraKeySpace.course_enrollment WHERE userId='userId2';");
+		   Response res= operation.getRecordsByProperty("cassandraKeySpace", "course_enrollment", "userId", "userId2");
+		   System.out.println(res.get("response"));
 		}
 
 	}
