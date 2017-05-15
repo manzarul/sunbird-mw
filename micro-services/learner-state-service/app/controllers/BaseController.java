@@ -14,11 +14,11 @@ import org.sunbird.common.responsecode.ResponseCode;
  */
 public class BaseController extends Controller {
 	/**
-	 * 
-	 * @param request
-	 * @param code
-	 * @param headerCode
-	 * @return
+	 * This method will create failure response
+	 * @param request Request
+	 * @param code ResponseCode
+	 * @param headerCode ResponseCode
+	 * @return Response
 	 */
 	public static Response createFailureResponse(Request request,ResponseCode code , ResponseCode headerCode) {
 		Response response = new Response();

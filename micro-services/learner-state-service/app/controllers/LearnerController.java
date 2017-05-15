@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 import org.sunbird.bean.LearnerStateOperation;
 import org.sunbird.common.models.response.Response;
 import org.sunbird.common.models.util.LogHelper;
+import org.sunbird.common.request.ExecutionContext;
 import org.sunbird.common.request.Request;
 import org.sunbird.common.request.HeaderParam;
 
@@ -50,7 +51,7 @@ public class LearnerController extends BaseController {
 		request.setOperation(LearnerStateOperation.GET_COURSE.getValue());
 		request.setRequest(map);
 		Timeout timeout = new Timeout(5, TimeUnit.SECONDS);
-
+        request.setId(ExecutionContext.getRequestId());
         Future<Object> future = Patterns.ask(selection, request, timeout);
         try {
         	Object response = Await.result(future, timeout.duration());
