@@ -43,10 +43,11 @@ public class CassandraOperationImpl implements CassandraOperation{
 		Response response = new Response();
 		String query = CassandraUtil.getPreparedStatement(keyspaceName,tableName,request);
 		System.out.println(query);
-		PreparedStatement statement = CassandraConnectionManager.getSession(keyspaceName).prepare(query);
-		BoundStatement boundStatement = new BoundStatement(statement);
+		
 		ResultSet result=null;
 		try {
+			PreparedStatement statement = CassandraConnectionManager.getSession(keyspaceName).prepare(query);
+			BoundStatement boundStatement = new BoundStatement(statement);
 			Iterator<Object> iterator = request.values().iterator(); 
 			Object [] array =  new Object[request.keySet().size()];
 			int i=0;

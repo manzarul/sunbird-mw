@@ -53,7 +53,7 @@ public class BaseController extends Controller {
 		response.setVer(getApiVersion(request));
 		response.setId(ExecutionContext.getRequestId());
 		response.setTs(ProjectUtil.getFormattedDate());
-		ResponseCode code = ResponseCode.getResponse(ResponseCode.success.getErrorMessage());
+		ResponseCode code = ResponseCode.getResponse(ResponseCode.success.getErrorCode());
 		code.setResponseCode(ResponseCode.OK.getResponseCode());
 		response.setParams(createResponseParamObj(code));
 		return response;
