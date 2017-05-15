@@ -54,7 +54,6 @@ public class CourseEnrollmentActor extends UntypedAbstractActor {
                     courseMap.put("active",true);
                     courseMap.put("status" , Constants.LearnerStateOperation.NOT_STARTED.getValue());
                     generateandAppendPrimaryKey(courseMap);
-
                     Response result = cassandraOperation.insertRecord(dbInfo.getKeySpace(),dbInfo.getTableName(),courseMap);
                     sender().tell(result, getSelf());
             } else {
@@ -74,7 +73,7 @@ public class CourseEnrollmentActor extends UntypedAbstractActor {
         String userId = (String)req.get(JsonKey.USER_ID);
         String courseId = (String)req.get(JsonKey.COURSE_ID);
         String  id = courseId+"##"+userId;
-        req.put("id",id);
+        req.put(JsonKey.ID,id);
 
     }
 }
