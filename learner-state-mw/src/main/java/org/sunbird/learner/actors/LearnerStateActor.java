@@ -81,7 +81,7 @@ public class LearnerStateActor extends UntypedAbstractActor {
     private void createListForGetContent(Map<String, Object> req) {
 
         String userId = (String) req.get(JsonKey.USER_ID);
-        List<String> contentList = (List<String>)req.get(JsonKey.CONTENT_LIST);
+        List<String> contentList = (List<String>)req.get(JsonKey.CONTENT_IDS);
         List<String> modifiedList = new ArrayList<String>();
         if(!(contentList.isEmpty())){
             for(String contentid : contentList){
@@ -89,7 +89,7 @@ public class LearnerStateActor extends UntypedAbstractActor {
             }
         }
         //overriding the content list with modified list
-        req.put(JsonKey.CONTENT_LIST , modifiedList);
+        req.put(JsonKey.CONTENT_IDS , modifiedList);
 
     }
 
