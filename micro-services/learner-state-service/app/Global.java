@@ -1,4 +1,6 @@
 import java.lang.reflect.Method;
+import java.util.UUID;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -19,6 +21,7 @@ import play.mvc.Results.Redirect;
 
 import org.sunbird.common.models.util.LogHelper;
 import org.sunbird.common.models.response.Response;
+import org.sunbird.common.request.ExecutionContext;
 import org.sunbird.common.request.HeaderParam;
 import org.sunbird.common.models.util.ProjectUtil;
 import org.sunbird.common.responsecode.ResponseCode;
@@ -55,6 +58,8 @@ public class Global extends GlobalSettings {
 	 */
 	@SuppressWarnings("rawtypes")
 	public Action onRequest(Request request, Method actionMethod) {
+		UUID uuid = UUID.randomUUID();
+		ExecutionContext.setRequestId(uuid.toString());
 		long startTime = System.currentTimeMillis();
 		logger.info("method call start.." +  request + " "+ actionMethod + " " + startTime);
 		if (request.method().equals(RequestMethod.GET.name())) {
