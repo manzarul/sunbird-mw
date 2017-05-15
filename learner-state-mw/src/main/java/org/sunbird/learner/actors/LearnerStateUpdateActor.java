@@ -10,10 +10,13 @@ import org.sunbird.cassandra.CassandraOperation;
 import org.sunbird.cassandraimpl.CassandraOperationImpl;
 import org.sunbird.common.exception.ProjectCommonException;
 import org.sunbird.common.models.response.Response;
+import org.sunbird.common.models.util.JsonKey;
 import org.sunbird.common.models.util.LogHelper;
 import org.sunbird.common.responsecode.ResponseCode;
 import org.sunbird.learner.util.ActorUtility;
 import org.sunbird.common.request.Request;
+
+import java.util.Map;
 
 /**
  * This actor will handle learner's state update operation .
@@ -31,9 +34,9 @@ public class LearnerStateUpdateActor extends UntypedAbstractActor {
             logger.debug("LearnerStateUpdateActor onReceive called");
             Request actorMessage = (Request) message;
             if (actorMessage.getOperation().equalsIgnoreCase(LearnerStateOperation.ADD_CONTENT.getValue())) {
-                Object obj = actorMessage.getRequest().get(actorMessage.getRequest().keySet().toArray()[0]);
                     ActorUtility.DbInfo dbInfo = ActorUtility.dbInfoMap.get(LearnerStateOperation.ADD_CONTENT.getValue());
-                    Response result = cassandraOperation.insertRecord(dbInfo.getKeySpace(),dbInfo.getTableName() , null);
+                    generateandAppendPrimaryKey(actorMessage.getRequest());
+                    Response result = cassandraOperation.insertRecord(dbInfo.getKeySpace(),dbInfo.getTableName() , actorMessage.getRequest());
                     sender().tell(result, self());
             } else {
                 logger.info("UNSUPPORTED OPERATION");
@@ -45,6 +48,14 @@ public class LearnerStateUpdateActor extends UntypedAbstractActor {
             ProjectCommonException exception = new ProjectCommonException(ResponseCode.invalidRequestData.getErrorCode(), ResponseCode.invalidRequestData.getErrorMessage(), ResponseCode.CLIENT_ERROR.getResponseCode());
             sender().tell(exception, ActorRef.noSender());
         }
+    }
+
+    private void generateandAppendPrimaryKey(Map<String , Object> req){
+        String userId = (String)req.get(JsonKey.USER_ID);
+        String contentId = (String)req.get(JsonKey.CONTENT_ID);
+        String  id = contentId+"##"+userId;
+        req.put("id",id);
+
     }
 
 }

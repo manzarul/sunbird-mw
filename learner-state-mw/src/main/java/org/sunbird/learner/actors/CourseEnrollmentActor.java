@@ -9,10 +9,13 @@ import org.sunbird.cassandra.CassandraOperation;
 import org.sunbird.cassandraimpl.CassandraOperationImpl;
 import org.sunbird.common.exception.ProjectCommonException;
 import org.sunbird.common.models.response.Response;
+import org.sunbird.common.models.util.JsonKey;
 import org.sunbird.common.models.util.LogHelper;
 import org.sunbird.common.request.Request;
 import org.sunbird.common.responsecode.ResponseCode;
 import org.sunbird.learner.util.ActorUtility;
+
+import java.util.Map;
 //import org.sunbird.common.request.Request;
 
 /**
@@ -38,8 +41,8 @@ public class CourseEnrollmentActor extends UntypedAbstractActor {
             Request actorMessage = (Request) message;
 
             if (actorMessage.getOperation().equalsIgnoreCase(LearnerStateOperation.ADD_COURSE.getValue())) {
-                Object obj = actorMessage.getRequest().get(actorMessage.getRequest().keySet().toArray()[0]);
                     ActorUtility.DbInfo dbInfo = ActorUtility.dbInfoMap.get(LearnerStateOperation.ADD_COURSE.getValue());
+                    generateandAppendPrimaryKey(actorMessage.getRequest());
                     Response result = cassandraOperation.insertRecord(dbInfo.getKeySpace(),dbInfo.getTableName(),actorMessage.getRequest());
                     sender().tell(result, getSelf());
             } else {
@@ -53,5 +56,13 @@ public class CourseEnrollmentActor extends UntypedAbstractActor {
             ProjectCommonException exception = new ProjectCommonException(ResponseCode.invalidRequestData.getErrorCode(), ResponseCode.invalidRequestData.getErrorMessage(), ResponseCode.CLIENT_ERROR.getResponseCode());
             sender().tell(exception, self());
         }
+    }
+
+    private void generateandAppendPrimaryKey(Map<String , Object> req){
+        String userId = (String)req.get(JsonKey.USER_ID);
+        String courseId = (String)req.get(JsonKey.COURSE_ID);
+        String  id = courseId+"##"+userId;
+        req.put("id",id);
+
     }
 }
