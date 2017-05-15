@@ -50,6 +50,7 @@ public final class CassandraConnectionManager {
 		Cluster cluster= null;
 		Session session = null;
 		try{
+			if(null == cassandraSessionMap.get(keyspace)){
 			   PropertiesCache cache = PropertiesCache.getInstance();
 			   PoolingOptions poolingOptions = new PoolingOptions();
 			   poolingOptions.setCoreConnectionsPerHost(HostDistance.LOCAL,  Integer.parseInt(cache.getProperty(Constants.CORE_CONNECTIONS_PER_HOST_FOR_LOCAL)));
@@ -78,10 +79,6 @@ public final class CassandraConnectionManager {
 		        	cassandraSessionMap.put(keyspace, session);
 		        	cassandraclusterMap.put(keyspace, cluster);
 		        }
-			   }catch(Exception e){
-				   LOGGER.error(e);
-				   throw new ProjectCommonException(ResponseCode.internalError.getErrorCode(), e.getMessage(), ResponseCode.SERVER_ERROR.getResponseCode());
-			   }
 		        final Metadata metadata = cluster.getMetadata();
 		        String msg = String.format("Connected to cluster: %s", metadata.getClusterName());
 		        LOGGER.debug(msg);
@@ -92,6 +89,15 @@ public final class CassandraConnectionManager {
 			        host.getAddress(),
 			        host.getRack());
 			        LOGGER.debug(msg);
+		        }
+				}
+			   }catch(Exception e){
+				   LOGGER.error(e);
+				   throw new ProjectCommonException(ResponseCode.internalError.getErrorCode(), e.getMessage(), ResponseCode.SERVER_ERROR.getResponseCode());
+			   }
+		        
+		        if(null != cassandraSessionMap.get(keyspace)){
+		        	connection = true;
 		        }
 		        return connection;
 	}
