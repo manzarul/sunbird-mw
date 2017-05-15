@@ -5,6 +5,7 @@ import org.sunbird.common.exception.ProjectCommonException;
 import org.sunbird.common.models.util.LogHelper;
 import org.sunbird.helper.CassandraConnectionManager;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -59,7 +60,7 @@ public class ActorUtility {
         InputStream input = null;
 
         try {
-            input = new FileInputStream("dbconfig.properties");
+            input = ActorUtility.class.getClassLoader().getResourceAsStream("dbconfig.properties");
             // load a properties file
             prop.load(input);
             System.out.println("PROPERTIES FILE UPLOADED SUCCESSFULLY");
