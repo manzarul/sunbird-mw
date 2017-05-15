@@ -58,22 +58,9 @@ public class LearnerController extends BaseController {
 		Future<Object> future = Patterns.ask(selection, request, timeout);
 		try {
 			Object response = Await.result(future, timeout.duration());
-			if (response instanceof Response) {
-				Response courseResponse = (Response) response;
-				Object value = courseResponse.getResult().get(JsonKey.RESPONSE);
-				courseResponse.getResult().remove(JsonKey.RESPONSE);
-				courseResponse.getResult().put(JsonKey.COURSE_LIST, value);
-				return ok(
-						Json.toJson(BaseController.createSuccessResponse(request().path(), (Response) courseResponse)));
-			} else {
-				ProjectCommonException exception = (ProjectCommonException) response;
-				return ok(Json.toJson(BaseController.createResponseOnException(request().path(), exception)));
-			}
+			return createCommonResponse(response);
 		} catch (Exception e) {
-			logger.error(e);
-			ProjectCommonException exception = new ProjectCommonException(ResponseCode.internalError.getErrorCode(),
-					ResponseCode.internalError.getErrorMessage(), ResponseCode.SERVER_ERROR.getResponseCode());
-			return ok(Json.toJson(BaseController.createResponseOnException(request().path(), exception)));
+			return createCommonExceptionResponse(e);
 		}
 	}
 	
@@ -145,5 +132,35 @@ public class LearnerController extends BaseController {
             e1.printStackTrace();
         }
 		return ok(val);
+	}
+	
+	/**
+	 * This method will create common response for all controller method
+	 * @param response Object
+	 * @return Result
+	 */
+	private Result createCommonResponse(Object response) {
+		if (response instanceof Response) {
+			Response courseResponse = (Response) response;
+			Object value = courseResponse.getResult().get(JsonKey.RESPONSE);
+			courseResponse.getResult().remove(JsonKey.RESPONSE);
+			courseResponse.getResult().put(JsonKey.COURSE_LIST, value);
+			return ok(Json.toJson(BaseController.createSuccessResponse(request().path(), (Response) courseResponse)));
+		} else {
+			ProjectCommonException exception = (ProjectCommonException) response;
+			return ok(Json.toJson(BaseController.createResponseOnException(request().path(), exception)));
+		}
+	}
+	
+	/**
+	 * Common exception response handler method.
+	 * @param e Exception
+	 * @return Result
+	 */
+	private Result createCommonExceptionResponse (Exception e) {
+		logger.error(e);
+		ProjectCommonException exception = new ProjectCommonException(ResponseCode.internalError.getErrorCode(),
+				ResponseCode.internalError.getErrorMessage(), ResponseCode.SERVER_ERROR.getResponseCode());
+		return ok(Json.toJson(BaseController.createResponseOnException(request().path(), exception)));
 	}
 }
