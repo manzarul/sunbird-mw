@@ -20,6 +20,7 @@ public interface ResponseMessage {
 		public static final String API_KEY_INVALID_ERROR = "APi key is invalid.";
 		public static final String INTERNAL_ERROR = "Process failed,please try after some time.";
 		public static final String COURSE_NAME_MISSING = "Please provide the course name.";
+		public static final String SUCCESS_MESSAGE = "Success";
 	}
 
 	public interface Key {
@@ -36,6 +37,7 @@ public interface ResponseMessage {
 		public static final String API_KEY_INVALID_ERROR = "API_KEY_INVALID_ERROR";
 		public static final String INTERNAL_ERROR = "API_KEY_INVALID_ERROR";
 		public static final String COURSE_NAME_MISSING = "COURSE_NAME_REQUIRED_ERROR";
+		public static final String SUCCESS_MESSAGE = "SUCCESS";
 	}
 }
 
