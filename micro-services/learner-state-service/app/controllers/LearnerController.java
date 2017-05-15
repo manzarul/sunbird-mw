@@ -9,6 +9,7 @@ import org.sunbird.common.exception.ProjectCommonException;
 import org.sunbird.common.models.response.Response;
 import org.sunbird.common.models.util.JsonKey;
 import org.sunbird.common.models.util.LogHelper;
+import org.sunbird.common.models.util.ProjectUtil;
 import org.sunbird.common.request.ExecutionContext;
 import org.sunbird.common.request.Request;
 import org.sunbird.common.responsecode.ResponseCode;
@@ -58,7 +59,7 @@ public class LearnerController extends BaseController {
 		Future<Object> future = Patterns.ask(selection, request, timeout);
 		try {
 			Object response = Await.result(future, timeout.duration());
-			return createCommonResponse(response);
+			return createCommonResponse(response,JsonKey.COURSE_LIST);
 		} catch (Exception e) {
 			return createCommonExceptionResponse(e);
 		}
@@ -83,21 +84,9 @@ public class LearnerController extends BaseController {
 		Future<Object> future = Patterns.ask(selection, reqObj, timeout);
 		try {
 			Object response  =  Await.result(future, timeout.duration());
-			if (response instanceof Response) {
-				logger.info("response instance of Response");
-				Response courseResponse = (Response) response;
-				return ok(Json.toJson(BaseController.createSuccessResponse(request().path(), (Response) courseResponse)));
-			} else {
-				logger.info("response instance of Exception");
-				ProjectCommonException exception = (ProjectCommonException) response;
-				return ok(Json.toJson(BaseController.createResponseOnException(request().path(), exception)));
-			}
-		} catch (Exception e1) {
-			logger.error(e1);
-			logger.info("Exception "+e1.getMessage());
-			ProjectCommonException exception = new ProjectCommonException(ResponseCode.internalError.getErrorCode(),
-					ResponseCode.internalError.getErrorMessage(), ResponseCode.SERVER_ERROR.getResponseCode());
-			return ok(Json.toJson(BaseController.createResponseOnException(request().path(), exception)));
+			return createCommonResponse(response,null);
+		} catch (Exception e) {
+			return createCommonExceptionResponse(e);
 		}
 	}
 	
@@ -115,29 +104,16 @@ public class LearnerController extends BaseController {
         reqObj.setOperation(LearnerStateOperation.GET_CONTENT.getValue());
         HashMap<String, Object> innerMap = new HashMap<>();
 		innerMap.put(JsonKey.USER_ID, reqObj.getParams().getUid());
-		innerMap.put(JsonKey.CONTENT_IDS, reqObj.getRequest());
+		innerMap.put(JsonKey.CONTENT_IDS, reqObj.getRequest().get(JsonKey.CONTENT_IDS));
 		reqObj.setRequest(innerMap);  
 		Timeout timeout = new Timeout(5, TimeUnit.SECONDS);
         Future<Object> future = Patterns.ask(selection, reqObj, timeout);
         try {
         	Object response = Await.result(future, timeout.duration());
-        	if (response instanceof Response) {
-				Response courseResponse = (Response) response;
-				Object value = courseResponse.getResult().get(JsonKey.RESPONSE);
-				courseResponse.getResult().remove(JsonKey.RESPONSE);
-				courseResponse.getResult().put(JsonKey.COURSE_LIST, value);
-				return ok(
-					Json.toJson(BaseController.createSuccessResponse(request().path(), (Response) courseResponse)));
-		} else {
-			ProjectCommonException exception = (ProjectCommonException) response;
-			return ok(Json.toJson(BaseController.createResponseOnException(request().path(), exception)));
+        	return createCommonResponse(response,JsonKey.CONTENT_LIST);
+		} catch (Exception e) {
+			return createCommonExceptionResponse(e);
 		}
-	} catch (Exception e) {
-		logger.error(e);
-		ProjectCommonException exception = new ProjectCommonException(ResponseCode.internalError.getErrorCode(),
-				ResponseCode.internalError.getErrorMessage(), ResponseCode.SERVER_ERROR.getResponseCode());
-		return ok(Json.toJson(BaseController.createResponseOnException(request().path(), exception)));
-	}
 
 	}
    
@@ -153,14 +129,12 @@ public class LearnerController extends BaseController {
         reqObj.setOperation(LearnerStateOperation.ADD_CONTENT.getValue());
 		Timeout timeout = new Timeout(5, TimeUnit.SECONDS);
         Future<Object> future = Patterns.ask(selection, reqObj, timeout);
-        String val = null;
         try {
-        	val =(String) Await.result(future, timeout.duration());
-            System.out.println(" final retun response=="+val);
-        } catch (Exception e1) {
-            e1.printStackTrace();
-        }
-		return ok(val);
+        	Response response  =  (Response) Await.result(future, timeout.duration());
+        	return createCommonResponse(response,null);
+		} catch (Exception e) {
+			return createCommonExceptionResponse(e);
+		}
 	}
 	
 	/**
@@ -168,12 +142,14 @@ public class LearnerController extends BaseController {
 	 * @param response Object
 	 * @return Result
 	 */
-	private Result createCommonResponse(Object response) {
+	private Result createCommonResponse(Object response,String key) {
 		if (response instanceof Response) {
 			Response courseResponse = (Response) response;
-			Object value = courseResponse.getResult().get(JsonKey.RESPONSE);
-			courseResponse.getResult().remove(JsonKey.RESPONSE);
-			courseResponse.getResult().put(JsonKey.COURSE_LIST, value);
+			if(!ProjectUtil.isStringNullOREmpty(key)){
+				Object value = courseResponse.getResult().get(JsonKey.RESPONSE);
+				courseResponse.getResult().remove(JsonKey.RESPONSE);
+				courseResponse.getResult().put(key, value);
+			}
 			return ok(Json.toJson(BaseController.createSuccessResponse(request().path(), (Response) courseResponse)));
 		} else {
 			ProjectCommonException exception = (ProjectCommonException) response;

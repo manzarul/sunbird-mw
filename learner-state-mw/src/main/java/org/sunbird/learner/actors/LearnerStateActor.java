@@ -55,7 +55,7 @@ public class LearnerStateActor extends UntypedAbstractActor {
                     String userId = (String) obj;
                     createListForGetContent(actorMessage.getRequest());
                     ActorUtility.DbInfo dbInfo = ActorUtility.dbInfoMap.get(LearnerStateOperation.GET_CONTENT.getValue());
-                    Response result = cassandraOperation.getRecordsByProperty(dbInfo.getKeySpace() , dbInfo.getTableName() , JsonKey.ID,(List)actorMessage.getRequest().get(JsonKey.CONTENT_LIST));
+                    Response result = cassandraOperation.getRecordsByProperty(dbInfo.getKeySpace() , dbInfo.getTableName() , JsonKey.ID,(List)actorMessage.getRequest().get(JsonKey.CONTENT_IDS));
                     logger.info(result.toString());
                     sender().tell(result, self());
                 } else {
