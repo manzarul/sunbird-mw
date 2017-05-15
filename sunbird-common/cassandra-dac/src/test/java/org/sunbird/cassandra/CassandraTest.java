@@ -1,4 +1,4 @@
-/*package org.sunbird.cassandra;
+package org.sunbird.cassandra;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -92,7 +92,7 @@ public class CassandraTest {
     	assertEquals("SUCCESS", response.get("response"));
 	}
 	
-	//@Test
+	@Test
 	public void testBGetRecordCourseById() {
 		Response response=operation.getRecordById("cassandraKeySpace", "course_enrollment", "courseId2##userId2");
 		assertEquals(1,((List<Map<String, Object>>)(response.get("response"))).size());
@@ -109,8 +109,8 @@ public class CassandraTest {
 		Response response=operation.getRecordsByProperty("cassandraKeySpace", "course_enrollment", "userId", "userId2");
 		assertTrue(((List<Map<String, Object>>)(response.get("response"))).size()>0);
 	}
-	
-	@Test
+/*	
+	//@Test
 	public void testCgetRecordContentByProperty() {
 		Response response=operation.getRecordsByProperty("cassandraKeySpace", "content_consumption", "userId", "userId2");
 		assertTrue(((List<Map<String, Object>>)(response.get("response"))).size()>0);
@@ -137,7 +137,7 @@ public class CassandraTest {
 		Response response=operation.getRecordsByProperties("cassandraKeySpace", "course_enrollment", coursemap1);
 		assertTrue(((List<Map<String, Object>>)(response.get("response"))).size()>0);
 	}
-	@Test
+	//@Test
 	public void testCUpdateCourseById() {
 		operation.updateRecord("cassandraKeySpace", "course_enrollment", coursemap2, "courseId2##userId2");
 		Response response=operation.getRecordById("cassandraKeySpace", "course_enrollment", "courseId2##userId2");
@@ -145,7 +145,7 @@ public class CassandraTest {
 		Map<String, Object> map = result.get(0);
 		assertTrue(((String)map.get("delta")).equalsIgnoreCase("delta as json string updated"));
 	}
-	@Test
+	//@Test
 	public void testCUpdateContentById() {
 		operation.updateRecord("cassandraKeySpace", "content_consumption", contentmap2, "contentId1##userId2");
 		Response response=operation.getRecordById("cassandraKeySpace", "content_consumption", "contentId1##userId2");
@@ -153,19 +153,19 @@ public class CassandraTest {
 		Map<String, Object> map = result.get(0);
 		assertTrue(((String)map.get("viewPosition")).equalsIgnoreCase("viewPosition 1 updated"));
 	}
-	@Test
+	//@Test
 	public void testDeleteContent() {
 		Response response=operation.deleteRecord("cassandraKeySpace", "content_consumption", "contentId1##userId2");
 		assertEquals("SUCCESS", response.get("response"));
 	}
 	
-	@Test
+	//@Test
 	public void testDeleteCourse() {
 		Response response=operation.deleteRecord("cassandraKeySpace", "course_enrollment", "courseId2##userId2");
 		assertEquals("SUCCESS", response.get("response"));
 	}
 	
-	@AfterClass
+	//@AfterClass
 	public static void shutdownhook() {
 		CassandraConnectionManager.shutdownhook();
 		contentmap = null;
@@ -173,7 +173,6 @@ public class CassandraTest {
 		contentmap1 = null;
 		coursemap1 = null;
     }
-
+*/
 }
 
-*/
