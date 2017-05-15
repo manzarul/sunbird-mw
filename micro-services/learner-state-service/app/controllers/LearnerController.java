@@ -87,20 +87,31 @@ public class LearnerController extends BaseController {
 		logger.info(" get course request data=" + requestData);
 		Request reqObj = (Request) mapper.RequestMapper.mapRequest(requestData, Request.class);
 		reqObj.setRequest_id(ExecutionContext.getRequestId());
+		reqObj.setOperation(LearnerStateOperation.ADD_COURSE.getValue());
 		HashMap<String, Object> innerMap = new HashMap<>();
 		innerMap.put(JsonKey.COURSE, reqObj.getRequest());
 		innerMap.put(JsonKey.USER_ID, reqObj.getParams().getUid());
 		reqObj.setRequest(innerMap);
 		Timeout timeout = new Timeout(3, TimeUnit.SECONDS);
 		Future<Object> future = Patterns.ask(selection, reqObj, timeout);
-		String val = null;
 		try {
-			val = (String) Await.result(future, timeout.duration());
-			System.out.println(" final retun response==" + val);
+			Object response  =  Await.result(future, timeout.duration());
+			if (response instanceof Response) {
+				logger.info("response instance of Response");
+				Response courseResponse = (Response) response;
+				return ok(Json.toJson(BaseController.createSuccessResponse(request().path(), (Response) courseResponse)));
+			} else {
+				logger.info("response instance of Exception");
+				ProjectCommonException exception = (ProjectCommonException) response;
+				return ok(Json.toJson(BaseController.createResponseOnException(request().path(), exception)));
+			}
 		} catch (Exception e1) {
-			e1.printStackTrace();
+			logger.error(e1);
+			logger.info("Exception "+e1.getMessage());
+			ProjectCommonException exception = new ProjectCommonException(ResponseCode.internalError.getErrorCode(),
+					ResponseCode.internalError.getErrorMessage(), ResponseCode.SERVER_ERROR.getResponseCode());
+			return ok(Json.toJson(BaseController.createResponseOnException(request().path(), exception)));
 		}
-		return ok(val);
 	}
 	
 	/**
@@ -111,18 +122,35 @@ public class LearnerController extends BaseController {
 	 */
 	public Result getContentState() {
 		 JsonNode requestData = request().body().asJson();
-	        logger.info(" get course request data=" + requestData);
-	        Request reqObj  = (Request) mapper.RequestMapper.mapRequest(requestData, Request.class);
+        logger.info(" get course request data=" + requestData);
+        Request reqObj  = (Request) mapper.RequestMapper.mapRequest(requestData, Request.class);
+        reqObj.setRequest_id(ExecutionContext.getRequestId());
+        reqObj.setOperation(LearnerStateOperation.GET_CONTENT.getValue());
+        HashMap<String, Object> innerMap = new HashMap<>();
+		innerMap.put(JsonKey.USER_ID, reqObj.getParams().getUid());
+		innerMap.put(JsonKey.CONTENT_IDS, reqObj.getRequest());
+		reqObj.setRequest(innerMap);  
 		Timeout timeout = new Timeout(5, TimeUnit.SECONDS);
         Future<Object> future = Patterns.ask(selection, reqObj, timeout);
         try {
-        	 Await.result(future, timeout.duration());
-            System.out.println(" final retun response==");
-        } catch (Exception e) {
-        	logger.error(e);
-        	return ok("Failure");
-        }
-		return ok("SUCCESS");
+        	Object response = Await.result(future, timeout.duration());
+        	if (response instanceof Response) {
+				Response courseResponse = (Response) response;
+				Object value = courseResponse.getResult().get(JsonKey.RESPONSE);
+				courseResponse.getResult().remove(JsonKey.RESPONSE);
+				courseResponse.getResult().put(JsonKey.COURSE_LIST, value);
+				return ok(
+					Json.toJson(BaseController.createSuccessResponse(request().path(), (Response) courseResponse)));
+		} else {
+			ProjectCommonException exception = (ProjectCommonException) response;
+			return ok(Json.toJson(BaseController.createResponseOnException(request().path(), exception)));
+		}
+	} catch (Exception e) {
+		logger.error(e);
+		ProjectCommonException exception = new ProjectCommonException(ResponseCode.internalError.getErrorCode(),
+				ResponseCode.internalError.getErrorMessage(), ResponseCode.SERVER_ERROR.getResponseCode());
+		return ok(Json.toJson(BaseController.createResponseOnException(request().path(), exception)));
+	}
 
 	}
    
@@ -135,6 +163,7 @@ public class LearnerController extends BaseController {
 		JsonNode requestData = request().body().asJson();
         logger.info(" get course request data=" + requestData);
         Request reqObj  = (Request) mapper.RequestMapper.mapRequest(requestData, Request.class);
+        reqObj.setOperation(LearnerStateOperation.ADD_CONTENT.getValue());
 		Timeout timeout = new Timeout(5, TimeUnit.SECONDS);
         Future<Object> future = Patterns.ask(selection, reqObj, timeout);
         String val = null;

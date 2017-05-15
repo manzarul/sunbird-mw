@@ -68,7 +68,7 @@ public class RequestRouterActor extends UntypedAbstractActor {
         if (message instanceof Request) {
             logger.debug("Actor selector onReceive called");
             Request actorMessage = (Request) message;
-            org.sunbird.common.request.ExecutionContext.setRequestId(actorMessage.getId());
+            org.sunbird.common.request.ExecutionContext.setRequestId(actorMessage.getRequestId());
             ActorRef ref = routerMap.get(actorMessage.getOperation());
             if (null != ref) {
                 route(ref, actorMessage);

@@ -64,7 +64,7 @@ public class BaseController extends Controller {
 		response.setVer(getApiVersion(request));
 		response.setId(ExecutionContext.getRequestId());
 		response.setTs(ProjectUtil.getFormattedDate());
-		ResponseCode code = ResponseCode.getResponse(ResponseCode.success.getErrorMessage());
+		ResponseCode code = ResponseCode.getResponse(ResponseCode.success.getErrorCode());
 		response.setParams(createResponseParamObj(code));
 		return response;
 	}
@@ -75,7 +75,8 @@ public class BaseController extends Controller {
 	 * @return String
 	 */
   public static String getApiVersion(String request) {
-	    return request.split("[/]")[1];
+	  System.out.println(request);
+	    return request.split("[/]")[0];
   }
   
   
