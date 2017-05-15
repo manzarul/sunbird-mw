@@ -47,9 +47,9 @@ public class CourseEnrollmentActor extends UntypedAbstractActor {
 
                     Map<String , Object> req = actorMessage.getRequest();
                     req.put(JsonKey.USER_ID , req.get("uid"));
-                    req.put("enrolledDate" , new Timestamp(System.currentTimeMillis()));
-                    req.put("active",true);
-                    req.put("status" , Constants.LearnerStateOperation.NOT_STARTED.getValue());
+                    req.put(JsonKey.COURSE_ENROLL_DATE , new Timestamp(System.currentTimeMillis()));
+                    req.put(JsonKey.IS_COURSE_ACTIVE,true);
+                    req.put(JsonKey.COURSE_STATUS , Constants.LearnerStateOperation.NOT_STARTED.getValue());
 
                     generateandAppendPrimaryKey(req);
 
@@ -72,7 +72,7 @@ public class CourseEnrollmentActor extends UntypedAbstractActor {
         String userId = (String)req.get(JsonKey.USER_ID);
         String courseId = (String)req.get(JsonKey.COURSE_ID);
         String  id = courseId+"##"+userId;
-        req.put("id",id);
+        req.put(JsonKey.ID,id);
 
     }
 }
