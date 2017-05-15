@@ -10,6 +10,8 @@ import org.apache.log4j.Logger;
 import org.sunbird.cassandraimpl.CassandraOperationImpl;
 import org.sunbird.common.Constants;
 import org.sunbird.common.PropertiesCache;
+import org.sunbird.common.exception.ProjectCommonException;
+import org.sunbird.common.responsecode.ResponseCode;
 
 import com.datastax.driver.core.AtomicMonotonicTimestampGenerator;
 import com.datastax.driver.core.Cluster;
@@ -78,6 +80,7 @@ public final class CassandraConnectionManager {
 		        }
 			   }catch(Exception e){
 				   LOGGER.error(e);
+				   throw new ProjectCommonException(ResponseCode.internalError.getErrorCode(), e.getMessage(), ResponseCode.SERVER_ERROR.getResponseCode());
 			   }
 		        final Metadata metadata = cluster.getMetadata();
 		        String msg = String.format("Connected to cluster: %s", metadata.getClusterName());
@@ -99,6 +102,9 @@ public final class CassandraConnectionManager {
 	 * @return Session
 	 */
 	public static Session getSession(String keyspaceName) {
+		if(null == cassandraSessionMap.get(keyspaceName)){
+			createConnection("127.0.0.1", "9042", "cassandra", "password", "cassandraKeySpace");
+		}
         return cassandraSessionMap.get(keyspaceName);
     }
  

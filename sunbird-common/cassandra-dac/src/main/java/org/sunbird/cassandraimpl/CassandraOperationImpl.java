@@ -20,6 +20,7 @@ import org.sunbird.helper.CassandraConnectionManager;
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
+import com.datastax.driver.core.Session;
 import com.datastax.driver.core.querybuilder.Clause;
 import com.datastax.driver.core.querybuilder.Delete;
 import com.datastax.driver.core.querybuilder.QueryBuilder;
@@ -140,7 +141,14 @@ public class CassandraOperationImpl implements CassandraOperation{
 		    Clause clause = QueryBuilder.eq(propertyName, propertyValue);
 		    selectWhere.and(clause);
 		    System.out.println("getRecordsByProperty : "+selectQuery);
-			ResultSet results  = CassandraConnectionManager.getSession(keyspaceName).execute(selectQuery);
+		    ResultSet results=null;
+		    try{
+		    Session session=	CassandraConnectionManager.getSession(keyspaceName);
+		    System.out.println("session  "+session);
+			results  = session.execute(selectQuery);
+		    }catch(Exception e){
+		    	e.printStackTrace();
+		    }
 			System.out.println("Result ---- "+results);
 			response = CassandraUtil.createResponse(results);
 		}catch(Exception e){
