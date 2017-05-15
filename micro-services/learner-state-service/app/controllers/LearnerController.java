@@ -5,8 +5,10 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.sunbird.bean.LearnerStateOperation;
+import org.sunbird.common.models.response.Response;
 import org.sunbird.common.models.util.LogHelper;
 import org.sunbird.common.request.Request;
+import org.sunbird.common.request.HeaderParam;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.typesafe.config.ConfigFactory;
@@ -15,6 +17,7 @@ import akka.actor.ActorSelection;
 import akka.actor.ActorSystem;
 import akka.pattern.Patterns;
 import akka.util.Timeout;
+import play.libs.Json;
 import play.mvc.Result;
 import scala.concurrent.Await;
 import scala.concurrent.Future;
@@ -39,22 +42,27 @@ public class LearnerController extends BaseController {
 	 * @return Result
 	 */
 	public Result getEnrolledCourses() {
+		String userId= request().getHeader(HeaderParam.X_Session_ID.getName());
 		Map<String,Object> map = new HashMap<>();
-		map.put("Course 1","user ID 1");
+		map.put("userId", userId);
 		Request request = new Request();
+		request.setRequest(map);
 		request.setOperation(LearnerStateOperation.GET_COURSE.toString());
 		request.setRequest(map);
 		Timeout timeout = new Timeout(5, TimeUnit.SECONDS);
 
         Future<Object> future = Patterns.ask(selection, request, timeout);
         try {
-        	 Await.result(future, timeout.duration());
-            System.out.println(" final retun response==");
+        	Object response = Await.result(future, timeout.duration());
+        	if(response instanceof Response){
+        		return ok(Json.toJson(response));
+        	}else{
+        		return ok(Json.toJson(response));
+        	}
         } catch (Exception e) {
         	logger.error(e);
         	return ok("Failure");
         }
-		return ok("SUCCESS");
 	}
 	
 	/**
