@@ -6,6 +6,7 @@ import akka.actor.Props;
 import com.typesafe.config.ConfigFactory;
 import org.sunbird.common.models.util.LogHelper;
 import org.sunbird.learner.actors.RequestRouterActor;
+import org.sunbird.learner.util.ActorUtility;
 
 /**
  * Created by arvind on 5/5/17.
@@ -27,5 +28,10 @@ public class Application {
         ActorRef learnerActorSelectorRef = system.actorOf(Props.create(RequestRouterActor.class),
                 "RequestRouterActor");
         logger.info("ACTORS STARTED " + learnerActorSelectorRef);
+        checkCassandraConnection();
+    }
+
+    private static void checkCassandraConnection() {
+        ActorUtility.checkCassandraDbConnections();
     }
 }

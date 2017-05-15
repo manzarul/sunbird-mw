@@ -102,9 +102,9 @@ public class RequestRouterActor extends UntypedAbstractActor {
             public void onComplete(Throwable failure, Object result) {
                 if (failure != null) {
                     //We got a failure, handle it here
+                    logger.error(failure);
                     ProjectCommonException exception = new ProjectCommonException(ResponseCode.internalError.getErrorCode(), ResponseCode.internalError.getErrorMessage(), ResponseCode.CLIENT_ERROR.getResponseCode());
                     parent.tell(exception, ActorRef.noSender());
-                    logger.error(failure);
                 } else {
                     logger.info("PARENT RESULT IS " + result);
                     // We got a result, handle it
