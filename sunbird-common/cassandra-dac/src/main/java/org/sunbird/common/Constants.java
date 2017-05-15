@@ -26,6 +26,8 @@ public interface Constants {
 	public static final String CONTENT_ID="contentId";
 	public static final String IDENTIFIER="id";
 	public static final String CONST_VARCHAR="(varchar)";
+	public static final String SUCCESS="SUCCESS";
+	public static final String RESPONSE="response";
 	
 	public enum LearnerStateOperation {
 		NOT_STARTED("notStarted"),STARTED("started"),COMPLETED("completed");

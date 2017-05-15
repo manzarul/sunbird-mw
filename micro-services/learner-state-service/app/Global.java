@@ -125,7 +125,7 @@ public class Global extends GlobalSettings {
 	 * @param request Request
 	 * @return Action
 	 */
-	private Action verifyGetRequestData(Request request) {
+	private Action verifyGetRequestData(final Request request) {
 		return new Action.Simple() {
 			public Promise<Result> call(Context ctx) throws Throwable {
 				String message = verifyRequestData(request,RequestMethod.GET.name());
