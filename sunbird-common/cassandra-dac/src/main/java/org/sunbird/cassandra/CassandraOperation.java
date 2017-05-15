@@ -62,7 +62,7 @@ public interface CassandraOperation {
 	 * @param propertyValueList
 	 * @return Response
 	 */
-	public Response  getRecordsByProperty(String keyspaceName,String tableName,String propertyName,List<String> propertyValueList);
+	public Response  getRecordsByProperty(String keyspaceName,String tableName,String propertyName,List<Object> propertyValueList);
 	
 	/**
 	 * used to fetch record based on given parameter list and their values

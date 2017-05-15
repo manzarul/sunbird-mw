@@ -2,11 +2,11 @@ package org.sunbird.common;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.sunbird.cassandraimpl.CassandraOperationImpl;
 import org.sunbird.common.models.response.Response;
 import org.sunbird.common.models.util.LogHelper;
 
@@ -69,7 +69,8 @@ public final class CassandraUtil{
 			map=new HashMap<>();
 			String[] valueArray =row.toString().substring(4, row.toString().length()-1).split(",");
 			for(int i=0;i<keyArray.length;i++){
-				map.put(keyArray[i].replace(Constants.CONST_VARCHAR, ""),valueArray[i]);
+				int pos= keyArray[i].indexOf("(");
+				map.put(keyArray[i].substring(0,pos),valueArray[i]);
 			}
 			responseList.add(map);
 			
@@ -77,6 +78,33 @@ public final class CassandraUtil{
 		LOGGER.debug(responseList.toString());
 		response.put("response", responseList);
 		return response;
+	}
+	
+	/**
+	 * this method is used to create update query statement based on table name and column name provided
+	 * @param keyspaceName
+	 * @param tableName
+	 * @param map
+	 * @return String
+	 * @author Amit Kumar
+	 */
+	public static String getUpdateQueryStatement(String keyspaceName, String tableName, Map<String, Object> map){
+		StringBuilder query=new StringBuilder("UPDATE "+keyspaceName+"."+tableName+" SET ");
+		Set<String> keySet= map.keySet();
+		Iterator<String> itr = keySet.iterator();
+		int i=0;
+		while(itr.hasNext()){
+			query.append(itr.next() +" = ? ");
+			if ( i != keySet.size()-1){
+				query.append(", ");
+		      }
+			i++;
+		}
+		query.append(" where "+Constants.IDENTIFIER +"= ? ;");
+	    LOGGER.debug(query.toString());
+	    System.out.println(query.toString());
+		return query.toString();
+		
 	}
 
 }

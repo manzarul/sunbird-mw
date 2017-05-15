@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Map.Entry;
 
 import org.sunbird.cassandra.CassandraOperation;
@@ -41,6 +42,7 @@ public class CassandraOperationImpl implements CassandraOperation{
 	public Response insertRecord(String keyspaceName, String tableName, Map<String, Object> request) throws ProjectCommonException {
 		Response response = new Response();
 		String query = CassandraUtil.getPreparedStatement(keyspaceName,tableName,request);
+		System.out.println(query);
 		PreparedStatement statement = CassandraConnectionManager.getSession(keyspaceName).prepare(query);
 		BoundStatement boundStatement = new BoundStatement(statement);
 		ResultSet result=null;
@@ -51,11 +53,13 @@ public class CassandraOperationImpl implements CassandraOperation{
 			while (iterator.hasNext()) {
 				array[i++] = iterator.next();
 			}
+			System.out.println(Arrays.toString(array));
 		   	result = CassandraConnectionManager.getSession(keyspaceName).execute(boundStatement.bind(array));
 			LOGGER.debug(result.toString());
 			response.put("response", "SUCCESS");
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage(), e);
+			System.out.println(e.getMessage());
 			//response.put("response", "FAILURE");
 			throw new ProjectCommonException(ResponseCode.internalError.getErrorCode(), e.getMessage(), ResponseCode.SERVER_ERROR.getResponseCode());
 			
@@ -67,8 +71,36 @@ public class CassandraOperationImpl implements CassandraOperation{
 	@Override
 	public Response updateRecord(String keyspaceName, String tableName, Map<String, Object> request,
 			String identifier) throws ProjectCommonException {
-		// TODO Auto-generated method stub
-		return null;
+		Response response = new Response();
+		try{
+		Set<String> keySet= request.keySet();
+		Response result = getRecordById(keyspaceName, tableName, identifier);
+		List<Map<String, Object>> list =  (List<Map<String, Object>>)response.get("response");
+		Map<String, Object> map = list.get(0);
+		Iterator<String> keyItr = keySet.iterator();
+		while(keyItr.hasNext()){
+			if ( true){
+
+			}
+		}
+		String updateQuery = CassandraUtil.getUpdateQueryStatement(keyspaceName, tableName, request);
+		PreparedStatement statement = CassandraConnectionManager.getSession(keyspaceName).prepare(updateQuery);
+		Iterator<Object> iterator = request.values().iterator(); 
+		Object [] array =  new Object[request.keySet().size()+1];
+		int i=0;
+		while (iterator.hasNext()) {
+			array[i++] = iterator.next();
+		}
+		array[i++] = identifier;
+		BoundStatement boundStatement = statement.bind(array);
+		CassandraConnectionManager.getSession(keyspaceName).execute(boundStatement);
+		}catch(Exception e){
+			LOGGER.error(e.getMessage(), e);
+			System.out.println(e.getMessage());
+			throw new ProjectCommonException(ResponseCode.internalError.getErrorCode(), e.getMessage(), ResponseCode.SERVER_ERROR.getResponseCode());
+		}
+		response.put("response", "SUCCESS");
+		return response;
 	}
 
 
@@ -83,6 +115,7 @@ public class CassandraOperationImpl implements CassandraOperation{
 		 response.put("response", "SUCCESS");
 		}catch(Exception e){
 			LOGGER.error(e.getMessage(), e);
+			System.out.println(e.getMessage());
 			//response.put("response", "FAILURE");
 			throw new ProjectCommonException(ResponseCode.internalError.getErrorCode(), e.getMessage(), ResponseCode.SERVER_ERROR.getResponseCode());
 		}
@@ -102,6 +135,7 @@ public class CassandraOperationImpl implements CassandraOperation{
 			response = CassandraUtil.createResponse(results);
 		}catch(Exception e){
 			LOGGER.error(e.getMessage(), e);
+			System.out.println(e.getMessage());
 			//response.put("response", "FAILURE");
 			throw new ProjectCommonException(ResponseCode.internalError.getErrorCode(), e.getMessage(), ResponseCode.SERVER_ERROR.getResponseCode());
 		}
@@ -121,6 +155,7 @@ public class CassandraOperationImpl implements CassandraOperation{
 			response = CassandraUtil.createResponse(results);
 		}catch(Exception e){
 			LOGGER.error(e.getMessage(), e);
+			System.out.println(e.getMessage());
 			//response.put("response", "FAILURE");
 			throw new ProjectCommonException(ResponseCode.internalError.getErrorCode(), e.getMessage(), ResponseCode.SERVER_ERROR.getResponseCode());
 		}
@@ -129,17 +164,19 @@ public class CassandraOperationImpl implements CassandraOperation{
 
 	@Override
 	public Response getRecordsByProperty(String keyspaceName, String tableName, String propertyName,
-			List<String> propertyValueList) throws ProjectCommonException{
+			List<Object> propertyValueList) throws ProjectCommonException{
 		Response response = new Response();
 		try{
 			Select selectQuery = QueryBuilder.select().all().from(keyspaceName, tableName);
 		    Where selectWhere = selectQuery.where();
 		    Clause clause = QueryBuilder.in(propertyName, propertyValueList);
 		    selectWhere.and(clause);
+		    System.out.println(selectQuery.toString());
 			ResultSet results  = CassandraConnectionManager.getSession(keyspaceName).execute(selectQuery);
 			response = CassandraUtil.createResponse(results);
 		}catch(Exception e){
 			LOGGER.error(e.getMessage(), e);
+			System.out.println(e.getMessage());
 			//response.put("response", "FAILURE");
 			throw new ProjectCommonException(ResponseCode.internalError.getErrorCode(), e.getMessage(), ResponseCode.SERVER_ERROR.getResponseCode());
 		}
@@ -168,6 +205,7 @@ public class CassandraOperationImpl implements CassandraOperation{
 			response = CassandraUtil.createResponse(results);
 		}catch(Exception e){
 			LOGGER.error(e.getMessage(), e);
+			System.out.println(e.getMessage());
 			//response.put("response", "FAILURE");
 			throw new ProjectCommonException(ResponseCode.internalError.getErrorCode(), e.getMessage(), ResponseCode.SERVER_ERROR.getResponseCode());
 		}
