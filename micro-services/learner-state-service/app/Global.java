@@ -4,6 +4,7 @@ import java.util.UUID;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import controllers.BaseController;
 import controllers.LearnerController;
 import play.Application;
 import play.GlobalSettings;
@@ -74,9 +75,10 @@ public class Global extends GlobalSettings {
      * As a GET request user must send some key in header.
      */
       public Promise<Result> onDataValidationError(Request request,String errorMessage) {
-    	  Response resp = new Response();
-    	  resp.setId(errorMessage);
-    	  resp.setVer ("v1");
+    	  logger.info("Data error found--");
+    	  ResponseCode code = ResponseCode.getResponse(errorMessage);
+    	  ResponseCode headerCode = ResponseCode.CLIENT_ERROR;
+    	  Response resp = BaseController.createFailureResponse(request, code,headerCode);
 	  return   Promise.<Result>pure(Results.ok(Json.toJson(resp)));
       }
 	
@@ -101,13 +103,13 @@ public class Global extends GlobalSettings {
 	private String verifyRequestData(Request request, String method) {
 		  if(RequestMethod.GET.name().equals(method)) {
 		if (ProjectUtil.isStringNullOREmpty(request.getHeader(HeaderParam.X_Consumer_ID.getName()))) {
-			return ResponseCode.customerIdRequired.getErrorMessage();
+			return ResponseCode.customerIdRequired.getErrorCode();
 		} else if (ProjectUtil.isStringNullOREmpty(request.getHeader(HeaderParam.X_Session_ID.getName()))) {
-			return ResponseCode.invalidUserCredentials.getErrorMessage();
+			return ResponseCode.invalidUserCredentials.getErrorCode();
 		} else if (ProjectUtil.isStringNullOREmpty(request.getHeader(HeaderParam.X_Device_ID.getName()))) {
-			return ResponseCode.deviceIdRequired.getErrorMessage();
+			return ResponseCode.deviceIdRequired.getErrorCode();
 		} else if (ProjectUtil.isStringNullOREmpty(request.getHeader(HeaderParam.ts.getName()))) {
-			return ResponseCode.deviceIdRequired.getErrorMessage();
+			return ResponseCode.deviceIdRequired.getErrorCode();
 		}
 		return "";
 		} else {
@@ -173,14 +175,4 @@ public class Global extends GlobalSettings {
 			}
 		};
 	}
-
-	/**
-	 * This method will provide api version.
-	 * @param request Request
-	 * @return String
-	 */
-  public static String getApiVersion(Request request) {
-	    return request+"".split("[/]")[1];
-  }
-	
 }
