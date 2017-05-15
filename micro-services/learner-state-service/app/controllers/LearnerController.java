@@ -54,7 +54,7 @@ public class LearnerController extends BaseController {
 		request.setOperation(LearnerStateOperation.GET_COURSE.getValue());
 		request.setRequest(map);
 		Timeout timeout = new Timeout(5, TimeUnit.SECONDS);
-		request.setId(ExecutionContext.getRequestId());
+		request.setRequest_id(ExecutionContext.getRequestId());
 		Future<Object> future = Patterns.ask(selection, request, timeout);
 		try {
 			Object response = Await.result(future, timeout.duration());
@@ -83,19 +83,24 @@ public class LearnerController extends BaseController {
 	 * @return Result
 	 */
 	public Result enrollCourse() {
-		        JsonNode requestData = request().body().asJson();
-		        logger.info(" get course request data=" + requestData);
-		        Request reqObj  = (Request) mapper.RequestMapper.mapRequest(requestData, Request.class);
-				Timeout timeout = new Timeout(3, TimeUnit.SECONDS);
-		        Future<Object> future = Patterns.ask(selection, reqObj, timeout);
-		        String val = null;
-		        try {
-		        	val =(String) Await.result(future, timeout.duration());
-		            System.out.println(" final retun response=="+val);
-		        } catch (Exception e1) {
-		            e1.printStackTrace();
-		        }
-				return ok(val);
+		JsonNode requestData = request().body().asJson();
+		logger.info(" get course request data=" + requestData);
+		Request reqObj = (Request) mapper.RequestMapper.mapRequest(requestData, Request.class);
+		reqObj.setRequest_id(ExecutionContext.getRequestId());
+		HashMap<String, Object> innerMap = new HashMap<>();
+		innerMap.put(JsonKey.COURSE, reqObj.getRequest());
+		innerMap.put(JsonKey.USER_ID, reqObj.getParams().getUid());
+		reqObj.setRequest(innerMap);
+		Timeout timeout = new Timeout(3, TimeUnit.SECONDS);
+		Future<Object> future = Patterns.ask(selection, reqObj, timeout);
+		String val = null;
+		try {
+			val = (String) Await.result(future, timeout.duration());
+			System.out.println(" final retun response==" + val);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		return ok(val);
 	}
 	
 	/**
