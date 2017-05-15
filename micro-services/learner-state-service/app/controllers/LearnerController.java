@@ -11,6 +11,7 @@ import org.sunbird.common.models.util.JsonKey;
 import org.sunbird.common.models.util.LogHelper;
 import org.sunbird.common.request.ExecutionContext;
 import org.sunbird.common.request.Request;
+import org.sunbird.common.request.RequestValidator;
 import org.sunbird.common.responsecode.ResponseCode;
 import org.sunbird.common.request.HeaderParam;
 
@@ -72,7 +73,9 @@ public class LearnerController extends BaseController {
 	public Result enrollCourse() {
 		JsonNode requestData = request().body().asJson();
 		logger.info(" get course request data=" + requestData);
+		try {
 		Request reqObj = (Request) mapper.RequestMapper.mapRequest(requestData, Request.class);
+		RequestValidator.validateCreateCourse(reqObj);
 		reqObj.setRequest_id(ExecutionContext.getRequestId());
 		reqObj.setOperation(LearnerStateOperation.ADD_COURSE.getValue());
 		HashMap<String, Object> innerMap = new HashMap<>();
@@ -81,7 +84,7 @@ public class LearnerController extends BaseController {
 		reqObj.setRequest(innerMap);
 		Timeout timeout = new Timeout(3, TimeUnit.SECONDS);
 		Future<Object> future = Patterns.ask(selection, reqObj, timeout);
-		try {
+		
 			Object response  =  Await.result(future, timeout.duration());
 			if (response instanceof Response) {
 				logger.info("response instance of Response");

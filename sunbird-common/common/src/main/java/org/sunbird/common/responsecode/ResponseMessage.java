@@ -21,6 +21,10 @@ public interface ResponseMessage {
 		public static final String INTERNAL_ERROR = "Process failed,please try after some time.";
 		public static final String COURSE_NAME_MISSING = "Please provide the course name.";
 		public static final String SUCCESS_MESSAGE = "Success";
+		public static final String SESSION_ID_MISSING = "Session id is mandatory.";
+		public static final String COURSE_ID_MISSING = "Course id is mandatory.";
+		public static final String COURSE_DESCRIPTION_MISSING = "Description is mandatory.";
+		public static final String COURSE_TOCURL_MISSING = "Course tocurl is mandatory.";
 	}
 
 	public interface Key {
@@ -38,6 +42,10 @@ public interface ResponseMessage {
 		public static final String INTERNAL_ERROR = "API_KEY_INVALID_ERROR";
 		public static final String COURSE_NAME_MISSING = "COURSE_NAME_REQUIRED_ERROR";
 		public static final String SUCCESS_MESSAGE = "SUCCESS";
+		public static final String SESSION_ID_MISSING = "SESSION_ID_REQUIRED_ERROR";
+		public static final String COURSE_ID_MISSING = "COURSE_ID_REQUIRED_ERROR";
+		public static final String COURSE_DESCRIPTION_MISSING = "COURSE_DESCRIPTION_REQUIRED_ERROR";
+		public static final String COURSE_TOCURL_MISSING = "COURSE_TOCURL_REQUIRED_ERROR";
 	}
 }
 

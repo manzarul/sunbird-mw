@@ -29,6 +29,9 @@ public class JsonKey {
 	public static final String COMPLETED_COUNT = "completedCount";
 	public static final String LAST_UPDATED_TIME = "lastUpdatedTime";
 	public static final String LAST_COMPLETED_TIME = "lastCompletedTime";
+	public static final String COURSE_NAME = "courseName";
+	public static final String DESCRIPTION = "description";
+	public static final String TOC_URL = "tocUrl";
 
 
 }
