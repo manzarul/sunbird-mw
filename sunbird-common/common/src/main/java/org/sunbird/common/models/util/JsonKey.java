@@ -19,4 +19,16 @@ public class JsonKey {
 	public static final String RESPONSE = "response";
 	public static final String COURSE_LIST = "courseList";
 	public static final String COURSE = "course";
+	public static final String COURSE_ENROLL_DATE= "enrolledDate";
+	public static final String IS_COURSE_ACTIVE = "active";
+	public static final String COURSE_STATUS = "status";
+	public static final String ID = "id";
+	public static final String VIEW_POSITION = "viewPosition";
+	public static final String VIEW_COUNT = "viewCount";
+	public static final String LAST_ACCESS_TIME= "lastAccessTime";
+	public static final String COMPLETED_COUNT = "completedCount";
+	public static final String LAST_UPDATED_TIME = "lastUpdatedTime";
+	public static final String LAST_COMPLETED_TIME = "lastCompletedTime";
+
+
 }
