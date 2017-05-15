@@ -23,7 +23,7 @@ public class BaseController extends Controller {
 	 */
 	public static Response createFailureResponse(Request request,ResponseCode code , ResponseCode headerCode) {
 		Response response = new Response();
-		response.setVer(getApiVersion(request));
+		response.setVer(getApiVersion(request.path()));
 		response.setId(ExecutionContext.getRequestId());
 		response.setTs(ProjectUtil.getFormattedDate());
 		response.setResponseCode(headerCode);
@@ -31,17 +31,6 @@ public class BaseController extends Controller {
 		return response;
 	}
    
-	
-	/**
-	 * This method will provide api version.
-	 * @param request Request
-	 * @return String
-	 */
-  public static String getApiVersion(Request request) {
-	     String reqPath = request+"";
-	    return reqPath.split("[/]")[1];
-  }
-  
     /**
      * This method will create response param 
      * @param code ResponseCode
@@ -65,6 +54,7 @@ public class BaseController extends Controller {
 		response.setId(ExecutionContext.getRequestId());
 		response.setTs(ProjectUtil.getFormattedDate());
 		ResponseCode code = ResponseCode.getResponse(ResponseCode.success.getErrorMessage());
+		code.setResponseCode(ResponseCode.OK.getResponseCode());
 		response.setParams(createResponseParamObj(code));
 		return response;
 	}
