@@ -17,7 +17,6 @@ import play.mvc.Http.Context;
 import play.mvc.Http.Request;
 import play.mvc.Result;
 import play.mvc.Results;
-import play.mvc.Results.Redirect;
 
 import org.sunbird.common.models.util.LogHelper;
 import org.sunbird.common.models.response.Response;
@@ -175,5 +174,13 @@ public class Global extends GlobalSettings {
 		};
 	}
 
+	/**
+	 * This method will provide api version.
+	 * @param request Request
+	 * @return String
+	 */
+  public static String getApiVersion(Request request) {
+	    return request+"".split("[/]")[1];
+  }
 	
 }
