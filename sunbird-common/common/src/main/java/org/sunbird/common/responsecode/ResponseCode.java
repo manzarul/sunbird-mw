@@ -130,4 +130,23 @@ public enum ResponseCode {
 		}
 		return ResponseCode.SERVER_ERROR;
 	}
+	
+	
+	/**
+     * This method will provide ResponseCode enum based on error code
+     * 
+     * @param code
+     * @return String
+     */
+    public static ResponseCode getResponse(String errorCode) {
+    	ResponseCode value =null;
+	ResponseCode responseCodes[] = ResponseCode.values();
+	for (ResponseCode response : responseCodes) {
+	    if (response.getErrorCode().equals(errorCode)) {
+		   return  value = response ;
+		  
+	    }
+	}
+	return value;
+    }
 }

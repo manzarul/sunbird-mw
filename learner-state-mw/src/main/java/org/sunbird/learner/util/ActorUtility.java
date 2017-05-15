@@ -14,12 +14,12 @@ public class ActorUtility {
     public static Map<String , DbInfo> dbInfoMap = new HashMap<String , DbInfo>();
 
     static{
-        dbInfoMap.put(LearnerStateOperation.ADD_CONTENT.getValue(), new DbInfo("cassandraKeySpace" , "content" ,"username","password","ip","port"));
-        dbInfoMap.put(LearnerStateOperation.GET_CONTENT.getValue(), new DbInfo("cassandraKeySpace" , "content","username","password","ip","port"));
-        dbInfoMap.put(LearnerStateOperation.GET_COURSE_BY_ID.getValue(), new DbInfo("cassandraKeySpace" , "course","username","password","ip","port"));
-        dbInfoMap.put(LearnerStateOperation.UPDATE_TOC.getValue(), new DbInfo("cassandraKeySpace" , "content","username","password","ip","port"));
-        dbInfoMap.put(LearnerStateOperation.ADD_COURSE.getValue(), new DbInfo("cassandraKeySpace" , "course","username","password","ip","port"));
-        dbInfoMap.put(LearnerStateOperation.GET_COURSE.getValue(), new DbInfo("cassandraKeySpace" , "course","username","password","ip","port"));
+        dbInfoMap.put(LearnerStateOperation.ADD_CONTENT.getValue(), new DbInfo("cassandraKeySpace" , "content_consumption" ,"username","password","ip","port"));
+        dbInfoMap.put(LearnerStateOperation.GET_CONTENT.getValue(), new DbInfo("cassandraKeySpace" , "content_consumption","username","password","ip","port"));
+        dbInfoMap.put(LearnerStateOperation.GET_COURSE_BY_ID.getValue(), new DbInfo("cassandraKeySpace" , "course_enrollment","username","password","ip","port"));
+        dbInfoMap.put(LearnerStateOperation.UPDATE_TOC.getValue(), new DbInfo("cassandraKeySpace" , "content_consumption","username","password","ip","port"));
+        dbInfoMap.put(LearnerStateOperation.ADD_COURSE.getValue(), new DbInfo("cassandraKeySpace" , "course_enrollment","username","password","ip","port"));
+        dbInfoMap.put(LearnerStateOperation.GET_COURSE.getValue(), new DbInfo("cassandraKeySpace" , "course_enrollment","username","password","ip","port"));
     }
 
     /**

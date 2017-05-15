@@ -3,6 +3,9 @@
  */
 package org.sunbird.common.models.util;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  * 
  * This class will contains all the common utility 
@@ -11,6 +14,11 @@ package org.sunbird.common.models.util;
  *
  */
 public class ProjectUtil {
+	
+	/**
+	 * format the date in YYYY-MM-DD hh:mm:ss:SSZ
+	 */
+	 private static final SimpleDateFormat format = new SimpleDateFormat("YYYY-MM-DD hh:mm:ss:SSZ");
 	
 	/**
 	 * This method will check incoming value is null or empty
@@ -24,6 +32,14 @@ public class ProjectUtil {
 			return true;
 		}
 		return false;
+	}
+	
+	/**
+	 * This method will provide formatted date
+	 * @return
+	 */
+	public static String getFormattedDate() {
+		return format.format(new Date());
 	}
 
 }

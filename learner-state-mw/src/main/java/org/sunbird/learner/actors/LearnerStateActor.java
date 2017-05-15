@@ -34,7 +34,7 @@ public class LearnerStateActor extends UntypedAbstractActor {
             logger.debug("LearnerStateActor onReceive called");
             Request actorMessage = (Request) message;
             if (actorMessage.getOperation().equalsIgnoreCase(LearnerStateOperation.GET_COURSE.getValue())) {
-                Object obj = actorMessage.getRequest().get(JsonKey.COURSE_ID);
+                Object obj = actorMessage.getRequest().get(JsonKey.USER_ID);
                 if (obj instanceof String) {
                     String userId = (String) obj;
                     ActorUtility.DbInfo dbInfo = ActorUtility.dbInfoMap.get(LearnerStateOperation.GET_COURSE.getValue());
@@ -48,7 +48,7 @@ public class LearnerStateActor extends UntypedAbstractActor {
             }
             else if (actorMessage.getOperation().equalsIgnoreCase(LearnerStateOperation.GET_CONTENT.getValue())) {
             	logger.info("op type get Content");
-                Object obj = actorMessage.getRequest().get(JsonKey.COURSE_ID);
+                Object obj = actorMessage.getRequest().get(JsonKey.USER_ID);
                 if (obj instanceof String) {
                 	logger.info("obj type String");
                     //String userId = (String) obj;
