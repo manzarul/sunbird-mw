@@ -26,7 +26,7 @@ import java.util.Map;
 public class CourseEnrollmentActor extends UntypedAbstractActor {
     private LogHelper logger = LogHelper.getInstance(CourseEnrollmentActor.class.getName());
 
-    private CassandraOperation cassandraOperation = new CassandraOperationImpl();
+     private CassandraOperation cassandraOperation = new CassandraOperationImpl();
 
     /**
      * Receives the actor message and perform the course enrollment operation .
@@ -37,7 +37,7 @@ public class CourseEnrollmentActor extends UntypedAbstractActor {
     @Override
     public void onReceive(Object message) throws Throwable {
         if (message instanceof Request) {
-            logger.info("CourseEnrollmentActor onReceive called");
+            logger.info("CourseEnrollmentActor  onReceive called");
             Request actorMessage = (Request) message;
 
             if (actorMessage.getOperation().equalsIgnoreCase(LearnerStateOperation.ADD_COURSE.getValue())) {
