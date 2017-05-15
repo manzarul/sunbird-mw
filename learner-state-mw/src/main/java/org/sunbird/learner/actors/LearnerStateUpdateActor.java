@@ -54,7 +54,7 @@ public class LearnerStateUpdateActor extends UntypedAbstractActor {
         String userId = (String)req.get(JsonKey.USER_ID);
         String contentId = (String)req.get(JsonKey.CONTENT_ID);
         String  id = contentId+"##"+userId;
-        req.put("id",id);
+        req.put(JsonKey.ID,id);
 
     }
 

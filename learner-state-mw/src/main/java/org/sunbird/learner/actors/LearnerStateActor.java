@@ -4,6 +4,7 @@ package org.sunbird.learner.actors;
 import akka.actor.ActorRef;
 import akka.actor.UntypedAbstractActor;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,13 +52,10 @@ public class LearnerStateActor extends UntypedAbstractActor {
                 Object obj = actorMessage.getRequest().get(JsonKey.USER_ID);
                 if (obj instanceof String) {
                 	logger.info("obj type String");
-                    //String userId = (String) obj;
-                    //List<String> contentList = (List<String>)actorMessage.getRequest().get(JsonKey.CONTENT_LIST);
+                    String userId = (String) obj;
+                    createListForGetContent(actorMessage.getRequest());
                     ActorUtility.DbInfo dbInfo = ActorUtility.dbInfoMap.get(LearnerStateOperation.GET_CONTENT.getValue());
-                    /*Map<String , Object> requestMap = new HashMap<String , Object>();
-                    requestMap.put("userId" , userId);
-                    requestMap.put("contentIds" , contentList);*/
-                    Response result = cassandraOperation.getRecordsByProperties(dbInfo.getKeySpace() , dbInfo.getTableName() , actorMessage.getRequest());
+                    Response result = cassandraOperation.getRecordsByProperty(dbInfo.getKeySpace() , dbInfo.getTableName() , JsonKey.CONTENT_ID,(List)actorMessage.getRequest().get(JsonKey.CONTENT_LIST));
                     logger.info(result.toString());
                     sender().tell(result, self());
                 } else {
@@ -77,6 +75,21 @@ public class LearnerStateActor extends UntypedAbstractActor {
             ProjectCommonException exception = new ProjectCommonException(ResponseCode.invalidRequestData.getErrorCode() ,ResponseCode.invalidRequestData.getErrorMessage(), ResponseCode.CLIENT_ERROR.getResponseCode() );
             sender().tell(exception , ActorRef.noSender());
         }
+
+    }
+
+    private void createListForGetContent(Map<String, Object> req) {
+
+        String userId = (String) req.get(JsonKey.USER_ID);
+        List<String> contentList = (List<String>)req.get(JsonKey.CONTENT_LIST);
+        List<String> modifiedList = new ArrayList<String>();
+        if(!(contentList.isEmpty())){
+            for(String contentid : contentList){
+                modifiedList.add(contentid+"##"+userId);
+            }
+        }
+        //overriding the content list with modified list
+        req.put(JsonKey.CONTENT_LIST , modifiedList);
 
     }
 
