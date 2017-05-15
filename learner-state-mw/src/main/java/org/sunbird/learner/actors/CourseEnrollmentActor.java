@@ -7,6 +7,7 @@ import akka.actor.UntypedAbstractActor;
 import org.sunbird.bean.LearnerStateOperation;
 import org.sunbird.cassandra.CassandraOperation;
 import org.sunbird.cassandraimpl.CassandraOperationImpl;
+import org.sunbird.common.Constants;
 import org.sunbird.common.exception.ProjectCommonException;
 import org.sunbird.common.models.response.Response;
 import org.sunbird.common.models.util.JsonKey;
@@ -15,6 +16,7 @@ import org.sunbird.common.request.Request;
 import org.sunbird.common.responsecode.ResponseCode;
 import org.sunbird.learner.util.ActorUtility;
 
+import java.sql.Timestamp;
 import java.util.Map;
 //import org.sunbird.common.request.Request;
 
@@ -42,8 +44,16 @@ public class CourseEnrollmentActor extends UntypedAbstractActor {
 
             if (actorMessage.getOperation().equalsIgnoreCase(LearnerStateOperation.ADD_COURSE.getValue())) {
                     ActorUtility.DbInfo dbInfo = ActorUtility.dbInfoMap.get(LearnerStateOperation.ADD_COURSE.getValue());
-                    generateandAppendPrimaryKey(actorMessage.getRequest());
-                    Response result = cassandraOperation.insertRecord(dbInfo.getKeySpace(),dbInfo.getTableName(),actorMessage.getRequest());
+
+                    Map<String , Object> req = actorMessage.getRequest();
+                    req.put(JsonKey.USER_ID , req.get("uid"));
+                    req.put("enrolledDate" , new Timestamp(System.currentTimeMillis()));
+                    req.put("active",true);
+                    req.put("status" , Constants.LearnerStateOperation.NOT_STARTED.getValue());
+
+                    generateandAppendPrimaryKey(req);
+
+                    Response result = cassandraOperation.insertRecord(dbInfo.getKeySpace(),dbInfo.getTableName(),req);
                     sender().tell(result, getSelf());
             } else {
                 logger.info("UNSUPPORTED OPERATION");
