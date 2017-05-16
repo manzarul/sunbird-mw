@@ -52,7 +52,7 @@ public class LearnerStateUpdateActor extends UntypedAbstractActor {
                     for (Map<String, Object> map : contentList) {
                         preOperation(map, userId);
                         map.put(JsonKey.USER_ID, userId);
-                        generateandAppendPrimaryKey(map , userId);
+                        generateandAppendPrimaryKey(map, userId);
                         try {
                             Response result = cassandraOperation.insertRecord(dbInfo.getKeySpace(), dbInfo.getTableName(), map);
                             response.getResult().put((String) map.get(JsonKey.CONTENT_ID), "SUCCESS");
@@ -74,10 +74,10 @@ public class LearnerStateUpdateActor extends UntypedAbstractActor {
         }
     }
 
-    private void preOperation(Map<String, Object> req , String userId) throws ParseException {
+    private void preOperation(Map<String, Object> req, String userId) throws ParseException {
 
         ActorUtility.DbInfo dbInfo = ActorUtility.dbInfoMap.get(LearnerStateOperation.ADD_CONTENT.getValue());
-        generateandAppendPrimaryKey(req , userId);
+        generateandAppendPrimaryKey(req, userId);
         Response response = cassandraOperation.getRecordById(dbInfo.getKeySpace(), dbInfo.getTableName(), (String) req.get(JsonKey.ID));
 
         List<Map<String, Object>> resultList = (List<Map<String, Object>>) response.getResult().get("response");
@@ -87,16 +87,26 @@ public class LearnerStateUpdateActor extends UntypedAbstractActor {
             int currentStatus = Integer.parseInt((String) result.get(JsonKey.COURSE_STATUS));
             int requestedStatus = Integer.parseInt((String) req.get(JsonKey.COURSE_STATUS));
 
-            Date lastUpdatedTime = parseDate(result.get(JsonKey.LAST_UPDATED_TIME) , cassandraSdf);
-            Date requestedUpdatedTime = parseDate(req.get(JsonKey.LAST_UPDATED_TIME),sdf);
-            Date accessTime = parseDate(result.get(JsonKey.LAST_ACCESS_TIME) , cassandraSdf);
-            Date requestAccessTime = parseDate(req.get(JsonKey.LAST_ACCESS_TIME),sdf);
+            Date lastUpdatedTime = parseDate(result.get(JsonKey.LAST_UPDATED_TIME), cassandraSdf);
+            Date requestedUpdatedTime = parseDate(req.get(JsonKey.LAST_UPDATED_TIME), sdf);
+            Date accessTime = parseDate(result.get(JsonKey.LAST_ACCESS_TIME), cassandraSdf);
+            Date requestAccessTime = parseDate(req.get(JsonKey.LAST_ACCESS_TIME), sdf);
 
             Date completedDate = parseDate(result.get(JsonKey.LAST_COMPLETED_TIME), cassandraSdf);
-            Date requestCompletedTime = parseDate(req.get(JsonKey.LAST_COMPLETED_TIME),sdf);
+            Date requestCompletedTime = parseDate(req.get(JsonKey.LAST_COMPLETED_TIME), sdf);
 
-            int completedCount = Integer.parseInt((String) result.get(JsonKey.COMPLETED_COUNT));
-            int viewCount = Integer.parseInt((String) result.get(JsonKey.VIEW_COUNT));
+            int completedCount;
+            if (null != result.get(JsonKey.COMPLETED_COUNT)) {
+                completedCount = Integer.parseInt((String) result.get(JsonKey.COMPLETED_COUNT));
+            } else {
+                completedCount = 0;
+            }
+            int viewCount;
+            if (null != result.get(JsonKey.VIEW_COUNT)) {
+                viewCount = Integer.parseInt((String) result.get(JsonKey.VIEW_COUNT));
+            } else {
+                viewCount = 0;
+            }
 
 
             if (requestedStatus >= currentStatus) {
@@ -118,13 +128,27 @@ public class LearnerStateUpdateActor extends UntypedAbstractActor {
 
         } else {
             // IT IS NEW CONTENT SIMPLY ADD IT
-        }
+            req.put(JsonKey.VIEW_COUNT, String.valueOf(0));
+            req.put(JsonKey.COMPLETED_COUNT, String.valueOf(0));
+            Date requestedUpdatedTime = parseDate(req.get(JsonKey.LAST_UPDATED_TIME), sdf);
+            Date requestAccessTime = parseDate(req.get(JsonKey.LAST_ACCESS_TIME), sdf);
 
+            if (requestedUpdatedTime != null) {
+                req.put(JsonKey.LAST_UPDATED_TIME, new Timestamp(requestedUpdatedTime.getTime()));
+            } else {
+                req.put(JsonKey.LAST_UPDATED_TIME, new Timestamp(System.currentTimeMillis()));
+            }
+            if (requestAccessTime != null) {
+                req.put(JsonKey.LAST_ACCESS_TIME, new Timestamp(requestAccessTime.getTime()));
+            } else {
+                req.put(JsonKey.LAST_ACCESS_TIME, new Timestamp(System.currentTimeMillis()));
+            }
+        }
 
     }
 
-    private Date parseDate(Object obj , SimpleDateFormat formatter) throws ParseException {
-        if(null == obj){
+    private Date parseDate(Object obj, SimpleDateFormat formatter) throws ParseException {
+        if (null == obj) {
             return null;
         }
         return formatter.parse((String) obj);
@@ -132,7 +156,7 @@ public class LearnerStateUpdateActor extends UntypedAbstractActor {
 
     private Timestamp compareTime(Date currentValue, Date requestedValue) {
 
-        if(currentValue == null){
+        if (currentValue == null) {
             return new Timestamp(requestedValue.getTime());
         }
         return (requestedValue.after(currentValue) ? new Timestamp(requestedValue.getTime()) : new Timestamp(currentValue.getTime()));
