@@ -15,6 +15,7 @@ import org.sunbird.common.exception.ProjectCommonException;
 import org.sunbird.common.models.response.Response;
 import org.sunbird.common.models.util.JsonKey;
 import org.sunbird.common.models.util.LogHelper;
+import org.sunbird.common.models.util.ProjectUtil;
 import org.sunbird.common.request.Request;
 import org.sunbird.common.responsecode.ResponseCode;
 import org.sunbird.learner.util.ActorUtility;
@@ -50,7 +51,7 @@ public class CourseEnrollmentActor extends UntypedAbstractActor {
                     String userId = (String) req.get(JsonKey.USER_ID);
                     Map<String , Object> courseMap=(Map<String, Object>) req.get(JsonKey.COURSE);
                     courseMap.put(JsonKey.USER_ID, userId);
-                    courseMap.put("enrolledDate" , new Timestamp(System.currentTimeMillis()));
+                    courseMap.put("enrolledDate" , ProjectUtil.getFormattedDate());
                     courseMap.put("active",true);
                     courseMap.put("status" , Constants.LearnerStateOperation.NOT_STARTED.getValue());
                     generateandAppendPrimaryKey(courseMap);

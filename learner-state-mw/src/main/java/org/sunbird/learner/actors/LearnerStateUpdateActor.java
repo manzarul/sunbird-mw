@@ -32,7 +32,7 @@ public class LearnerStateUpdateActor extends UntypedAbstractActor {
 
     private CassandraOperation cassandraOperation = new CassandraOperationImpl();
     private LogHelper logger = LogHelper.getInstance(LearnerStateUpdateActor.class.getName());
-    SimpleDateFormat sdf = ProjectUtil.cassandraFormat;
+    SimpleDateFormat sdf = ProjectUtil.format;
 
     @Override
     public void onReceive(Object message) throws Throwable {
@@ -132,7 +132,6 @@ public class LearnerStateUpdateActor extends UntypedAbstractActor {
         if(currentValue == null){
             return requestedValue.toString();
         }
-
         return (requestedValue.after(currentValue) ? requestedValue.toString() : currentValue.toString());
     }
 
@@ -141,7 +140,6 @@ public class LearnerStateUpdateActor extends UntypedAbstractActor {
         String contentId = (String) req.get(JsonKey.CONTENT_ID);
         String id = contentId + "##" + userId;
         req.put(JsonKey.ID, id);
-
     }
 
 }
