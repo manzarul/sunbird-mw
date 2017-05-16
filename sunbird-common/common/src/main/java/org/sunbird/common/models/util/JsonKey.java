@@ -19,6 +19,7 @@ public class JsonKey {
 	public static final String RESPONSE = "response";
 	public static final String COURSE_LIST = "courseList";
 	public static final String COURSE = "course";
+	public static final String CONTENT = "content";
 	public static final String COURSE_ENROLL_DATE= "enrolledDate";
 	public static final String IS_COURSE_ACTIVE = "active";
 	public static final String COURSE_STATUS = "status";

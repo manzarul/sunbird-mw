@@ -103,6 +103,7 @@ public class LearnerController extends BaseController {
 		JsonNode requestData = request().body().asJson();
         logger.info(" get course request data=" + requestData);
         Request reqObj  = (Request) mapper.RequestMapper.mapRequest(requestData, Request.class);
+        RequestValidator.validateGetData(reqObj);
         reqObj.setRequest_id(ExecutionContext.getRequestId());
         reqObj.setOperation(LearnerStateOperation.GET_CONTENT.getValue());
         HashMap<String, Object> innerMap = new HashMap<>();
@@ -129,7 +130,13 @@ public class LearnerController extends BaseController {
 		JsonNode requestData = request().body().asJson();
         logger.info(" get course request data=" + requestData);
         Request reqObj  = (Request) mapper.RequestMapper.mapRequest(requestData, Request.class);
+        RequestValidator.validateUpdateContent(reqObj);
         reqObj.setOperation(LearnerStateOperation.ADD_CONTENT.getValue());
+        reqObj.setRequest_id(ExecutionContext.getRequestId());
+		HashMap<String, Object> innerMap = new HashMap<>();
+		innerMap.put(JsonKey.CONTENT_LIST, reqObj.getRequest());
+		innerMap.put(JsonKey.USER_ID, reqObj.getParams().getUid());
+		reqObj.setRequest(innerMap);
 		Timeout timeout = new Timeout(5, TimeUnit.SECONDS);
         Future<Object> future = Patterns.ask(selection, reqObj, timeout);
         	Response response  =  (Response) Await.result(future, timeout.duration());
@@ -166,8 +173,13 @@ public class LearnerController extends BaseController {
 	 */
 	private Result createCommonExceptionResponse (Exception e) {
 		logger.error(e);
-		ProjectCommonException exception = new ProjectCommonException(ResponseCode.internalError.getErrorCode(),
+		ProjectCommonException exception = null;
+		if(e instanceof ProjectCommonException) {
+			exception = (ProjectCommonException) e;
+		}else {
+		 exception = new ProjectCommonException(ResponseCode.internalError.getErrorCode(),
 				ResponseCode.internalError.getErrorMessage(), ResponseCode.SERVER_ERROR.getResponseCode());
+		}
 		return ok(Json.toJson(BaseController.createResponseOnException(request().path(), exception)));
 	}
 }
