@@ -50,7 +50,7 @@ public class LearnerStateUpdateActor extends UntypedAbstractActor {
 
                 if (!(contentList.isEmpty())) {
                     for (Map<String, Object> map : contentList) {
-                        preOperation(map);
+                        preOperation(map, userId);
                         map.put(JsonKey.USER_ID, userId);
                         generateandAppendPrimaryKey(map , userId);
                         try {
@@ -74,10 +74,10 @@ public class LearnerStateUpdateActor extends UntypedAbstractActor {
         }
     }
 
-    private void preOperation(Map<String, Object> req) throws ParseException {
+    private void preOperation(Map<String, Object> req , String userId) throws ParseException {
 
         ActorUtility.DbInfo dbInfo = ActorUtility.dbInfoMap.get(LearnerStateOperation.ADD_CONTENT.getValue());
-        //generateandAppendPrimaryKey(req);
+        generateandAppendPrimaryKey(req , userId);
         Response response = cassandraOperation.getRecordById(dbInfo.getKeySpace(), dbInfo.getTableName(), (String) req.get(JsonKey.ID));
 
         List<Map<String, Object>> resultList = (List<Map<String, Object>>) response.getResult().get("response");
