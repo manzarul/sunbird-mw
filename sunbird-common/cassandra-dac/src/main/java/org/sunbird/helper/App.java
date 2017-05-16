@@ -24,17 +24,19 @@ public class App {
 			CassandraOperation operation= new CassandraOperationImpl();
 			Map<String,Object> contentmap = new HashMap<>();
 			//Map<String,Object> coursemap = new HashMap<>();
-				    	   
-	    	contentmap.put("contentId", "contentId1");
-	   		contentmap.put("viewCount", "viewCount 1");
-	   		contentmap.put("completedCount", "completedCount1");
+			//cont-2445122, 1, 2017-05-13 02:49:41, pos1, 2017-05-13 02:49:41,  cont-2445122##userId21, userId21
+			//(contentId,status,lastCompletedTime,viewPosition,lastAccessTime,id,viewCount,completedCount,lastUpdatedTime,userId) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+			//[ cont-2445123, 1, 2017-05-15 10:58:07:509+0530, pos1, 2017-01-01 10:58:07.509,  cont-2445123##userId21, 0, 0, 2017-05-16 18:50:33.264, userId21]
+	    	contentmap.put("contentId", "cont-2445123");
+	   		contentmap.put("viewCount", "0");
+	   		contentmap.put("completedCount", "0");
 	   		contentmap.put("status", 1);
-	   		contentmap.put("userId", "userId2");
-	   		contentmap.put("lastUpdatedTime", new Timestamp(System.currentTimeMillis()) );
-	   		contentmap.put("lastAccessTime", new Timestamp(System.currentTimeMillis()));
-	   		contentmap.put("lastCompletedTime", new Timestamp(System.currentTimeMillis()));
-	   		contentmap.put("viewPosition", "viewPosition 1");
-	   		contentmap.put("id", "contentId1##userId2");
+	   		contentmap.put("userId", "userId21");
+	   		contentmap.put("lastUpdatedTime", new Timestamp(new Date().getTime()) );
+	   		contentmap.put("lastAccessTime", new Timestamp(new Date().getTime()));//new Timestamp(new Date().getTime())
+	   		contentmap.put("lastCompletedTime", new Timestamp(new Date().getTime()));
+	   		contentmap.put("viewPosition", "pos1");
+	   		contentmap.put("id", "cont-2445123##userId21");
 	   		
 	   		coursemap.put("courseName", "courseName1");
 	   		coursemap.put("userId", "userId2");
@@ -47,10 +49,11 @@ public class App {
 	   		coursemap.put("delta", "delta as json string");
 	   		coursemap.put("id", "courseId2##userId2");
 	    	   
-	   		operation.insertRecord("cassandraKeySpace", "course_enrollment", coursemap);
-	   		operation.insertRecord("cassandraKeySpace", "content_consumption", contentmap);
-	   		operation.getRecordById("cassandraKeySpace", "course_enrollment", "courseId1##userId1");
-	   		operation.getRecordById("cassandraKeySpace", "content_consumption", "contentId1234567890##userId2");
+	   		//operation.insertRecord("cassandraKeySpace", "course_enrollment", coursemap);
+	   		Response response= operation.insertRecord("cassandraKeySpace", "content_consumption", contentmap);
+	   		//operation.getRecordById("cassandraKeySpace", "course_enrollment", "courseId1##userId1");
+	   		operation.getRecordById("cassandraKeySpace", "content_consumption", "cont-2445122##userId21");
+	   		System.out.println(response.get("response"));
 			//Response response=operation.getRecordById("cassandraKeySpace", "content", "contentId1##userId24");
 			//Response response=operation.getRecordsByProperty("cassandraKeySpace", "content", "courseid", "courseId 1");
 			//Response response=operation.getRecordsByProperties("cassandraKeySpace", "content", map);
@@ -86,9 +89,11 @@ public class App {
 		    System.out.println(str);
 		    
 			// AND status=1; userId='userId2' AND
-		    CassandraConnectionManager.getSession("cassandraKeySpace").execute( "SELECT * FROM cassandraKeySpace.course_enrollment WHERE userId='userId2';");
-		   Response res= operation.getRecordsByProperty("cassandraKeySpace", "course_enrollment", "userId", "userId2");
-		   System.out.println(res.get("response"));
+		   // CassandraConnectionManager.getSession("cassandraKeySpace").execute( "SELECT * FROM cassandraKeySpace.course_enrollment WHERE userId='userId2';");
+		  // Response res= operation.getRecordsByProperty("cassandraKeySpace", "course_enrollment", "userId", "userId2");
+	   		//Response res= operation.insertRecord("cassandraKeySpace", "content_consumption", contentmap);
+	   		
+	   		//System.out.println(res.get("response"));
 		}
 
 	}

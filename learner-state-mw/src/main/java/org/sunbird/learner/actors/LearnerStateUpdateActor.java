@@ -84,8 +84,8 @@ public class LearnerStateUpdateActor extends UntypedAbstractActor {
         if (!(resultList.isEmpty())) {
             Map<String, Object> result = resultList.get(0);
 
-            int currentStatus = Integer.parseInt((String) result.get(JsonKey.COURSE_STATUS));
-            int requestedStatus = Integer.parseInt((String) req.get(JsonKey.COURSE_STATUS));
+            int currentStatus = (int) result.get(JsonKey.COURSE_STATUS);
+            int requestedStatus = (int) req.get(JsonKey.COURSE_STATUS);
 
             Date lastUpdatedTime = parseDate(result.get(JsonKey.LAST_UPDATED_TIME), cassandraSdf);
             Date requestedUpdatedTime = parseDate(req.get(JsonKey.LAST_UPDATED_TIME), sdf);
@@ -110,7 +110,7 @@ public class LearnerStateUpdateActor extends UntypedAbstractActor {
 
 
             if (requestedStatus >= currentStatus) {
-                req.put(JsonKey.COURSE_STATUS, String.valueOf(requestedStatus));
+                req.put(JsonKey.COURSE_STATUS, requestedStatus);
                 if (requestedStatus == 2) {
                     req.put(JsonKey.COMPLETED_COUNT, String.valueOf(completedCount + 1));
                     req.put(JsonKey.LAST_COMPLETED_TIME, compareTime(completedDate, requestCompletedTime));
@@ -120,7 +120,7 @@ public class LearnerStateUpdateActor extends UntypedAbstractActor {
                 req.put(JsonKey.LAST_UPDATED_TIME, compareTime(lastUpdatedTime, requestedUpdatedTime));
 
             } else {
-                req.put(JsonKey.COURSE_STATUS, String.valueOf(currentStatus));
+                req.put(JsonKey.COURSE_STATUS, currentStatus);
                 req.put(JsonKey.VIEW_COUNT, String.valueOf(viewCount + 1));
                 req.put(JsonKey.LAST_ACCESS_TIME, compareTime(accessTime, requestAccessTime));
                 req.put(JsonKey.LAST_UPDATED_TIME, compareTime(lastUpdatedTime, requestedUpdatedTime));
@@ -136,12 +136,12 @@ public class LearnerStateUpdateActor extends UntypedAbstractActor {
             if (requestedUpdatedTime != null) {
                 req.put(JsonKey.LAST_UPDATED_TIME, new Timestamp(requestedUpdatedTime.getTime()));
             } else {
-                req.put(JsonKey.LAST_UPDATED_TIME, new Timestamp(System.currentTimeMillis()));
+                req.put(JsonKey.LAST_UPDATED_TIME, new Timestamp(parseDate(ProjectUtil.getFormattedDate(), sdf).getTime()));
             }
             if (requestAccessTime != null) {
                 req.put(JsonKey.LAST_ACCESS_TIME, new Timestamp(requestAccessTime.getTime()));
             } else {
-                req.put(JsonKey.LAST_ACCESS_TIME, new Timestamp(System.currentTimeMillis()));
+                req.put(JsonKey.LAST_ACCESS_TIME, new Timestamp(parseDate(ProjectUtil.getFormattedDate(), sdf).getTime()));
             }
         }
 
