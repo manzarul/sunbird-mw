@@ -133,7 +133,7 @@ public class LearnerController extends BaseController {
         reqObj.setOperation(LearnerStateOperation.ADD_CONTENT.getValue());
         reqObj.setRequest_id(ExecutionContext.getRequestId());
 		HashMap<String, Object> innerMap = new HashMap<>();
-		innerMap.put(JsonKey.CONTENT_LIST, reqObj.getRequest());
+		innerMap.put(JsonKey.CONTENTS, reqObj.getRequest().get(JsonKey.CONTENTS));
 		innerMap.put(JsonKey.USER_ID, reqObj.getParams().getUid());
 		reqObj.setRequest(innerMap);
 		Timeout timeout = new Timeout(Akka_wait_time, TimeUnit.SECONDS);

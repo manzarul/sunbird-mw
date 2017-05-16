@@ -33,6 +33,7 @@ public class JsonKey {
 	public static final String COURSE_NAME = "courseName";
 	public static final String DESCRIPTION = "description";
 	public static final String TOC_URL = "tocUrl";
+	public static final String CONTENTS = "contents";
 
 
 }
