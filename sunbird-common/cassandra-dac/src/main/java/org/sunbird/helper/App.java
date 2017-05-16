@@ -1,4 +1,4 @@
-package org.sunbird.helper;
+/*package org.sunbird.helper;
 
 import java.sql.Timestamp;
 import java.util.Date;
@@ -22,7 +22,7 @@ public class App {
 		Map<String,Object> coursemap = new HashMap<>();
 		if(bool){
 			CassandraOperation operation= new CassandraOperationImpl();
-			/*Map<String,Object> contentmap = new HashMap<>();
+			Map<String,Object> contentmap = new HashMap<>();
 			//Map<String,Object> coursemap = new HashMap<>();
 				    	   
 	    	contentmap.put("contentId", "contentId1");
@@ -84,7 +84,7 @@ public class App {
 	   		coursemap.put("delta", "delta as json string");
 			String str= CassandraUtil.getUpdateQueryStatement("cassandraKeySpace", "course_enrollment",  coursemap);
 		    System.out.println(str);
-		    */
+		    
 			// AND status=1; userId='userId2' AND
 		    CassandraConnectionManager.getSession("cassandraKeySpace").execute( "SELECT * FROM cassandraKeySpace.course_enrollment WHERE userId='userId2';");
 		   Response res= operation.getRecordsByProperty("cassandraKeySpace", "course_enrollment", "userId", "userId2");
@@ -94,3 +94,4 @@ public class App {
 	}
 
 }
+*/

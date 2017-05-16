@@ -23,6 +23,7 @@ public interface ResponseMessage {
 		public static final String SUCCESS_MESSAGE = "Success";
 		public static final String SESSION_ID_MISSING = "Session id is mandatory.";
 		public static final String COURSE_ID_MISSING = "Course id is mandatory.";
+		public static final String CONTENT_ID_MISSING = "Content id is mandatory.";
 		public static final String COURSE_DESCRIPTION_MISSING = "Description is mandatory.";
 		public static final String COURSE_TOCURL_MISSING = "Course tocurl is mandatory.";
 	}
@@ -44,6 +45,7 @@ public interface ResponseMessage {
 		public static final String SUCCESS_MESSAGE = "SUCCESS";
 		public static final String SESSION_ID_MISSING = "SESSION_ID_REQUIRED_ERROR";
 		public static final String COURSE_ID_MISSING = "COURSE_ID_REQUIRED_ERROR";
+		public static final String CONTENT_ID_MISSING ="CONTENT_ID_REQUIRED_ERROR";
 		public static final String COURSE_DESCRIPTION_MISSING = "COURSE_DESCRIPTION_REQUIRED_ERROR";
 		public static final String COURSE_TOCURL_MISSING = "COURSE_TOCURL_REQUIRED_ERROR";
 	}

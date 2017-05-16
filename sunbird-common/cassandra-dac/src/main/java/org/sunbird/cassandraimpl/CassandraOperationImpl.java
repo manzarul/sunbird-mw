@@ -41,11 +41,10 @@ public class CassandraOperationImpl implements CassandraOperation{
 	@Override
 	public Response insertRecord(String keyspaceName, String tableName, Map<String, Object> request) throws ProjectCommonException {
 		Response response = new Response();
-		String query = CassandraUtil.getPreparedStatement(keyspaceName,tableName,request);
-		System.out.println(query);
-		
 		ResultSet result=null;
 		try {
+			String query = CassandraUtil.getPreparedStatement(keyspaceName,tableName,request);
+			System.out.println(query);
 			PreparedStatement statement = CassandraConnectionManager.getSession(keyspaceName).prepare(query);
 			BoundStatement boundStatement = new BoundStatement(statement);
 			Iterator<Object> iterator = request.values().iterator(); 

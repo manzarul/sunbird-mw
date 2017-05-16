@@ -11,10 +11,10 @@ import org.sunbird.common.models.util.JsonKey;
 import org.sunbird.common.models.util.LogHelper;
 import org.sunbird.common.models.util.ProjectUtil;
 import org.sunbird.common.request.ExecutionContext;
+import org.sunbird.common.request.HeaderParam;
 import org.sunbird.common.request.Request;
 import org.sunbird.common.request.RequestValidator;
 import org.sunbird.common.responsecode.ResponseCode;
-import org.sunbird.common.request.HeaderParam;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.typesafe.config.ConfigFactory;
@@ -23,10 +23,11 @@ import akka.actor.ActorSelection;
 import akka.actor.ActorSystem;
 import akka.pattern.Patterns;
 import akka.util.Timeout;
+import play.libs.F.Function;
+import play.libs.F.Promise;
 import play.libs.Json;
 import play.mvc.Result;
-import scala.concurrent.Await;
-import scala.concurrent.Future;
+import play.mvc.Results;
 /**
  * This controller will handler all the request related 
  * to learner state.
@@ -36,6 +37,7 @@ import scala.concurrent.Future;
 public class LearnerController extends BaseController {
 	private LogHelper logger = LogHelper.getInstance(LearnerController.class.getName());
 	private static ActorSelection selection=null;
+	private static final int Akka_wait_time =3; 
 	static{
 		ActorSystem system = ActorSystem.create("HelloApplication", ConfigFactory.load()
                 .getConfig("HelloConfig"));
@@ -47,22 +49,21 @@ public class LearnerController extends BaseController {
 	 * for a user. User courses are stored in Cassandra db.
 	 * @return Result
 	 */
-	public Result getEnrolledCourses() {
-		String userId = request().getHeader(HeaderParam.X_Session_ID.getName());
-		Map<String, Object> map = new HashMap<>();
-		map.put("userId", userId);
-		Request request = new Request();
-		request.setRequest(map);
-		request.setOperation(LearnerStateOperation.GET_COURSE.getValue());
-		request.setRequest(map);
-		Timeout timeout = new Timeout(5, TimeUnit.SECONDS);
-		request.setRequest_id(ExecutionContext.getRequestId());
-		Future<Object> future = Patterns.ask(selection, request, timeout);
+	public Promise<Result> getEnrolledCourses() {
 		try {
-			Object response = Await.result(future, timeout.duration());
-			return createCommonResponse(response,JsonKey.COURSE_LIST);
+			String userId = request().getHeader(HeaderParam.X_Session_ID.getName());
+			Map<String, Object> map = new HashMap<>();
+			map.put(JsonKey.USER_ID, userId);
+			Request request = new Request();
+			request.setRequest(map);
+			request.setOperation(LearnerStateOperation.GET_COURSE.getValue());
+			request.setRequest(map);
+			Timeout timeout = new Timeout(Akka_wait_time, TimeUnit.SECONDS);
+			request.setRequest_id(ExecutionContext.getRequestId());
+			Promise<Result> res = actorResponseHandler(selection,request,timeout,JsonKey.COURSE_LIST);
+			return res;
 		} catch (Exception e) {
-			return createCommonExceptionResponse(e);
+			return Promise.<Result> pure(createCommonExceptionResponse(e));
 		}
 	}
 	
@@ -71,25 +72,23 @@ public class LearnerController extends BaseController {
 	 * enroll for a new course. 
 	 * @return Result
 	 */
-	public Result enrollCourse() {
-		JsonNode requestData = request().body().asJson();
-		logger.info(" get course request data=" + requestData);
+	public Promise<Result> enrollCourse() {
 		try {
-		Request reqObj = (Request) mapper.RequestMapper.mapRequest(requestData, Request.class);
-		RequestValidator.validateCreateCourse(reqObj);
-		reqObj.setRequest_id(ExecutionContext.getRequestId());
-		reqObj.setOperation(LearnerStateOperation.ADD_COURSE.getValue());
-		HashMap<String, Object> innerMap = new HashMap<>();
-		innerMap.put(JsonKey.COURSE, reqObj.getRequest());
-		innerMap.put(JsonKey.USER_ID, reqObj.getParams().getUid());
-		reqObj.setRequest(innerMap);
-		Timeout timeout = new Timeout(3, TimeUnit.SECONDS);
-		Future<Object> future = Patterns.ask(selection, reqObj, timeout);
-		
-			Object response  =  Await.result(future, timeout.duration());
-			return createCommonResponse(response,null);
+			JsonNode requestData = request().body().asJson();
+			logger.info(" get course request data=" + requestData);
+			Request reqObj = (Request) mapper.RequestMapper.mapRequest(requestData, Request.class);
+			RequestValidator.validateCreateCourse(reqObj);
+			reqObj.setRequest_id(ExecutionContext.getRequestId());
+			reqObj.setOperation(LearnerStateOperation.ADD_COURSE.getValue());
+			HashMap<String, Object> innerMap = new HashMap<>();
+			innerMap.put(JsonKey.COURSE, reqObj.getRequest());
+			innerMap.put(JsonKey.USER_ID, reqObj.getParams().getUid());
+			reqObj.setRequest(innerMap);
+			Timeout timeout = new Timeout(Akka_wait_time, TimeUnit.SECONDS);
+			Promise<Result> res = actorResponseHandler(selection,reqObj,timeout,null);
+			return res;
 		} catch (Exception e) {
-			return createCommonExceptionResponse(e);
+			return Promise.<Result> pure(createCommonExceptionResponse(e));
 		}
 	}
 	
@@ -99,23 +98,23 @@ public class LearnerController extends BaseController {
 	 *against TOC (table of content).
 	 * @return Result
 	 */
-	public Result getContentState() {
-		 JsonNode requestData = request().body().asJson();
-        logger.info(" get course request data=" + requestData);
-        Request reqObj  = (Request) mapper.RequestMapper.mapRequest(requestData, Request.class);
-        reqObj.setRequest_id(ExecutionContext.getRequestId());
-        reqObj.setOperation(LearnerStateOperation.GET_CONTENT.getValue());
-        HashMap<String, Object> innerMap = new HashMap<>();
-		innerMap.put(JsonKey.USER_ID, reqObj.getParams().getUid());
-		innerMap.put(JsonKey.CONTENT_IDS, reqObj.getRequest().get(JsonKey.CONTENT_IDS));
-		reqObj.setRequest(innerMap);  
-		Timeout timeout = new Timeout(5, TimeUnit.SECONDS);
-        Future<Object> future = Patterns.ask(selection, reqObj, timeout);
-        try {
-        	Object response = Await.result(future, timeout.duration());
-        	return createCommonResponse(response,JsonKey.CONTENT_LIST);
+	public Promise<Result> getContentState() {
+		try {
+			JsonNode requestData = request().body().asJson();
+			logger.info(" get course request data=" + requestData);
+			Request reqObj = (Request) mapper.RequestMapper.mapRequest(requestData, Request.class);
+			RequestValidator.validateGetData(reqObj);
+			reqObj.setRequest_id(ExecutionContext.getRequestId());
+			reqObj.setOperation(LearnerStateOperation.GET_CONTENT.getValue());
+			HashMap<String, Object> innerMap = new HashMap<>();
+			innerMap.put(JsonKey.USER_ID, reqObj.getParams().getUid());
+			innerMap.put(JsonKey.CONTENT_IDS, reqObj.getRequest().get(JsonKey.CONTENT_IDS));
+			reqObj.setRequest(innerMap);
+			Timeout timeout = new Timeout(Akka_wait_time, TimeUnit.SECONDS);
+			Promise<Result> res = actorResponseHandler(selection, reqObj, timeout, JsonKey.CONTENT_LIST);
+			return res;
 		} catch (Exception e) {
-			return createCommonExceptionResponse(e);
+			return Promise.<Result> pure(createCommonExceptionResponse(e));
 		}
 
 	}
@@ -125,18 +124,23 @@ public class LearnerController extends BaseController {
 	 *store state.
 	 * @return Result
 	 */
-	public Result updateContentState() {
+	public Promise<Result> updateContentState() {
+		try {
 		JsonNode requestData = request().body().asJson();
         logger.info(" get course request data=" + requestData);
         Request reqObj  = (Request) mapper.RequestMapper.mapRequest(requestData, Request.class);
+        RequestValidator.validateUpdateContent(reqObj);
         reqObj.setOperation(LearnerStateOperation.ADD_CONTENT.getValue());
-		Timeout timeout = new Timeout(5, TimeUnit.SECONDS);
-        Future<Object> future = Patterns.ask(selection, reqObj, timeout);
-        try {
-        	Response response  =  (Response) Await.result(future, timeout.duration());
-        	return createCommonResponse(response,null);
+        reqObj.setRequest_id(ExecutionContext.getRequestId());
+		HashMap<String, Object> innerMap = new HashMap<>();
+		innerMap.put(JsonKey.CONTENT_LIST, reqObj.getRequest());
+		innerMap.put(JsonKey.USER_ID, reqObj.getParams().getUid());
+		reqObj.setRequest(innerMap);
+		Timeout timeout = new Timeout(Akka_wait_time, TimeUnit.SECONDS);
+		Promise<Result> res = actorResponseHandler(selection, reqObj, timeout, null);
+		return res;
 		} catch (Exception e) {
-			return createCommonExceptionResponse(e);
+			return Promise.<Result> pure(createCommonExceptionResponse(e));
 		}
 	}
 	
@@ -153,10 +157,12 @@ public class LearnerController extends BaseController {
 				courseResponse.getResult().remove(JsonKey.RESPONSE);
 				courseResponse.getResult().put(key, value);
 			}
-			return ok(Json.toJson(BaseController.createSuccessResponse(request().path(), (Response) courseResponse)));
+		    return Results.ok(Json.toJson(BaseController.createSuccessResponse(request().path(), (Response) courseResponse)));
+			//return ok(Json.toJson(BaseController.createSuccessResponse(request().path(), (Response) courseResponse)));
 		} else {
-			ProjectCommonException exception = (ProjectCommonException) response;
-			return ok(Json.toJson(BaseController.createResponseOnException(request().path(), exception)));
+			 ProjectCommonException exception = (ProjectCommonException) response;
+			 return Results.ok(Json.toJson(BaseController.createResponseOnException(request().path(), exception)));
+			//return ok(Json.toJson(BaseController.createResponseOnException(request().path(), exception)));
 		}
 	}
 	
@@ -167,8 +173,38 @@ public class LearnerController extends BaseController {
 	 */
 	private Result createCommonExceptionResponse (Exception e) {
 		logger.error(e);
-		ProjectCommonException exception = new ProjectCommonException(ResponseCode.internalError.getErrorCode(),
+		ProjectCommonException exception = null;
+		if(e instanceof ProjectCommonException) {
+			exception = (ProjectCommonException) e;
+		}else {
+		 exception = new ProjectCommonException(ResponseCode.internalError.getErrorCode(),
 				ResponseCode.internalError.getErrorMessage(), ResponseCode.SERVER_ERROR.getResponseCode());
-		return ok(Json.toJson(BaseController.createResponseOnException(request().path(), exception)));
+		}
+		return Results.ok(Json.toJson(BaseController.createResponseOnException(request().path(), exception)));
+	}
+	
+	/**
+	 * This method will make a call to Akka actor and return promise.
+	 * @param selection ActorSelection
+	 * @param request Request
+	 * @param timeout Timeout
+	 * @param responseKey String
+	 * @return Promise<Result>
+	 */
+	private Promise<Result> actorResponseHandler(ActorSelection selection, Request request, Timeout timeout,String responseKey) {
+		Promise<Result> res = Promise.wrap(Patterns.ask(selection, request, timeout))
+				.map(new Function<Object, Result>() {
+					public Result apply(Object result) {
+						if (result instanceof Response) {
+							Response response = (Response) result;
+							return createCommonResponse(response, responseKey);
+						} else if (result instanceof ProjectCommonException) {
+							return createCommonExceptionResponse((ProjectCommonException) result);
+						} else {
+							return createCommonExceptionResponse(new Exception());
+						}
+					}
+				});
+		return res;
 	}
 }

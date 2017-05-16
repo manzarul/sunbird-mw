@@ -3,7 +3,9 @@
  */
 package org.sunbird.learner.actors;
 
-import akka.actor.UntypedAbstractActor;import scala.util.parsing.json.JSON;
+import java.sql.Timestamp;
+import java.util.Map;
+//import org.sunbird.common.request.Request;
 
 import org.sunbird.bean.LearnerStateOperation;
 import org.sunbird.cassandra.CassandraOperation;
@@ -17,9 +19,7 @@ import org.sunbird.common.request.Request;
 import org.sunbird.common.responsecode.ResponseCode;
 import org.sunbird.learner.util.ActorUtility;
 
-import java.sql.Timestamp;
-import java.util.Map;
-//import org.sunbird.common.request.Request;
+import akka.actor.UntypedAbstractActor;
 
 /**
  * This actor will handle course enrollment operation .

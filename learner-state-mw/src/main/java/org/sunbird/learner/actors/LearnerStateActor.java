@@ -1,11 +1,7 @@
 package org.sunbird.learner.actors;
 
 
-import akka.actor.ActorRef;
-import akka.actor.UntypedAbstractActor;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,6 +15,9 @@ import org.sunbird.common.models.util.LogHelper;
 import org.sunbird.common.request.Request;
 import org.sunbird.common.responsecode.ResponseCode;
 import org.sunbird.learner.util.ActorUtility;
+
+import akka.actor.ActorRef;
+import akka.actor.UntypedAbstractActor;
 
 /**
  * This actor will handle leaner's state operation like get course , get content etc.
