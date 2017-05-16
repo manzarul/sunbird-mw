@@ -28,6 +28,7 @@ public interface Constants {
 	public static final String CONST_VARCHAR="(varchar)";
 	public static final String SUCCESS="SUCCESS";
 	public static final String RESPONSE="response";
+	public static final String SESSION_IS_NULL="cassandra session is null for this ";
 	
 	public enum LearnerStateOperation {
 		NOT_STARTED("notStarted"),STARTED("started"),COMPLETED("completed");

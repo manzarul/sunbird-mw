@@ -46,4 +46,26 @@ public class RequestValidator {
 			throw dataException;
 		}
 	}
+	
+	/**
+	 * This method will do content state request data
+	 * validation. if all mandatory data is coming then it won't do any thing
+	 * if any mandatory data is missing then it will throw exception.
+	 * @param Request contentRequestDto
+	 */
+	public static void validateCreateContent(Request contentRequestDto) {
+		if (ProjectUtil.isStringNullOREmpty(contentRequestDto.getParams().getDid())) {
+			ProjectCommonException dataException = new ProjectCommonException(ResponseCode.deviceIdRequired.getErrorCode(),
+					ResponseCode.deviceIdRequired.getErrorMessage(),ResponseCode.CLIENT_ERROR.getResponseCode());
+			throw dataException;
+		} else if (ProjectUtil.isStringNullOREmpty(contentRequestDto.getParams().getSid())) {
+			ProjectCommonException dataException = new ProjectCommonException(ResponseCode.sessionIdRequiredError.getErrorCode(),
+					ResponseCode.sessionIdRequiredError.getErrorMessage(),ResponseCode.CLIENT_ERROR.getResponseCode());
+			throw dataException;
+		}else if (contentRequestDto.getRequest().get(JsonKey.CONTENT_ID) ==null) {
+			ProjectCommonException dataException = new ProjectCommonException(ResponseCode.contentIdRequired.getErrorCode(),
+					ResponseCode.contentIdRequiredError.getErrorMessage(),ResponseCode.CLIENT_ERROR.getResponseCode());
+			throw dataException;
+		}
+	}
 }

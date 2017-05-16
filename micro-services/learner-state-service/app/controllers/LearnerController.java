@@ -48,9 +48,10 @@ public class LearnerController extends BaseController {
 	 * @return Result
 	 */
 	public Result getEnrolledCourses() {
+		try {
 		String userId = request().getHeader(HeaderParam.X_Session_ID.getName());
 		Map<String, Object> map = new HashMap<>();
-		map.put("userId", userId);
+		map.put(JsonKey.USER_ID, userId);
 		Request request = new Request();
 		request.setRequest(map);
 		request.setOperation(LearnerStateOperation.GET_COURSE.getValue());
@@ -58,7 +59,6 @@ public class LearnerController extends BaseController {
 		Timeout timeout = new Timeout(5, TimeUnit.SECONDS);
 		request.setRequest_id(ExecutionContext.getRequestId());
 		Future<Object> future = Patterns.ask(selection, request, timeout);
-		try {
 			Object response = Await.result(future, timeout.duration());
 			return createCommonResponse(response,JsonKey.COURSE_LIST);
 		} catch (Exception e) {
@@ -72,9 +72,9 @@ public class LearnerController extends BaseController {
 	 * @return Result
 	 */
 	public Result enrollCourse() {
+		try {
 		JsonNode requestData = request().body().asJson();
 		logger.info(" get course request data=" + requestData);
-		try {
 		Request reqObj = (Request) mapper.RequestMapper.mapRequest(requestData, Request.class);
 		RequestValidator.validateCreateCourse(reqObj);
 		reqObj.setRequest_id(ExecutionContext.getRequestId());
@@ -85,8 +85,7 @@ public class LearnerController extends BaseController {
 		reqObj.setRequest(innerMap);
 		Timeout timeout = new Timeout(3, TimeUnit.SECONDS);
 		Future<Object> future = Patterns.ask(selection, reqObj, timeout);
-		
-			Object response  =  Await.result(future, timeout.duration());
+		Object response  =  Await.result(future, timeout.duration());
 			return createCommonResponse(response,null);
 		} catch (Exception e) {
 			return createCommonExceptionResponse(e);
@@ -100,7 +99,8 @@ public class LearnerController extends BaseController {
 	 * @return Result
 	 */
 	public Result getContentState() {
-		 JsonNode requestData = request().body().asJson();
+		try {
+		JsonNode requestData = request().body().asJson();
         logger.info(" get course request data=" + requestData);
         Request reqObj  = (Request) mapper.RequestMapper.mapRequest(requestData, Request.class);
         reqObj.setRequest_id(ExecutionContext.getRequestId());
@@ -111,7 +111,6 @@ public class LearnerController extends BaseController {
 		reqObj.setRequest(innerMap);  
 		Timeout timeout = new Timeout(5, TimeUnit.SECONDS);
         Future<Object> future = Patterns.ask(selection, reqObj, timeout);
-        try {
         	Object response = Await.result(future, timeout.duration());
         	return createCommonResponse(response,JsonKey.CONTENT_LIST);
 		} catch (Exception e) {
@@ -126,13 +125,13 @@ public class LearnerController extends BaseController {
 	 * @return Result
 	 */
 	public Result updateContentState() {
+		try {
 		JsonNode requestData = request().body().asJson();
         logger.info(" get course request data=" + requestData);
         Request reqObj  = (Request) mapper.RequestMapper.mapRequest(requestData, Request.class);
         reqObj.setOperation(LearnerStateOperation.ADD_CONTENT.getValue());
 		Timeout timeout = new Timeout(5, TimeUnit.SECONDS);
         Future<Object> future = Patterns.ask(selection, reqObj, timeout);
-        try {
         	Response response  =  (Response) Await.result(future, timeout.duration());
         	return createCommonResponse(response,null);
 		} catch (Exception e) {

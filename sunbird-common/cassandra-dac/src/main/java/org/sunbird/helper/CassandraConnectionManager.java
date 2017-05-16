@@ -109,7 +109,7 @@ public final class CassandraConnectionManager {
 	 */
 	public static Session getSession(String keyspaceName) {
 		if(null == cassandraSessionMap.get(keyspaceName)){
-			createConnection("127.0.0.1", "9042", "cassandra", "password", "cassandraKeySpace");
+			throw new ProjectCommonException(ResponseCode.internalError.getErrorCode(), Constants.SESSION_IS_NULL+keyspaceName, ResponseCode.SERVER_ERROR.getResponseCode());
 		}
         return cassandraSessionMap.get(keyspaceName);
     }
@@ -124,6 +124,8 @@ public final class CassandraConnectionManager {
 			cassandraSessionMap.get(key).close();
 			cassandraclusterMap.get(key).close();
 		}
+		cassandraSessionMap=null;
+		cassandraclusterMap=null;
     }
 
 }
